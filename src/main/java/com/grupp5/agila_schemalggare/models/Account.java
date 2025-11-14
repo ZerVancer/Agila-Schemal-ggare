@@ -17,6 +17,13 @@ public abstract class Account {
         this.password = password;
     }
 
+    // Framtida användning för sparning/hämtning av konton från Repositories.
+    public Account(UUID id, String username, String password) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+    }
+
     // Getters
     public UUID getAccountId() {
         return id;
@@ -33,7 +40,7 @@ public abstract class Account {
 
     public abstract String getRole();
 
-    // Någon eventuell funktion för om användaren är Admin?
+    // Någon eventuell funktion för om användaren är Admin? Inte nödvändig just nu.
 //    public boolean canEditOthers() {
 //        return false;
 //    }
