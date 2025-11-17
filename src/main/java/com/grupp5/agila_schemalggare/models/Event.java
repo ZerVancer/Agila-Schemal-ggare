@@ -1,4 +1,4 @@
-package models;
+package com.grupp5.agila_schemalggare.models;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
