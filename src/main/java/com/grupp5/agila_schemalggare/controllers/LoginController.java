@@ -31,7 +31,8 @@ public class LoginController {
         }
 
         // Måste kolla så att kontot faktiskt finns sparat i en arraylist senare?
-        // Måste uppdateras efter register fungerar, just nu skapas ett automatiskt konto baserat på input i view
+        // Måste uppdateras efter register fungerar samt User/Admin klasserna finns.
+        // just nu skapar jag en instans av Account baserat på input från view, ta bort "abstract" för att kunna göra det i main.
         Account account = new Account(username, password);
 
         if (account == null) {
@@ -47,6 +48,8 @@ public class LoginController {
         changeStatus("Login successful!", "green");
 
         // Timer för att kalla på en funktion som senare ska rendera kalendern efter lyckad inloggning.
+        // 2 sekunder delay för att simulera en sökning av kontot.
+        // Kan ta bort senare, samt clearFields metoden.
         Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(2), event -> clearFields()));
         timeline.setCycleCount(1);
         timeline.play();
