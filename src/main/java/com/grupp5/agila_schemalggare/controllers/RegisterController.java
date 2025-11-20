@@ -1,17 +1,29 @@
 package com.grupp5.agila_schemalggare.controllers;
 
+import com.grupp5.agila_schemalggare.models.Account;
 import com.grupp5.agila_schemalggare.models.User;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 public class RegisterController {
+    List<Account> accounts = new ArrayList<>(Arrays.asList(
+            new User("username", "?password"),
+            new User("milo_söder", "smörgåsrån4l!fe"),
+            new User("hundenPollux", "p?nnarÄrBäst")
+    ));
+
     @FXML
     TextField usernameInputField;
 
     @FXML
-    TextField passwordInputField;
+    PasswordField passwordInputField;
 
     @FXML
     Button submitButton;
@@ -43,10 +55,19 @@ public class RegisterController {
                 return;
             }
 
-        User user = new User(username, password);
+        Account account = new User(username, password);
+        accounts.add(account);
+
         //saveUserToFile(); <-- empty method for implementation later
 
-        submitConfirmation.setText("Registration successful!");
+        StringBuilder testMessage = new StringBuilder("Registration successful!");
+
+        for (Account a : accounts) {
+            testMessage.append("\n").append(a.toString());
+        }
+
+        submitConfirmation.setText(testMessage.toString());
+        //submitConfirmation.setText("Registration successful!");
 
         //changeSceneToLogin(); <-- empty method for implementation later
     }

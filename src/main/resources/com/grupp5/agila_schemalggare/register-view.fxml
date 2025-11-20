@@ -8,18 +8,26 @@
             fx:controller="com.grupp5.agila_schemalggare.controllers.RegisterController"
             prefHeight="400.0" prefWidth="600.0">
 
-    <VBox alignment="CENTER" spacing="20.0"
+    <VBox alignment="CENTER" spacing="10.0"
           AnchorPane.topAnchor="0"
           AnchorPane.bottomAnchor="0"
           AnchorPane.leftAnchor="0"
           AnchorPane.rightAnchor="0">
 
         <Label>Register new user</Label>
-        <Label>Enter desired username:</Label>
-        <TextField fx:id="usernameInputField" maxWidth="200"></TextField>
-        <Label>Enter desired password:</Label>
-        <TextField fx:id="passwordInputField" maxWidth="200"></TextField>
-        <Button fx:id="submitButton" onAction="#submitUserDetails">Submit</Button>
-        <Label fx:id="submitConfirmation"></Label>
+
+        <VBox alignment="CENTER" spacing="3.0">
+            <Label>Username:</Label>
+            <TextField fx:id="usernameInputField" maxWidth="200"/>
+        </VBox>
+
+        <VBox alignment="CENTER" spacing="3.0">
+            <Label>Password:</Label>
+            <PasswordField fx:id="passwordInputField" maxWidth="200"/>
+        </VBox>
+
+        <Button fx:id="submitButton" text="Submit" onAction="#submitUserDetails"/>
+
+        <Label fx:id="submitConfirmation"/>
     </VBox>
 </AnchorPane>
