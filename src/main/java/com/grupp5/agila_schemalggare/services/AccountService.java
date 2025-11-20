@@ -11,6 +11,7 @@ public class AccountService {
     public List<Account> registeredUsers = new ArrayList<>();
 
     public AccountService() {
+        // Går att ta bort, skapar bara ett konto för att testa logiken.
         registeredUsers.add(new User("Joel", "1234"));
     }
 
@@ -39,4 +40,9 @@ public class AccountService {
 
         return account;
     }
+
+    // Metod för register.
+//    public Account registerNewAccount() {
+//
+//    }
 }
