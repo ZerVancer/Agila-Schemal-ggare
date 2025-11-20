@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.grupp5.agila_schemalggare.controllers.RegisterController"
+            prefHeight="400.0" prefWidth="600.0">
+
+    <VBox alignment="CENTER" spacing="10.0"
+          AnchorPane.topAnchor="0"
+          AnchorPane.bottomAnchor="0"
+          AnchorPane.leftAnchor="0"
+          AnchorPane.rightAnchor="0">
+
+        <Label>Register new user</Label>
+
+        <VBox alignment="CENTER" spacing="3.0">
+            <Label>Username:</Label>
+            <TextField fx:id="usernameInputField" maxWidth="200"/>
+        </VBox>
+
+        <VBox alignment="CENTER" spacing="3.0">
+            <Label>Password:</Label>
+            <PasswordField fx:id="passwordInputField" maxWidth="200"/>
+        </VBox>
+
+        <Button fx:id="submitButton" text="Submit" onAction="#submitUserDetails"/>
+
+        <Label fx:id="submitConfirmation"/>
+    </VBox>
+</AnchorPane>
