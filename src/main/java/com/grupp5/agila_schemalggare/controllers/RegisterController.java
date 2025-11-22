@@ -3,10 +3,13 @@ package com.grupp5.agila_schemalggare.controllers;
 import com.grupp5.agila_schemalggare.models.Account;
 import com.grupp5.agila_schemalggare.models.User;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -27,6 +30,9 @@ public class RegisterController {
 
     @FXML
     Button submitButton;
+
+    @FXML
+    Button loginButton;
 
     @FXML
     Label submitConfirmation;
@@ -69,7 +75,7 @@ public class RegisterController {
         submitConfirmation.setText(testMessage.toString());
         //submitConfirmation.setText("Registration successful!");
 
-        //changeSceneToLogin(); <-- empty method for implementation later
+        changeSceneToLogin();
     }
 
     private boolean validateUsername(String username) { //later also validate that no two users can have the same username
@@ -86,5 +92,17 @@ public class RegisterController {
 
     private void saveUserToFile(User user) {}
 
-    private void changeSceneToLogin() {}
+    @FXML
+    private void changeSceneToLogin() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/grupp5/agila_schemalggare/login-view.fxml"));
+            Parent root = loader.load();
+
+            Stage stage = (Stage) usernameInputField.getScene().getWindow();
+            stage.getScene().setRoot(root);
+
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+    }
 }
