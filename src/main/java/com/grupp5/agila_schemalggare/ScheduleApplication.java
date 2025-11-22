@@ -15,11 +15,11 @@ public class ScheduleApplication extends Application {
     FXMLLoader fxmlLoader = new FXMLLoader(ScheduleApplication.class.getResource("login-view.fxml"));
 
     Scene scene = new Scene(fxmlLoader.load(), 320, 240);
-    stage.setTitle("Hello!");
+    stage.setTitle("Schedule Application");
     stage.setScene(scene);
 
-      LoginController loginController = fxmlLoader.getController();
-      loginController.setAccountService(new AccountService());
+    LoginController loginController = fxmlLoader.getController();
+    loginController.setAccountService(new AccountService());
 
     stage.show();
   }
