@@ -38,12 +38,12 @@ public abstract class Account {
         return password;
     }
 
-    //public abstract String getRole();
+    public abstract String getRole();
 
     // Någon eventuell funktion för om användaren är Admin? Inte nödvändig just nu.
-//    public boolean canEditOthers() {
-//        return false;
-//    }
+    public boolean canEditOthers() {
+        return false;
+    }
 
     // Går alltid att lägga till saker i framtiden etc.
 }
