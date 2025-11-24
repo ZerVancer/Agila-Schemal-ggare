@@ -2,6 +2,8 @@ package com.grupp5.agila_schemalggare.controllers;
 
 import com.grupp5.agila_schemalggare.services.AccountService;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
@@ -24,6 +26,9 @@ public class RegisterController {
     PasswordField passwordInputField;
     @FXML
     Button submitButton;
+    @FXML
+    Button loginButton;
+
     @FXML
     Label submitConfirmation;
 
@@ -50,8 +55,34 @@ public class RegisterController {
             submitConfirmation.setText("Account creation success!");
         }
 
-        //changeSceneToLogin(); <-- empty method for implementation later
+        changeSceneToLogin();
     }
 
-    private void changeSceneToLogin() {}
+    private boolean validateUsername(String username) { //later also validate that no two users can have the same username
+        return username.length() > 5 && //longer than 5 characters
+                username.length() < 16 && //shorter than 16 characters
+                username.matches("[A-Za-z0-9_.-]+"); //allows letters, numbers, -, _, and .
+    }
+
+    private boolean validatePassword(String password) {
+        return password.length() > 5 && //longer than 5 characters
+                password.length() < 31 && //shorter than 31
+                password.matches(".*[!@#$%^&*()_+=\\-{}\\[\\]:;\"'<>,.?/].*"); //must contain at least one special character
+    }
+
+    private void saveUserToFile(User user) {}
+
+    @FXML
+    private void changeSceneToLogin() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/grupp5/agila_schemalggare/login-view.fxml"));
+            Parent root = loader.load();
+
+            Stage stage = (Stage) usernameInputField.getScene().getWindow();
+            stage.getScene().setRoot(root);
+
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+    }
 }

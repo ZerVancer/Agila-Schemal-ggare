@@ -3,10 +3,7 @@ module com.grupp5.agila_schemalggare {
   requires javafx.fxml;
   requires javafx.graphics;
 
-    opens com.grupp5.agila_schemalggare to javafx.fxml;
-    opens com.grupp5.agila_schemalggare.controllers to javafx.fxml;
-
-  opens com.grupp5.agila_schemalggare.controllers;
   opens com.grupp5.agila_schemalggare to javafx.fxml;
+  opens com.grupp5.agila_schemalggare.controllers;
   exports com.grupp5.agila_schemalggare;
 }

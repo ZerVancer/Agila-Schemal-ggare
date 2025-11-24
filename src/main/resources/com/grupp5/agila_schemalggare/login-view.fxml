@@ -25,7 +25,7 @@
 
     <HBox alignment="CENTER" spacing="10.0">
         <Button text="Log In" onAction="#handleLogin" />
-        <Button text="Register" />
+        <Button text="Register" onAction="#switchToRegisterView"/>
     </HBox>
 
     <Label fx:id="statusLabel" visible="false" />

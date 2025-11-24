@@ -1,13 +1,17 @@
 package com.grupp5.agila_schemalggare.controllers;
 
+import com.grupp5.agila_schemalggare.ScheduleApplication;
 import com.grupp5.agila_schemalggare.models.Account;
 import com.grupp5.agila_schemalggare.services.AccountService;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 
 public class LoginController {
@@ -21,8 +25,6 @@ public class LoginController {
     @FXML private TextField usernameField;
     @FXML private PasswordField passwordField;
     @FXML private Label statusLabel;
-
-
 
     @FXML
     private void handleLogin() {
@@ -51,9 +53,18 @@ public class LoginController {
         timeline.play();
     }
 
-    // För framtida användning om användaren vill byta vy från login menyn för att registrera ett konto
-//    @FXML
-//    private void switchToRegisterView() {}
+    @FXML
+    private void switchToRegisterView() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/grupp5/agila_schemalggare/register-view.fxml"));
+            Parent root = loader.load();
+
+            Stage stage = (Stage) usernameField.getScene().getWindow();
+            stage.getScene().setRoot(root);
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+    }
 
     private void changeStatus(String message, String color) {
         statusLabel.setText(message);
