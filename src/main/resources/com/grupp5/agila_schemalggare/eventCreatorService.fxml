@@ -10,14 +10,18 @@
    <children>
       <TextField fx:id="titleField" layoutX="72.0" layoutY="35.0" promptText="Title" />
       <TextField fx:id="descriptionField" layoutX="72.0" layoutY="76.0" promptText="Description" />
-      <Spinner fx:id="startTimeHourSpinner" initialValue="0" layoutX="63.0" layoutY="140.0" max="23" min="0" prefHeight="25.0" prefWidth="69.0" />
-      <Spinner fx:id="startTimeMinuteSpinner" initialValue="0" layoutX="157.0" layoutY="140.0" max="59" min="0" prefHeight="25.0" prefWidth="69.0" />
+      <Spinner fx:id="startTimeHourSpinner" initialValue="0" layoutX="82.0" layoutY="140.0" max="23" min="0" prefHeight="25.0" prefWidth="54.0" />
+      <Spinner fx:id="startTimeMinuteSpinner" initialValue="0" layoutX="178.0" layoutY="140.0" max="59" min="0" prefHeight="25.0" prefWidth="54.0" />
       <Button fx:id="confirmButton" layoutX="68.0" layoutY="247.0" mnemonicParsing="false" onAction="#confirmButton" text="Confirm" />
       <Button fx:id="cancelButton" layoutX="166.0" layoutY="247.0" mnemonicParsing="false" onAction="#closeWindowAction" text="Cancel" />
       <Label fx:id="errorMessage" alignment="CENTER" layoutX="61.0" layoutY="276.0" prefHeight="55.0" prefWidth="171.0" />
-      <Spinner fx:id="endTimeHourSpinner" initialValue="0" layoutX="63.0" layoutY="202.0" max="23" min="0" prefHeight="25.0" prefWidth="69.0" />
-      <Spinner fx:id="endTimeMinuteSpinner" initialValue="0" layoutX="157.0" layoutY="202.0" max="23" min="0" prefHeight="25.0" prefWidth="69.0" />
+      <Spinner fx:id="endTimeHourSpinner" initialValue="0" layoutX="82.0" layoutY="202.0" max="23" min="0" prefHeight="25.0" prefWidth="54.0" />
+      <Spinner fx:id="endTimeMinuteSpinner" initialValue="0" layoutX="179.0" layoutY="202.0" max="59" min="0" prefHeight="25.0" prefWidth="52.0" />
       <Label layoutX="120.0" layoutY="110.0" text="Start Time" />
       <Label layoutX="122.0" layoutY="173.0" text="End Time" />
+      <Label layoutX="50.0" layoutY="144.0" text="Hour" />
+      <Label layoutX="50.0" layoutY="206.0" text="Hour" />
+      <Label alignment="CENTER" layoutX="134.0" layoutY="144.0" prefHeight="17.0" prefWidth="44.0" text="Minute" />
+      <Label alignment="CENTER" layoutX="134.0" layoutY="206.0" prefHeight="17.0" prefWidth="44.0" text="Minute" />
    </children>
 </AnchorPane>
