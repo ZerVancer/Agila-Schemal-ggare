@@ -6,7 +6,5 @@ module com.grupp5.agila_schemalggare {
     opens com.grupp5.agila_schemalggare to javafx.fxml;
     opens com.grupp5.agila_schemalggare.controllers to javafx.fxml;
 
-  opens com.grupp5.agila_schemalggare.controllers;
-  opens com.grupp5.agila_schemalggare to javafx.fxml;
   exports com.grupp5.agila_schemalggare;
 }

@@ -1,6 +1,12 @@
-package com.grupp5.agila_schemalggare.models;
+package com.grupp5.agila_schemalggare.services;
+
+import com.grupp5.agila_schemalggare.models.Account;
+import com.grupp5.agila_schemalggare.models.Event;
 
 import java.time.LocalDateTime;
+
+
+//redundant file, functionality moved to CalendarService
 
 public class EventCreatorService {
   public EventCreatorService() {}

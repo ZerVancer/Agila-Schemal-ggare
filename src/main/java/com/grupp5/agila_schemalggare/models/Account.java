@@ -8,13 +8,14 @@ public abstract class Account {
     private UUID id;
     private String username;
     private String password;
-    //private Calendar calendar; - Placeholder för tillfället.
+    private Calendar calendar;
 
     //Constructors
     public Account(String username, String password) {
         this.id = UUID.randomUUID();
         this.username = username;
         this.password = password;
+        this.calendar = new Calendar();
     }
 
     // Framtida användning för sparning/hämtning av konton från Repositories.
@@ -36,6 +37,10 @@ public abstract class Account {
     // Möjligtvis värt att ta bort senare?
     public String getPassword() {
         return password;
+    }
+
+    public Calendar getCalendar() {
+        return calendar;
     }
 
     public abstract String getRole();
