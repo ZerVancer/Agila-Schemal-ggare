@@ -1,20 +1,23 @@
 package com.grupp5.agila_schemalggare.controllers;
 
 import com.grupp5.agila_schemalggare.services.AccountService;
+import com.grupp5.agila_schemalggare.utils.SceneManagerProvider;
+import com.grupp5.agila_schemalggare.utils.ServiceRegister;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
+import javafx.util.Duration;
 
-import java.util.InputMismatchException;
-
-public class RegisterController {
+public class RegisterController implements ServiceRegister {
     private AccountService accountService;
 
-    public void setAccountService(AccountService accountService) {
+    @Override
+    public void registerAccountService(AccountService accountService) {
         this.accountService = accountService;
     }
 
@@ -24,6 +27,8 @@ public class RegisterController {
     PasswordField passwordInputField;
     @FXML
     Button submitButton;
+    @FXML
+    Button changeToLogin;
     @FXML
     Label submitConfirmation;
 
@@ -50,8 +55,17 @@ public class RegisterController {
             submitConfirmation.setText("Account creation success!");
         }
 
-        //changeSceneToLogin(); <-- empty method for implementation later
+        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(2), event -> changeSceneToLogin()));
+        timeline.setCycleCount(1);
+        timeline.play();
+
+
     }
 
-    private void changeSceneToLogin() {}
+    @FXML
+    private void changeSceneToLogin() {
+        SceneManagerProvider.getSceneManager().switchScene("/com/grupp5/agila_schemalggare/login-view.fxml");
+    }
+
+
 }
