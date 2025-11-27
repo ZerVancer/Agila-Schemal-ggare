@@ -1,26 +1,23 @@
 package com.grupp5.agila_schemalggare;
 
-import com.grupp5.agila_schemalggare.controllers.LoginController;
 import com.grupp5.agila_schemalggare.services.AccountService;
+import com.grupp5.agila_schemalggare.utils.SceneManagerProvider;
+import com.grupp5.agila_schemalggare.utils.SceneManager;
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
-
 import java.io.IOException;
 
 public class ScheduleApplication extends Application {
   @Override
   public void start(Stage stage) throws IOException {
-    FXMLLoader fxmlLoader = new FXMLLoader(ScheduleApplication.class.getResource("login-view.fxml"));
+      AccountService accountService = new AccountService();
+      SceneManager sceneManager = new SceneManager(stage, accountService);
 
-    Scene scene = new Scene(fxmlLoader.load(), 320, 240);
-    stage.setTitle("Schedule Application");
-    stage.setScene(scene);
+      SceneManagerProvider.setSceneManager(sceneManager);
 
-    LoginController loginController = fxmlLoader.getController();
-    loginController.setAccountService(new AccountService());
+      sceneManager.switchScene("/com/grupp5/agila_schemalggare/login-view.fxml");
 
-    stage.show();
+      stage.setTitle("Schedule Application");
+      stage.show();
   }
 }
