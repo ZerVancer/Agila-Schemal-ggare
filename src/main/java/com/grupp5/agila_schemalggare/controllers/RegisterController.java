@@ -1,19 +1,15 @@
 package com.grupp5.agila_schemalggare.controllers;
 
+import com.grupp5.agila_schemalggare.models.User;
 import com.grupp5.agila_schemalggare.services.AccountService;
 import com.grupp5.agila_schemalggare.utils.SceneManagerProvider;
 import com.grupp5.agila_schemalggare.utils.ServiceRegister;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
-import javafx.util.Duration;
 
 public class RegisterController implements ServiceRegister {
     private AccountService accountService;
@@ -57,9 +53,7 @@ public class RegisterController implements ServiceRegister {
             submitConfirmation.setText("Account creation success!");
         }
 
-        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(2), event -> changeSceneToLogin()));
-        timeline.setCycleCount(1);
-        timeline.play();
+        changeSceneToLogin();
 
 
     }
@@ -67,10 +61,6 @@ public class RegisterController implements ServiceRegister {
     @FXML
     private void changeSceneToLogin() {
         SceneManagerProvider.getSceneManager().switchScene("/com/grupp5/agila_schemalggare/login-view.fxml");
-    }
-
-
-        changeSceneToLogin();
     }
 
     private boolean validateUsername(String username) { //later also validate that no two users can have the same username
@@ -87,17 +77,4 @@ public class RegisterController implements ServiceRegister {
 
     private void saveUserToFile(User user) {}
 
-    @FXML
-    private void changeSceneToLogin() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/grupp5/agila_schemalggare/login-view.fxml"));
-            Parent root = loader.load();
-
-            Stage stage = (Stage) usernameInputField.getScene().getWindow();
-            stage.getScene().setRoot(root);
-
-        } catch (Exception exception) {
-            exception.printStackTrace();
-        }
-    }
 }
