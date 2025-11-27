@@ -47,4 +47,9 @@ public class Event {
     public LocalDateTime getEndDate() { //getters send out LocalDateTime to display time in user's time zone
         return LocalDateTime.ofInstant(endDate, ZoneOffset.UTC);
     }
+
+    @Override
+    public String toString() {
+      return title;
+    }
 }

@@ -27,11 +27,11 @@ public class AccountService {
     }
 
     // Getter för resterande komponenter för att hämta kontot om så önskas.
-    public Account getLoggedInAccount() {
+    public static Account getLoggedInAccount() {
         return loggedInAccount;
     }
 
-    public void setLoggedInAccount(Account account) {
+    public static void setLoggedInAccount(Account account) {
         loggedInAccount = account;
     }
 

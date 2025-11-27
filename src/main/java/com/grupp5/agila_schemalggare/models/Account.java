@@ -9,9 +9,7 @@ public abstract class Account {
     private UUID id;
     private String username;
     private String password;
-    // La till bara för att kunna starta projektet - Joel
-    private List<Event> events;
-    //private Calendar calendar; - Placeholder för tillfället.
+    private Calendar calendar = new Calendar();
 
     //Constructors
     public Account(String username, String password) {
@@ -27,6 +25,10 @@ public abstract class Account {
         this.password = password;
     }
 
+    public void addEvent(Event event) {
+        calendar.addEvent(event);
+    }
+
     // Getters
     public UUID getAccountId() {
         return id;
@@ -40,14 +42,12 @@ public abstract class Account {
         return password;
     }
 
+    public Calendar getCalendar() {
+      return  calendar;
+    }
+
     public abstract String getRole();
 
-    // La till bara för att kunna starta projektet - Joel
-    public String addEvent(Event event) {
-        events.add(event);
-
-        return "| Event added: " + event + " |";
-    }
 
     // Någon eventuell funktion för om användaren är Admin?
     public boolean canEditOthers() {
