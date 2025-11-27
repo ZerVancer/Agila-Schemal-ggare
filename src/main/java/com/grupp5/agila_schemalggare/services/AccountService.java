@@ -13,7 +13,7 @@ public class AccountService {
 
     // La till denna "variabeln" för att verkligen deklarera ett konto som man kan använda sig utav
     // om så önskas i andra delar i projektet, istället för att behöva filtrera igenom och jämföra etc.
-    public static Account loggedInAccount = null;
+    private static Account loggedInAccount = null;
 
     public AccountService() {
         // Går att ta bort, skapar bara ett konto för att testa logiken.
