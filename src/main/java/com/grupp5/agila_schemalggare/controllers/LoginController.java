@@ -65,7 +65,7 @@ public class LoginController implements ServiceRegister {
     private void switchToCalendarView() {
         clearFields();
 
-        SceneManagerProvider.getSceneManager().switchScene("/com/grupp5/agila_schemalggare/calendarMonth.fxml");
+        SceneManagerProvider.getSceneManager().switchScene("/com/grupp5/agila_schemalggare/calendar-viex.fxml");
     }
 
     private void changeStatus(String message, String color) {
