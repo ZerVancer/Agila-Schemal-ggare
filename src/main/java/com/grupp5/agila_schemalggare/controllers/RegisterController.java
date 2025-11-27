@@ -54,8 +54,6 @@ public class RegisterController implements ServiceRegister {
         }
 
         changeSceneToLogin();
-
-
     }
 
     @FXML

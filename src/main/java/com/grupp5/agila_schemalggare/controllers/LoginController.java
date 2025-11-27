@@ -51,9 +51,7 @@ public class LoginController implements ServiceRegister {
         // Timer för att kalla på en funktion som senare ska rendera kalendern efter lyckad inloggning.
         // 2 sekunder delay för att simulera en sökning av kontot.
         // Kan ta bort senare, samt clearFields metoden.
-        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(2), event -> switchToCalendarView()));
-        timeline.setCycleCount(1);
-        timeline.play();
+        switchToCalendarView();
     }
 
     // För framtida användning om användaren vill byta vy från login menyn för att registrera ett konto
