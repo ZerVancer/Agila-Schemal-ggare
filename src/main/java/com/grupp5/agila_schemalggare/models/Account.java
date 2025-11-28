@@ -9,7 +9,7 @@ public abstract class Account {
     private UUID id;
     private String username;
     private String password;
-    private Calendar calendar;
+    private Calendar calendar = new Calendar();
 
     //Constructors
     public Account(String username, String password) {
