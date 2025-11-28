@@ -5,11 +5,12 @@ import com.grupp5.agila_schemalggare.models.Admin;
 import com.grupp5.agila_schemalggare.models.User;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 public class AccountService {
 
-    public List<Account> registeredUsers = new ArrayList<>();
+    public HashSet<Account> registeredUsers = new HashSet<>();
 
     // La till denna "variabeln" för att verkligen deklarera ett konto som man kan använda sig utav
     // om så önskas i andra delar i projektet, istället för att behöva filtrera igenom och jämföra etc.
@@ -76,19 +77,13 @@ public class AccountService {
                     "and be between 6 and 30 characters long.");
         }
 
-        Account account;
+        Account account = registeredUsers.isEmpty() ? new Admin(username, password) : new User(username, password);
 
-        if (registeredUsers.isEmpty()) {
-            account = new Admin(username, password);
-        } else {
-            account = new User(username, password);
-        }
-
-        registeredUsers.add(account);
+        boolean added = registeredUsers.add(account);
         //saveAccountToFile(); <-- empty method for later
 
-        for (Account a : registeredUsers) {
-            System.out.println(a.toString());
+        if (!added) {
+            throw new IllegalArgumentException("Username already exists!");
         }
 
         return true;
