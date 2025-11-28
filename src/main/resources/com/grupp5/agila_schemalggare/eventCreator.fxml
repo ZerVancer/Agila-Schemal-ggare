@@ -6,7 +6,7 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.grupp5.agila_schemalggare.controllers.EventCreatorServiceController">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.grupp5.agila_schemalggare.controllers.EventCreatorController">
    <children>
       <TextField fx:id="titleField" layoutX="72.0" layoutY="35.0" promptText="Title" />
       <TextField fx:id="descriptionField" layoutX="72.0" layoutY="76.0" promptText="Description" />

@@ -16,6 +16,7 @@ public abstract class Account {
         this.id = UUID.randomUUID();
         this.username = username;
         this.password = password;
+        this.calendar = new Calendar();
     }
 
     // Framtida användning för sparning/hämtning av konton från Repositories.
@@ -26,8 +27,13 @@ public abstract class Account {
     }
 
     public void addEvent(Event event) {
-        calendar.addEvent(event);
+      calendar.addEvent(event);
     }
+
+    public UUID getId() {
+        return id;
+    }
+    public void setId(UUID id) {}
 
     // Getters
     public UUID getAccountId() {
@@ -43,11 +49,10 @@ public abstract class Account {
     }
 
     public Calendar getCalendar() {
-      return  calendar;
+        return calendar;
     }
 
     public abstract String getRole();
-
 
     // Någon eventuell funktion för om användaren är Admin?
     public boolean canEditOthers() {
