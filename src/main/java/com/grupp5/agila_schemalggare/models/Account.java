@@ -54,13 +54,6 @@ public abstract class Account {
 
     public abstract String getRole();
 
-    // La till bara för att kunna starta projektet - Joel
-    public String addEvent(Event event) {
-        events.add(event);
-
-        return "| Event added: " + event + " |";
-    }
-
     // Någon eventuell funktion för om användaren är Admin?
     public boolean canEditOthers() {
         return false;
