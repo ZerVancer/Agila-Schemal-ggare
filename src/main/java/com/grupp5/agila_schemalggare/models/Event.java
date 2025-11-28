@@ -1,11 +1,12 @@
 package com.grupp5.agila_schemalggare.models;
 
+import java.io.Serializable;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.UUID;
 
-public class Event {
+public class Event implements Serializable {
     UUID id;
     String title;
     String description;
