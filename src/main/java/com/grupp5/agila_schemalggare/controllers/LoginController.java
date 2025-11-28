@@ -1,28 +1,33 @@
 package com.grupp5.agila_schemalggare.controllers;
 
+import com.grupp5.agila_schemalggare.ScheduleApplication;
 import com.grupp5.agila_schemalggare.models.Account;
 import com.grupp5.agila_schemalggare.services.AccountService;
+import com.grupp5.agila_schemalggare.utils.SceneManagerProvider;
+import com.grupp5.agila_schemalggare.utils.ServiceRegister;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 
-public class LoginController {
+public class LoginController implements ServiceRegister {
 
     private AccountService accountService;
 
-    public void setAccountService(AccountService accountService) {
+    @Override
+    public void registerAccountService(AccountService accountService) {
         this.accountService = accountService;
     }
 
     @FXML private TextField usernameField;
     @FXML private PasswordField passwordField;
     @FXML private Label statusLabel;
-
-
 
     @FXML
     private void handleLogin() {
@@ -46,14 +51,22 @@ public class LoginController {
         // Timer för att kalla på en funktion som senare ska rendera kalendern efter lyckad inloggning.
         // 2 sekunder delay för att simulera en sökning av kontot.
         // Kan ta bort senare, samt clearFields metoden.
-        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(2), event -> clearFields()));
+        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(2), event -> switchToCalendarView()));
         timeline.setCycleCount(1);
         timeline.play();
     }
 
     // För framtida användning om användaren vill byta vy från login menyn för att registrera ett konto
-//    @FXML
-//    private void switchToRegisterView() {}
+    @FXML
+    private void switchToRegisterView() {
+        SceneManagerProvider.getSceneManager().switchScene("/com/grupp5/agila_schemalggare/register-view.fxml");
+    }
+
+    private void switchToCalendarView() {
+        clearFields();
+
+        SceneManagerProvider.getSceneManager().switchScene("/com/grupp5/agila_schemalggare/calendarMonth.fxml");
+    }
 
     private void changeStatus(String message, String color) {
         statusLabel.setText(message);

@@ -1,5 +1,6 @@
 package com.grupp5.agila_schemalggare.models;
 
+import java.util.List;
 import java.util.UUID;
 
 // Simpel Account klass som tar emot username & password som input.
@@ -43,7 +44,6 @@ public abstract class Account {
         return username;
     }
 
-    // Möjligtvis värt att ta bort senare?
     public String getPassword() {
         return password;
     }
@@ -54,7 +54,14 @@ public abstract class Account {
 
     public abstract String getRole();
 
-    // Någon eventuell funktion för om användaren är Admin? Inte nödvändig just nu.
+    // La till bara för att kunna starta projektet - Joel
+    public String addEvent(Event event) {
+        events.add(event);
+
+        return "| Event added: " + event + " |";
+    }
+
+    // Någon eventuell funktion för om användaren är Admin?
     public boolean canEditOthers() {
         return false;
     }
