@@ -18,10 +18,8 @@ public class CalendarService {
             throw new IllegalStateException("User is not logged in");
         }
 
-        Calendar calendar = loggedInAccount.getCalendar();
-
         Event event = new Event(title, desc, startDate, endDate);
-        calendar.addEvent(event);
+        loggedInAccount.addEvent(event);
 
         //saveChangesToFile(); <-- empty method for later
 

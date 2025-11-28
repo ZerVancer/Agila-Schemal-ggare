@@ -25,6 +25,15 @@ public abstract class Account {
         this.password = password;
     }
 
+    public void addEvent(Event event) {
+      calendar.addEvent(event);
+    }
+
+    public UUID getId() {
+        return id;
+    }
+    public void setId(UUID id) {}
+
     // Getters
     public UUID getAccountId() {
         return id;
