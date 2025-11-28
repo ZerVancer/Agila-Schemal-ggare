@@ -1,11 +1,12 @@
 package com.grupp5.agila_schemalggare.models;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.UUID;
 
 // Simpel Account klass som tar emot username & password som input.
 // Ska användas som basklass för resterande användar klasser.
-public abstract class Account {
+public abstract class Account implements Serializable {
     private UUID id;
     private String username;
     private String password;
