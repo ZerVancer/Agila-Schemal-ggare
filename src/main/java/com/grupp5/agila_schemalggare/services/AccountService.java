@@ -4,9 +4,7 @@ import com.grupp5.agila_schemalggare.models.Account;
 import com.grupp5.agila_schemalggare.models.Admin;
 import com.grupp5.agila_schemalggare.models.User;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 
 public class AccountService {
 

@@ -65,7 +65,7 @@ public abstract class Account {
             return true;
         }
 
-        if (object == null || getClass() != object.getClass()) {
+        if (object == null || !(object instanceof Account)) {
             return false;
         }
 
