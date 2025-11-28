@@ -51,9 +51,7 @@ public class LoginController implements ServiceRegister {
         // Timer för att kalla på en funktion som senare ska rendera kalendern efter lyckad inloggning.
         // 2 sekunder delay för att simulera en sökning av kontot.
         // Kan ta bort senare, samt clearFields metoden.
-        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(2), event -> switchToCalendarView()));
-        timeline.setCycleCount(1);
-        timeline.play();
+        switchToCalendarView();
     }
 
     // För framtida användning om användaren vill byta vy från login menyn för att registrera ett konto
@@ -65,7 +63,7 @@ public class LoginController implements ServiceRegister {
     private void switchToCalendarView() {
         clearFields();
 
-        SceneManagerProvider.getSceneManager().switchScene("/com/grupp5/agila_schemalggare/calendarMonth.fxml");
+        SceneManagerProvider.getSceneManager().switchScene("/com/grupp5/agila_schemalggare/calendar-viex.fxml");
     }
 
     private void changeStatus(String message, String color) {
