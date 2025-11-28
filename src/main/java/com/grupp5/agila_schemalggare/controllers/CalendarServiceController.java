@@ -1,9 +1,6 @@
 package com.grupp5.agila_schemalggare.controllers;
 
-import com.grupp5.agila_schemalggare.models.Account;
 import com.grupp5.agila_schemalggare.models.Event;
-import com.grupp5.agila_schemalggare.models.EventCreatorService;
-import com.grupp5.agila_schemalggare.models.User;
 import com.grupp5.agila_schemalggare.services.AccountService;
 import com.grupp5.agila_schemalggare.utils.SceneManager;
 import com.grupp5.agila_schemalggare.utils.ServiceRegister;
@@ -16,10 +13,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
-import javafx.stage.Window;
 
 import java.net.URL;
-import java.time.LocalDateTime;
 import java.util.ResourceBundle;
 
 public class CalendarServiceController implements Initializable, ServiceRegister {
