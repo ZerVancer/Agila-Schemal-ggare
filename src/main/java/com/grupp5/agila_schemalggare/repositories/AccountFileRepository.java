@@ -5,8 +5,7 @@ import com.grupp5.agila_schemalggare.models.Admin;
 import com.grupp5.agila_schemalggare.models.User;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
 
 public class AccountFileRepository {
     public boolean saveAccountToFile(Account account) throws IOException {
@@ -52,8 +51,8 @@ public class AccountFileRepository {
         return null;
     }
 
-    public List<Account> loadAllAccountsFromFile() throws IOException, ClassNotFoundException {
-        ArrayList<Account> accounts = new ArrayList<>();
+    public HashSet<Account> loadAllAccountsFromFile() throws IOException, ClassNotFoundException {
+        HashSet<Account> accounts = new HashSet<>();
 
         File folder = new File("accountsSaveData");
 

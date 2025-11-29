@@ -9,14 +9,21 @@ import java.io.IOException;
 import java.util.HashSet;
 
 public class AccountService {
+    AccountFileRepository accountFileRepository = new AccountFileRepository();
 
-    public HashSet<Account> registeredUsers = new HashSet<>();
+    public HashSet<Account> registeredUsers;
 
     // La till denna "variabeln" för att verkligen deklarera ett konto som man kan använda sig utav
     // om så önskas i andra delar i projektet, istället för att behöva filtrera igenom och jämföra etc.
     private static Account loggedInAccount = null;
 
     public AccountService() {
+        try {
+            registeredUsers = accountFileRepository.loadAllAccountsFromFile();
+        } catch (IOException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+
         // Går att ta bort, skapar bara ett konto för att testa logiken.
         // Uppdaterade lite för att säkerställa att första kontot blir en "Admin"
         if (registeredUsers.isEmpty()) {
