@@ -19,7 +19,7 @@ public class AccountFileRepository {
         String fileName = account.getRole() + "@" + account.getUsername() + ".ser";
 
         try (ObjectOutputStream out = new ObjectOutputStream(
-                        new FileOutputStream(
+                new FileOutputStream(
                         new File(folder, fileName)))) {
             out.writeObject(account);
         }

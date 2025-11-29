@@ -4,8 +4,10 @@ import com.grupp5.agila_schemalggare.models.Account;
 import com.grupp5.agila_schemalggare.models.Admin;
 import com.grupp5.agila_schemalggare.models.User;
 import com.grupp5.agila_schemalggare.utils.DynamicController;
+import com.grupp5.agila_schemalggare.repositories.AccountFileRepository;
 
 import java.util.ArrayList;
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
 
@@ -110,8 +112,15 @@ public class AccountService {
 
         Account account = registeredUsers.isEmpty() ? new Admin(username, password) : new User(username, password);
 
+        AccountFileRepository repository = new AccountFileRepository();
+
+        try {
+            repository.saveAccountToFile(account);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
         boolean added = registeredUsers.add(account);
-        //saveAccountToFile(); <-- empty method for later
 
         if (!added) {
             throw new IllegalArgumentException("Username already exists!");
