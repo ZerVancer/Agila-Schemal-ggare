@@ -12,6 +12,7 @@ import java.util.HashSet;
 import java.util.List;
 
 public class AccountService {
+    AccountFileRepository accountFileRepository = new AccountFileRepository();
 
     private static final HashSet<Account> registeredUsers = new HashSet<>();
 
@@ -21,6 +22,12 @@ public class AccountService {
     private static final List<DynamicController> dynamicControllers = new ArrayList<>();
 
     public AccountService() {
+        try {
+            registeredUsers = accountFileRepository.loadAllAccountsFromFile();
+        } catch (IOException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+
         // Går att ta bort, skapar bara ett konto för att testa logiken.
         // Uppdaterade lite för att säkerställa att första kontot blir en "Admin"
 //        if (registeredUsers.isEmpty()) {
