@@ -1,19 +1,19 @@
 package com.grupp5.agila_schemalggare.controllers;
 
 import com.grupp5.agila_schemalggare.models.Account;
-import com.grupp5.agila_schemalggare.models.EventCreatorService;
-import com.grupp5.agila_schemalggare.models.User;
+import com.grupp5.agila_schemalggare.services.CalendarService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.TextField;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 import java.time.LocalDateTime;
 
-public class EventCreatorServiceController {
+public class EventCreatorController {
   @FXML
   private TextField titleField;
   @FXML
@@ -41,11 +41,13 @@ public class EventCreatorServiceController {
     int endTimeMinuteSpinnerValue = endTimeMinuteSpinner.getValue();
 
     if (title.isEmpty()) {
+      errorMessage.setTextFill(Color.RED);
       errorMessage.setText("Title cannot be empty");
       return;
     }
     // May be unnecessary
     if (description.isEmpty()) {
+      errorMessage.setTextFill(Color.RED);
       errorMessage.setText("Description cannot be empty");
       return;
     }
@@ -56,15 +58,21 @@ public class EventCreatorServiceController {
     LocalDateTime endTime = LocalDateTime.now().withHour(endTimeHourSpinnerValue).withMinute(endTimeMinuteSpinnerValue);
 
     if (startTime.isAfter(endTime)) {
+      errorMessage.setTextFill(Color.RED);
       errorMessage.setText("Start time cannot be after end time");
       return;
     }
 
-    // WARNING: Hardcoded user
-    Account account = new User("t", "Test");
+    CalendarService calenderService = new CalendarService();
+    Account account = calenderService.createEvent(title, description, startTime, endTime);
 
-    EventCreatorService calenderService = new EventCreatorService();
-    calenderService.createEvent(account, title, description, startTime, endTime);
+    if (account != null) {
+        errorMessage.setTextFill(Color.GREEN);
+        errorMessage.setText("Event created successfully.");
+    } else {
+        errorMessage.setTextFill(Color.RED);
+        errorMessage.setText("Event was not created.");
+    }
 
     closeWindowAction(event);
   }

@@ -10,15 +10,14 @@ public abstract class Account implements Serializable {
     private UUID id;
     private String username;
     private String password;
-    // La till bara för att kunna starta projektet - Joel
-    private List<Event> events;
-    //private Calendar calendar; - Placeholder för tillfället.
+    private Calendar calendar = new Calendar();
 
     //Constructors
     public Account(String username, String password) {
         this.id = UUID.randomUUID();
         this.username = username;
         this.password = password;
+        this.calendar = new Calendar();
     }
 
     // Framtida användning för sparning/hämtning av konton från Repositories.
@@ -27,6 +26,15 @@ public abstract class Account implements Serializable {
         this.username = username;
         this.password = password;
     }
+
+    public void addEvent(Event event) {
+      calendar.addEvent(event);
+    }
+
+    public UUID getId() {
+        return id;
+    }
+    public void setId(UUID id) {}
 
     // Getters
     public UUID getAccountId() {
@@ -41,14 +49,11 @@ public abstract class Account implements Serializable {
         return password;
     }
 
-    public abstract String getRole();
-
-    // La till bara för att kunna starta projektet - Joel
-    public String addEvent(Event event) {
-        events.add(event);
-
-        return "| Event added: " + event + " |";
+    public Calendar getCalendar() {
+        return calendar;
     }
+
+    public abstract String getRole();
 
     // Någon eventuell funktion för om användaren är Admin?
     public boolean canEditOthers() {

@@ -25,7 +25,7 @@ public class SceneManager {
             }
 
             if (stage.getScene() == null) {
-                stage.setScene(new javafx.scene.Scene(root, 360, 240));
+                stage.setScene(new javafx.scene.Scene(root, 700, 400));
             } else {
                 stage.getScene().setRoot(root);
             }

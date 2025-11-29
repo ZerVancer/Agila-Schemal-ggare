@@ -41,11 +41,24 @@ public class Event implements Serializable {
         return description;
     }
 
+    public void setStartDate(LocalDateTime startDate) {
+        this.startDate = startDate.toInstant(ZoneOffset.UTC);
+    }
+
     public LocalDateTime getStartDate() {
         return LocalDateTime.ofInstant(startDate, ZoneOffset.UTC);
     }
 
+    public void setEndDate(LocalDateTime endDate) {
+        this.endDate = endDate.toInstant(ZoneOffset.UTC);
+    }
+
     public LocalDateTime getEndDate() { //getters send out LocalDateTime to display time in user's time zone
         return LocalDateTime.ofInstant(endDate, ZoneOffset.UTC);
+    }
+
+    @Override
+    public String toString() {
+      return title;
     }
 }
