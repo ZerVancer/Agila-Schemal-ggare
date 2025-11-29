@@ -60,5 +60,25 @@ public abstract class Account implements Serializable {
         return false;
     }
 
+    // Check för HashSet
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) {
+            return true;
+        }
+
+        if (object == null || !(object instanceof Account)) {
+            return false;
+        }
+
+        Account account = (Account) object;
+        return username.equals(account.username);
+    }
+
+    @Override
+    public int hashCode() {
+        return username.hashCode();
+    }
+
     // Går alltid att lägga till saker i framtiden etc.
 }
