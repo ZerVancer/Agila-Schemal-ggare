@@ -4,7 +4,9 @@ import com.grupp5.agila_schemalggare.models.Account;
 import com.grupp5.agila_schemalggare.models.Calendar;
 import com.grupp5.agila_schemalggare.models.Event;
 import com.grupp5.agila_schemalggare.models.User;
+import com.grupp5.agila_schemalggare.repositories.AccountFileRepository;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 
 public class CalendarService {
@@ -21,7 +23,7 @@ public class CalendarService {
         Event event = new Event(title, desc, startDate, endDate);
         loggedInAccount.addEvent(event);
 
-        //saveChangesToFile(); <-- empty method for later
+        saveChangesToFile(loggedInAccount);
 
         return loggedInAccount;
     }
@@ -39,7 +41,7 @@ public class CalendarService {
             }
         }
 
-        //saveChangesToFile(); <-- empty method for later
+        saveChangesToFile(loggedInAccount);
 
         return loggedInAccount;
     }
@@ -68,7 +70,7 @@ public class CalendarService {
         editedEvent.setStartDate(startDate);
         editedEvent.setEndDate(endDate);
 
-        //saveChangesToFile(); <-- empty method for later
+        saveChangesToFile(loggedInAccount);
 
         return loggedInAccount;
     }
@@ -80,5 +82,13 @@ public class CalendarService {
         return loggedInAccount != null;
     }
 
-    // private void saveChangesToFile() {}
+    private void saveChangesToFile(Account account) {
+        AccountFileRepository repository = new AccountFileRepository();
+
+        try {
+            repository.updateExistingAccount(account);
+        } catch (IOException e) {
+        throw new RuntimeException();
+        }
+    }
 }

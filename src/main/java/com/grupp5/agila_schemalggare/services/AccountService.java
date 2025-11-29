@@ -3,7 +3,9 @@ package com.grupp5.agila_schemalggare.services;
 import com.grupp5.agila_schemalggare.models.Account;
 import com.grupp5.agila_schemalggare.models.Admin;
 import com.grupp5.agila_schemalggare.models.User;
+import com.grupp5.agila_schemalggare.repositories.AccountFileRepository;
 
+import java.io.IOException;
 import java.util.HashSet;
 
 public class AccountService {
@@ -77,8 +79,15 @@ public class AccountService {
 
         Account account = registeredUsers.isEmpty() ? new Admin(username, password) : new User(username, password);
 
+        AccountFileRepository repository = new AccountFileRepository();
+
+        try {
+            repository.saveAccountToFile(account);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
         boolean added = registeredUsers.add(account);
-        //saveAccountToFile(); <-- empty method for later
 
         if (!added) {
             throw new IllegalArgumentException("Username already exists!");
@@ -98,6 +107,4 @@ public class AccountService {
                 password.length() < 31 && //shorter than 31
                 password.matches(".*[!@#$%^&*()_+=\\-{}\\[\\]:;\"'<>,.?/].*"); //must contain at least one special character
     }
-
-    //private void saveAccountToFile() {}
 }
