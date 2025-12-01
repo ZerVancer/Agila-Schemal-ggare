@@ -3,7 +3,6 @@ package com.grupp5.agila_schemalggare.controllers;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 
-
 public class SideMenuController {
     private CalendarViewController calendarViewController;
 
@@ -33,9 +32,11 @@ public class SideMenuController {
         setActiveButton(renderMonthly);
     }
 
+    // Nu togglar den bara activeButton
     @FXML
     public void handleYearlyClick() {
         // TODO finns inget på plats för års vy
+        // calendarViewController.showYearView(); <-- Inför
         setActiveButton(renderYearly);
     }
 
@@ -49,7 +50,5 @@ public class SideMenuController {
 
         activeButton.getStyleClass().add("active");
         activeButton.setStyle("-fx-background-color: lightblue; -fx-border-color: gray; -fx-border-radius: 4px; -fx-background-radius: 4px;");
-
-
     }
 }

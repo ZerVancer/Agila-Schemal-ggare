@@ -13,7 +13,6 @@
 
     <Label text="Menu" style="-fx-font-size: 18px; -fx-font-weight: bold; "/>
 
-
     <!-- Meny för rendering -->
     <VBox alignment="CENTER"
           spacing="5.0">
