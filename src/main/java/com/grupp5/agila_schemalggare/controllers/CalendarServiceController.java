@@ -32,16 +32,20 @@ public class CalendarServiceController implements Initializable, ServiceRegister
 
   @FXML
   protected void createButtonAction(ActionEvent event) {
-    sceneManager = new SceneManager((Stage) label.getScene().getWindow(), accountService);
-    sceneManager.switchScene("/com/grupp5/agila_schemalggare/eventCreatorService.fxml");
+    //accountService.nullCurrentEvent();
+    switchSceneToCreateEdit();
   }
 
   @FXML
   protected void editButtonAction(ActionEvent event) {
     Event eventToEdit = choiceBox.getSelectionModel().getSelectedItem();
+    //accountService.setCurrentEvent(eventToEdit);
+    switchSceneToCreateEdit();
+  }
+
+  private void switchSceneToCreateEdit() {
     sceneManager = new SceneManager((Stage) label.getScene().getWindow(), accountService);
-    // Connect to eventEditor
-    sceneManager.switchScene("");
+    sceneManager.switchScene("/com/grupp5/agila_schemalggare/eventCreatorService.fxml");
   }
 
   private void fillBoxWithEvents() {
