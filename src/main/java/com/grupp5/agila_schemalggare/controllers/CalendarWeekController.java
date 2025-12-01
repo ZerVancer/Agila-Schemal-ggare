@@ -9,6 +9,7 @@ import javafx.scene.control.Label;
 
 import java.net.URL;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.WeekFields;
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -60,7 +61,6 @@ public class CalendarWeekController implements Initializable {
   private Label[] dayLabels;
 
   private LocalDate[] weekDates;
-
   // - Joel
 
   // TEMP:
@@ -103,44 +103,53 @@ public class CalendarWeekController implements Initializable {
 
     LocalDate monday = date.minusDays(dayOfWeek - 1);
 
+    DateTimeFormatter dayFormat = DateTimeFormatter.ofPattern("EEEE MMM");
+
     for (int i = 0; i < 7; i++) {
-        weekDates[i] = monday.plusDays(i);
-        dayLabels[i].setText(weekDates[i].getDayOfWeek() + " " + weekDates[i].getDayOfMonth());
+        LocalDate current = monday.plusDays(i);
+
+        weekDates[i] = current;
+
+        String dayName = current.format(dayFormat);
+        int dayNumber = current.getDayOfMonth();
+
+        String labelText = dayName + " " + dayNumber;
+        dayLabels[i].setText(labelText);
     }
   }
 
-  public void renderEvents() {
-      for (int i = 0; i < weekDates.length; i++) {
-          LocalDate day = weekDates[i];
+    public void renderEvents() {
+        for (int i = 0; i < weekDates.length; i++) {
+            LocalDate day = weekDates[i];
 
-          var events = calendarService.getSpecificEvent(day);
+            var events = calendarService.getSpecificEvent(day);
 
-          StringBuilder stringBuilder = new StringBuilder(dayButtons[i].getText());
+            StringBuilder stringBuilder = new StringBuilder(dayButtons[i].getText());
 
-          for (var event : events) {
-              String startTime = String.format("%02d:%02d", event.getStartDate().getHour(), event.getStartDate().getMinute());
-              String endTime = String.format("%02d:%02d", event.getEndDate().getHour(), event.getEndDate().getMinute());
+            for (var event : events) {
+                String startTime = String.format("%02d:%02d", event.getStartDate().getHour(), event.getStartDate().getMinute());
+                String endTime = String.format("%02d:%02d", event.getEndDate().getHour(), event.getEndDate().getMinute());
 
-              stringBuilder.append("| ")
-                      .append(event.getTitle())
-                      .append(" |\n")
-                      .append("| ")
-                      .append(startTime)
-                      .append(" - ")
-                      .append(endTime)
-                      .append(" |\n");
-          }
+                stringBuilder.append("| ")
+                        .append(event.getTitle())
+                        .append(" |\n")
+                        .append("| ")
+                        .append(startTime)
+                        .append(" - ")
+                        .append(endTime)
+                        .append(" |\n");
+            }
 
-          dayButtons[i].setText(stringBuilder.toString());
+            dayButtons[i].setText(stringBuilder.toString());
 
 
-          if (!events.isEmpty()) {
-              dayButtons[i].setStyle("-fx-border-color: lightblue;");
-          } else {
-              dayButtons[i].setStyle("");
-          }
-      }
-  }
+            if (!events.isEmpty()) {
+                dayButtons[i].setStyle("-fx-border-color: lightblue;");
+            } else {
+                dayButtons[i].setStyle("");
+            }
+        }
+    }
 
   @Override
   public void initialize(URL url, ResourceBundle resourceBundle) {

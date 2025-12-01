@@ -24,7 +24,7 @@ public class Calendar {
     return events;
   }
 
-  // Metod för att skapa några events. - Joel
+    // Metod för att skapa några events. - Joel
     // Går att radera om så önskas, eller fylla på med mer för redovisningen?
 
 //  public void populateEvents() {
