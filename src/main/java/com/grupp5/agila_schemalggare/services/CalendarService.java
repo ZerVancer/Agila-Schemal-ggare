@@ -5,7 +5,9 @@ import com.grupp5.agila_schemalggare.models.Calendar;
 import com.grupp5.agila_schemalggare.models.Event;
 import com.grupp5.agila_schemalggare.models.User;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class CalendarService {
     // AccountService accountService = new AccountService(); //solve dependency injection at a later point
@@ -71,6 +73,17 @@ public class CalendarService {
         //saveChangesToFile(); <-- empty method for later
 
         return loggedInAccount;
+    }
+
+    public List<Event> getAllEvents() {
+        return loggedInAccount.getCalendar().getEvents();
+    }
+
+    public List<Event> getSpecificEvent(LocalDate date) {
+        return getAllEvents()
+                .stream()
+                .filter(event -> event.getStartDate().toLocalDate().equals(date))
+                .toList();
     }
 
     //room for possible extra calendar display logic here

@@ -1,5 +1,6 @@
 package com.grupp5.agila_schemalggare.controllers;
 
+import com.grupp5.agila_schemalggare.services.CalendarService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -13,16 +14,19 @@ import java.time.LocalDate;
 import java.util.ResourceBundle;
 
 public class CalendarMonthController implements Initializable {
-  @FXML
-  private Button previousMonthButton;
-  @FXML
-  private Label monthLabel;
-  @FXML
-  private Button nextMonthButton;
-  @FXML
-  private Label timeSpanLabel;
-  @FXML
-  private GridPane gridPane;
+
+    private final CalendarService calendarService = new CalendarService();
+
+    @FXML
+    private Button previousMonthButton;
+    @FXML
+    private Label monthLabel;
+    @FXML
+    private Button nextMonthButton;
+    @FXML
+    private Label timeSpanLabel;
+    @FXML
+    private GridPane gridPane;
 
   // TEMP:
   private LocalDate date = LocalDate.now();
@@ -120,9 +124,27 @@ public class CalendarMonthController implements Initializable {
   }
 
   private void addButtonToGrid(String text, int row, int col) {
-    Button button = new Button(String.valueOf(text));
-    button.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-    button.setOnAction(this::buttonAction);
+      int day = Integer.parseInt(text);
+      LocalDate dayDate = date.withDayOfMonth(day);
+
+      var events = calendarService.getSpecificEvent(dayDate);
+
+      // Lägger till en siffra beroende på hur många och om det finns events för det datumet.
+      String buttonText = text;
+      if (!events.isEmpty()) {
+          buttonText += " (" + events.size() + ")";
+      }
+
+      Button button = new Button(buttonText);
+      button.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+      button.setStyle("-fx-cursor: pointer;");
+      button.setOnAction(this::buttonAction);
+
+      // Om vi vill ha färg för att highlighta?
+//      if (!events.isEmpty()) {
+//          button.setStyle("-fx-background-color: lightblue; -fx-border-color: darkblue;");
+//      }
+
     gridPane.add(button, col, row);
   }
 

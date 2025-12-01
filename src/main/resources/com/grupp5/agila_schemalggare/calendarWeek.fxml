@@ -20,7 +20,7 @@
         <Button fx:id="nextWeekButton" onAction="#switchToNextWeek" text="&gt;" />
     </HBox>
     <Label fx:id="timeSpanLabel" style="-fx-font-size: 14px; -fx-font-weight: bold" text="date" />
-    <GridPane alignment="CENTER" hgap="5" vgap="5">
+    <GridPane fx:id="weekGrid" alignment="CENTER" hgap="5" vgap="5">
         <columnConstraints>
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -38,7 +38,7 @@
             <Button fx:id="mondayButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#buttonAction" GridPane.rowIndex="1" />
             <Button fx:id="tuesdayButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#buttonAction" GridPane.columnIndex="1" GridPane.rowIndex="1" />
             <Button fx:id="wednesdayButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#buttonAction" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-            <Button fx:id="tursdayButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#buttonAction" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+            <Button fx:id="thursdayButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#buttonAction" GridPane.columnIndex="3" GridPane.rowIndex="1" />
             <Button fx:id="fridayButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#buttonAction" GridPane.columnIndex="4" GridPane.rowIndex="1" />
             <Button fx:id="saturdayButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#buttonAction" GridPane.columnIndex="5" GridPane.rowIndex="1" />
             <Button fx:id="sundayButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#buttonAction" GridPane.columnIndex="6" GridPane.rowIndex="1" />

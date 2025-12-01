@@ -16,6 +16,8 @@ public abstract class Account {
         this.username = username;
         this.password = password;
         this.calendar = new Calendar();
+        // För att testa så att events är synligt
+        //this.calendar.populateEvents();
     }
 
     // Framtida användning för sparning/hämtning av konton från Repositories.
