@@ -21,7 +21,6 @@
             <Insets top="5" />
         </VBox.margin>
 
-        <Button text="Daily" minWidth="80"/>
         <Button text="Weekly" minWidth="80"/>
         <Button text="Monthly" minWidth="80"/>
         <Button text="Yearly" minWidth="80"/>
