@@ -3,20 +3,15 @@ package com.grupp5.agila_schemalggare.controllers;
 import com.grupp5.agila_schemalggare.services.CalendarService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 
-import java.net.URL;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.WeekFields;
 import java.util.Locale;
-import java.util.ResourceBundle;
 
-public class CalendarWeekController implements Initializable {
-
-  private final CalendarService calendarService = new CalendarService();
+public class CalendarWeekController {
 
   @FXML
   public Button previousWeekButton;
@@ -60,26 +55,35 @@ public class CalendarWeekController implements Initializable {
   private Button[] dayButtons;
   private Label[] dayLabels;
 
-  private LocalDate[] weekDates;
+  private LocalDateTime[] weekDates;
   // - Joel
 
-  // TEMP:
-  private LocalDate date = LocalDate.now();
+  private final CalendarService calendarService = new CalendarService();
+  private LocalDateTime date;
+
+  public void setCurrentDate(LocalDateTime date) {
+    this.date = date;
+  }
 
   // Future button use
   @FXML
   protected void buttonAction(ActionEvent event) {
+    Button button = (Button) event.getSource();
+    String dayString = button.getText().split("-")[2];
+    if (dayString.charAt(0) == '0') dayString = String.valueOf(dayString.charAt(1));
+    int day = Integer.parseInt(dayString);
+    calendarService.openEventHandlingWindow(date.withDayOfMonth(day));
   }
 
   @FXML
   protected void switchToPreviousWeek() {
     date = date.minusWeeks(1);
-    initialize(null, null);
+    setScene();
   }
   @FXML
   protected void switchToNextWeek() {
     date = date.plusWeeks(1);
-    initialize(null, null);
+    setScene();
   }
 
   public void setWeekLabel() {
@@ -91,26 +95,26 @@ public class CalendarWeekController implements Initializable {
   public void setTimeSpanLabel() {
       int dayOfWeek = date.getDayOfWeek().getValue();
 
-      LocalDate startDate = date.minusDays(dayOfWeek - 1);
-      LocalDate endDate = date.plusDays(7 - dayOfWeek);
+      LocalDateTime startDate = date.minusDays(dayOfWeek - 1);
+      LocalDateTime endDate = date.plusDays(7 - dayOfWeek);
 
-      timeSpanLabel.setText(startDate + "  |  " + endDate);
+      timeSpanLabel.setText(startDate.toLocalDate() + "  |  " + endDate.toLocalDate());
   }
 
   public void setDayDate() {
-    weekDates = new LocalDate[7];
+    weekDates = new LocalDateTime[7];
     int dayOfWeek = date.getDayOfWeek().getValue();
 
-    LocalDate monday = date.minusDays(dayOfWeek - 1);
+    LocalDateTime monday = date.minusDays(dayOfWeek - 1);
 
     DateTimeFormatter dayFormat = DateTimeFormatter.ofPattern("EEEE MMM");
 
     for (int i = 0; i < 7; i++) {
-        LocalDate current = monday.plusDays(i);
+        LocalDateTime current = monday.plusDays(i);
 
         weekDates[i] = current;
 
-        String dayName = current.format(dayFormat);
+        String dayName = current.toLocalDate().format(dayFormat);
         int dayNumber = current.getDayOfMonth();
 
         String labelText = dayName + " " + dayNumber;
@@ -120,11 +124,11 @@ public class CalendarWeekController implements Initializable {
 
     public void renderEvents() {
         for (int i = 0; i < weekDates.length; i++) {
-            LocalDate day = weekDates[i];
+            LocalDateTime day = weekDates[i];
 
             var events = calendarService.getSpecificEvent(day);
 
-            StringBuilder stringBuilder = new StringBuilder(day.toString() + "\n");
+            StringBuilder stringBuilder = new StringBuilder(day.toLocalDate().toString() + "\n");
 
             for (var event : events) {
                 String startTime = String.format("%02d:%02d", event.getStartDate().getHour(), event.getStartDate().getMinute());
@@ -151,8 +155,8 @@ public class CalendarWeekController implements Initializable {
         }
     }
 
-  @Override
-  public void initialize(URL url, ResourceBundle resourceBundle) {
+
+  public void setScene() {
     dayButtons = new Button[]{mondayButton, tuesdayButton, wednesdayButton, thursdayButton, fridayButton, saturdayButton, sundayButton};
     dayLabels = new Label[]{mondayLabel, tuesdayLabel, wednesdayLabel, thursdayLabel, fridayLabel, saturdayLabel, sundayLabel};
 

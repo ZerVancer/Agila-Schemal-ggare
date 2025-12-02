@@ -1,21 +1,16 @@
 package com.grupp5.agila_schemalggare.controllers;
 
 import com.grupp5.agila_schemalggare.models.Event;
-import com.grupp5.agila_schemalggare.services.AccountService;
 import com.grupp5.agila_schemalggare.services.CalendarService;
-import com.grupp5.agila_schemalggare.utils.ServiceRegister;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
-import java.net.URL;
 import java.time.LocalDateTime;
-import java.util.ResourceBundle;
 
-public class EventServiceController implements Initializable, ServiceRegister {
+public class EventServiceController {
   @FXML
   private TextField titleField;
   @FXML
@@ -33,12 +28,18 @@ public class EventServiceController implements Initializable, ServiceRegister {
   @FXML
   private Button deleteButton;
 
-
-  private AccountService accountService;
   // Change to accountService.getCurrentEvent and accountService.getCurrentDate in Initialize
-  private Event curretnEvent = new Event("Test", "test", LocalDateTime.now(), LocalDateTime.now().plusHours(1));
-  private LocalDateTime currentDate = LocalDateTime.now();
+  private Event currentEvent;
+  private LocalDateTime currentDate;
   private final CalendarService calenderService = new CalendarService();
+
+  public void setCurrentEvent(Event currentEvent) {
+    this.currentEvent = currentEvent;
+  }
+
+  public void setCurrentDate(LocalDateTime currentDate) {
+    this.currentDate = currentDate;
+  }
 
   @FXML
   public void confirmButton(ActionEvent event) {
@@ -70,10 +71,10 @@ public class EventServiceController implements Initializable, ServiceRegister {
       return;
     }
 
-    if (curretnEvent == null) {
+    if (currentEvent == null) {
       calenderService.createEvent(title, description, startTime, endTime);
     } else {
-      calenderService.editEvent(curretnEvent, title, description, startTime, endTime);
+      calenderService.editEvent(currentEvent, title, description, startTime, endTime);
     }
 
     closeWindowAction(event);
@@ -87,29 +88,24 @@ public class EventServiceController implements Initializable, ServiceRegister {
 
   @FXML
   public void deleteButton(ActionEvent event) {
-    calenderService.deleteEvent(curretnEvent);
+    calenderService.deleteEvent(currentEvent);
     closeWindowAction(event);
   }
 
-  @Override
-  public void initialize(URL url, ResourceBundle resourceBundle) {
-    if (curretnEvent != null) {
-      titleField.setText(curretnEvent.getTitle());
-      descriptionField.setText(curretnEvent.getDescription());
+  public void setScene() {
+    if (currentEvent != null) {
+      titleField.setText(currentEvent.getTitle());
+      descriptionField.setText(currentEvent.getDescription());
       SpinnerValueFactory<Integer> valueFactory1 = startTimeHourSpinner.getValueFactory();
-      valueFactory1.setValue(curretnEvent.getStartDate().getHour());
+      valueFactory1.setValue(currentEvent.getStartDate().getHour());
       SpinnerValueFactory<Integer> valueFactory2 = startTimeMinuteSpinner.getValueFactory();
-      valueFactory2.setValue(curretnEvent.getStartDate().getMinute());
+      valueFactory2.setValue(currentEvent.getStartDate().getMinute());
       SpinnerValueFactory<Integer> valueFactory3 = endTimeHourSpinner.getValueFactory();
-      valueFactory3.setValue(curretnEvent.getEndDate().getHour());
+      valueFactory3.setValue(currentEvent.getEndDate().getHour());
       SpinnerValueFactory<Integer> valueFactory4 = endTimeMinuteSpinner.getValueFactory();
-      valueFactory4.setValue(curretnEvent.getEndDate().getMinute());
+      valueFactory4.setValue(currentEvent.getEndDate().getMinute());
       deleteButton.setVisible(true);
     }
   }
 
-  @Override
-  public void registerAccountService(AccountService accountService) {
-    this.accountService = accountService;
-  }
 }
