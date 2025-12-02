@@ -31,7 +31,8 @@ public class CalendarViewController {
         viewRender.getChildren().setAll(weekView);
     }
 
-    public void showMonthView() {
+    public void showMonthView() {;
+      calendarMonthController.setScene();
         viewRender.getChildren().setAll(monthView);
     }
 
