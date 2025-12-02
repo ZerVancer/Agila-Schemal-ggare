@@ -124,7 +124,7 @@ public class CalendarWeekController implements Initializable {
 
             var events = calendarService.getSpecificEvent(day);
 
-            StringBuilder stringBuilder = new StringBuilder(dayButtons[i].getText());
+            StringBuilder stringBuilder = new StringBuilder(day.toString() + "\n");
 
             for (var event : events) {
                 String startTime = String.format("%02d:%02d", event.getStartDate().getHour(), event.getStartDate().getMinute());
