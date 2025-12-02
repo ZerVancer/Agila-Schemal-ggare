@@ -4,20 +4,19 @@
 <?import javafx.scene.layout.*?>
 
 <BorderPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml">
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.grupp5.agila_schemalggare.controllers.CalendarViewController">
 
     <top>
         <Label text="Schedule Application" style="-fx-font-size: 22px; -fx-font-weight: bold" BorderPane.alignment="CENTER" />
     </top>
 
     <center>
-        <fx:include source="calendarMonth.fxml" BorderPane.alignment="CENTER"/>
+        <StackPane fx:id="viewRender" />
     </center>
 
     <right >
-        <VBox alignment="CENTER" minWidth="100">
-            <fx:include source="side-menu.fxml" BorderPane.alignment="CENTER"/>
-        </VBox>
+        <VBox fx:id="sideMenu" alignment="CENTER" minWidth="100" />
     </right>
 
 </BorderPane>

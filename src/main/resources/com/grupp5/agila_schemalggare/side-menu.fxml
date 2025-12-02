@@ -2,16 +2,16 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-
 <?import javafx.geometry.Insets?>
+
 <VBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
       alignment="CENTER"
       spacing="5.0"
-      minWidth="60">
+      minWidth="60"
+      fx:controller="com.grupp5.agila_schemalggare.controllers.SideMenuController">
 
     <Label text="Menu" style="-fx-font-size: 18px; -fx-font-weight: bold; "/>
-
 
     <!-- Meny för rendering -->
     <VBox alignment="CENTER"
@@ -21,10 +21,9 @@
             <Insets top="5" />
         </VBox.margin>
 
-        <Button text="Daily" minWidth="80"/>
-        <Button text="Weekly" minWidth="80"/>
-        <Button text="Monthly" minWidth="80"/>
-        <Button text="Yearly" minWidth="80"/>
+        <Button fx:id="renderWeekly" text="Weekly" minWidth="80" onAction="#handleWeeklyClick"/>
+        <Button fx:id="renderMonthly" text="Monthly" minWidth="80" onAction="#handleMonthlyClick"/>
+        <Button fx:id="renderYearly" text="Yearly" minWidth="80" onAction="#handleYearlyClick"/>
     </VBox>
 
     <!-- Kommande event -->
