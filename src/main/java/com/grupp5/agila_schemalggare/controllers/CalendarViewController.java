@@ -21,9 +21,8 @@ public class CalendarViewController {
     private Parent monthView;
     private CalendarMonthController calendarMonthController;
 
-    // TODO: Inför year controllern om vi gör det i tid.
-//    private Parent yearView;
-//    private CalendarYearController calendarYearController;
+    private Parent yearView;
+    private CalendarYearController calendarYearController;
 
     public void showWeekView() {
         viewRender.getChildren().setAll(weekView);
@@ -35,7 +34,7 @@ public class CalendarViewController {
 
     // Inför year, om vi har tid.
     public void showYearView() {
-        // Fyll ut här när Year-view finns.
+        viewRender.getChildren().setAll(yearView);
     }
 
     // Vid start
@@ -51,14 +50,11 @@ public class CalendarViewController {
         monthView = monthLoader.load();
         calendarMonthController = monthLoader.getController();
 
-        // Inför year.
-//        FXMLLoader yearLoader = new FXMLLoader(getClass().getResource("/com/grupp5/agila_schemalggare/<Fyll ut här>.fxml"));
-//        yearView = yearLoader.load();
-//        calendarYearController = yearLoader.getController();
+        FXMLLoader yearLoader = new FXMLLoader(getClass().getResource("/com/grupp5/agila_schemalggare/calendarYear.fxml"));
+        yearView = yearLoader.load();
+        calendarYearController = yearLoader.getController();
 
         viewRender.getChildren().setAll(monthView);
-
-
 
         FXMLLoader sideLoader = new FXMLLoader(getClass().getResource("/com/grupp5/agila_schemalggare/side-menu.fxml"));
         VBox sideMenuNode = sideLoader.load();
