@@ -1,6 +1,7 @@
 package com.grupp5.agila_schemalggare.services;
 
 import com.grupp5.agila_schemalggare.controllers.CalendarServiceController;
+import com.grupp5.agila_schemalggare.controllers.EventServiceController;
 import com.grupp5.agila_schemalggare.models.Account;
 import com.grupp5.agila_schemalggare.models.Calendar;
 import com.grupp5.agila_schemalggare.models.Event;
@@ -95,6 +96,22 @@ public class CalendarService {
       try {
         Parent root = loader.load();
         CalendarServiceController controller = loader.getController();
+        controller.setCurrentDate(currentDate);
+        controller.setScene();
+        Stage stage = new  Stage();
+        stage.setTitle("Event Handling");
+        stage.setScene(new Scene(root, 300, 300));
+        stage.show();
+      } catch (IOException e) {
+        throw new RuntimeException(e);
+      }
+    }
+
+    public void openEventCreatingWindow(LocalDateTime currentDate) {
+      FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/grupp5/agila_schemalggare/eventService.fxml"));
+      try {
+        Parent root = loader.load();
+        EventServiceController controller = loader.getController();
         controller.setCurrentDate(currentDate);
         controller.setScene();
         Stage stage = new  Stage();

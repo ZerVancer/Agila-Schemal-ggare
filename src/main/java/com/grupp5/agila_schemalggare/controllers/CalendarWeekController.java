@@ -72,7 +72,8 @@ public class CalendarWeekController {
     String dayString = button.getText().split("-")[2];
     if (dayString.charAt(0) == '0') dayString = String.valueOf(dayString.charAt(1));
     int day = Integer.parseInt(dayString);
-    calendarService.openEventHandlingWindow(date.withDayOfMonth(day));
+    if (calendarService.getSpecificEvent(date.withDayOfMonth(day)).isEmpty()) calendarService.openEventCreatingWindow(date.withDayOfMonth(day));
+    else calendarService.openEventHandlingWindow(date.withDayOfMonth(day));
   }
 
   @FXML

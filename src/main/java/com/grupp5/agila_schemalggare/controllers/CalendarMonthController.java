@@ -30,12 +30,13 @@ public class CalendarMonthController {
     this.date = date;
   }
 
-  // Future button use
   @FXML
   public void buttonAction(ActionEvent event) {
     Button button = (Button) event.getSource();
     int day = Integer.parseInt(button.getText());
-    calendarService.openEventHandlingWindow(date.withDayOfMonth(day));
+    CalendarService calendarService = new CalendarService();
+    if (calendarService.getSpecificEvent(date.withDayOfMonth(day)).isEmpty()) calendarService.openEventCreatingWindow(date.withDayOfMonth(day));
+    else calendarService.openEventHandlingWindow(date.withDayOfMonth(day));
   }
 
   @FXML
