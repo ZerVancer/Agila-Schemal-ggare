@@ -8,6 +8,7 @@ import javafx.scene.layout.VBox;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class CalendarViewController {
     @FXML
@@ -45,13 +46,17 @@ public class CalendarViewController {
         // Försökte få ihop det med SceneManager, problemet är att den just nu påverkar hela scenen.
         // Därav får FXMLLoader ordna detta.
 
-         FXMLLoader weekLoader = new FXMLLoader(getClass().getResource("/com/grupp5/agila_schemalggare/calendarWeek.fxml"));
-         weekView = weekLoader.load();
-         calendarWeekController = weekLoader.getController();
+        FXMLLoader weekLoader = new FXMLLoader(getClass().getResource("/com/grupp5/agila_schemalggare/calendarWeek.fxml"));
+        weekView = weekLoader.load();
+        calendarWeekController = weekLoader.getController();
+        calendarWeekController.setCurrentDate(LocalDateTime.now());
+        calendarWeekController.setScene();
 
         FXMLLoader monthLoader = new FXMLLoader(getClass().getResource("/com/grupp5/agila_schemalggare/calendarMonth.fxml"));
         monthView = monthLoader.load();
         calendarMonthController = monthLoader.getController();
+        calendarMonthController.setCurrentDate(LocalDateTime.now());
+        calendarMonthController.setScene();
 
         FXMLLoader yearLoader = new FXMLLoader(getClass().getResource("/com/grupp5/agila_schemalggare/calendarYear.fxml"));
         yearView = yearLoader.load();

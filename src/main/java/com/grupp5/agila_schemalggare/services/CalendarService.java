@@ -1,19 +1,23 @@
 package com.grupp5.agila_schemalggare.services;
 
+import com.grupp5.agila_schemalggare.controllers.CalendarServiceController;
+import com.grupp5.agila_schemalggare.controllers.EventServiceController;
 import com.grupp5.agila_schemalggare.models.Account;
 import com.grupp5.agila_schemalggare.models.Calendar;
 import com.grupp5.agila_schemalggare.models.Event;
-import com.grupp5.agila_schemalggare.models.User;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 
-import java.time.LocalDate;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 
 public class CalendarService {
-    // AccountService accountService = new AccountService(); //solve dependency injection at a later point
-    // Account loggedInAccount = accountService.getLoggedInAccount(); <-- fetch loggedInAccount later when variable is available
+    Account loggedInAccount = AccountService.getLoggedInAccount(); //<-- fetch loggedInAccount later when variable is available
 
-    Account loggedInAccount = new User("milo_soder", "smörgåsrån"); //tillfällig användare
+    //Account loggedInAccount = new User("milo_soder", "smörgåsrån"); //tillfällig användare
 
     public Account createEvent(String title, String desc, LocalDateTime startDate, LocalDateTime endDate) {
         if (!userIsLoggedIn()) {
@@ -38,6 +42,7 @@ public class CalendarService {
         for (Event e : calendar.getEvents()) {
             if  (e.getId().equals(event.getId())) {
                 calendar.removeEvent(e);
+                return loggedInAccount;
             }
         }
 
@@ -79,11 +84,43 @@ public class CalendarService {
         return loggedInAccount.getCalendar().getEvents();
     }
 
-    public List<Event> getSpecificEvent(LocalDate date) {
+    public List<Event> getSpecificEvent(LocalDateTime date) {
         return getAllEvents()
                 .stream()
-                .filter(event -> event.getStartDate().toLocalDate().equals(date))
+                .filter(event -> event.getStartDate().toLocalDate().equals(date.toLocalDate()))
                 .toList();
+    }
+
+    public void openEventHandlingWindow(LocalDateTime currentDate) {
+      FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/grupp5/agila_schemalggare/calendarService.fxml"));
+      try {
+        Parent root = loader.load();
+        CalendarServiceController controller = loader.getController();
+        controller.setCurrentDate(currentDate);
+        controller.setScene();
+        Stage stage = new  Stage();
+        stage.setTitle("Event Handling");
+        stage.setScene(new Scene(root, 300, 300));
+        stage.show();
+      } catch (IOException e) {
+        throw new RuntimeException(e);
+      }
+    }
+
+    public void openEventCreatingWindow(LocalDateTime currentDate) {
+      FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/grupp5/agila_schemalggare/eventService.fxml"));
+      try {
+        Parent root = loader.load();
+        EventServiceController controller = loader.getController();
+        controller.setCurrentDate(currentDate);
+        controller.setScene();
+        Stage stage = new  Stage();
+        stage.setTitle("Event Handling");
+        stage.setScene(new Scene(root, 300, 300));
+        stage.show();
+      } catch (IOException e) {
+        throw new RuntimeException(e);
+      }
     }
 
     //room for possible extra calendar display logic here

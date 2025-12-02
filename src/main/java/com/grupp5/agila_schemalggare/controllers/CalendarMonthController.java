@@ -3,19 +3,14 @@ package com.grupp5.agila_schemalggare.controllers;
 import com.grupp5.agila_schemalggare.services.CalendarService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 
-import java.net.URL;
-import java.time.LocalDate;
-import java.util.ResourceBundle;
+import java.time.LocalDateTime;
 
-public class CalendarMonthController implements Initializable {
-
-    private final CalendarService calendarService = new CalendarService();
+public class CalendarMonthController {
 
 
 
@@ -30,29 +25,32 @@ public class CalendarMonthController implements Initializable {
     @FXML
     private GridPane gridPane;
 
-  // TEMP:
-  private LocalDate date = LocalDate.now();
+  private final CalendarService calendarService = new CalendarService();
+  private LocalDateTime date;
 
-    public void setDate(LocalDate date) {
-        this.date = date;
-        initialize(null, null);
-    }
-  // Future button use
+  public void setCurrentDate(LocalDateTime date) {
+    this.date = date;
+  }
+
   @FXML
   public void buttonAction(ActionEvent event) {
     Button button = (Button) event.getSource();
+    int day = Integer.parseInt(button.getText());
+    CalendarService calendarService = new CalendarService();
+    if (calendarService.getSpecificEvent(date.withDayOfMonth(day)).isEmpty()) calendarService.openEventCreatingWindow(date.withDayOfMonth(day));
+    else calendarService.openEventHandlingWindow(date.withDayOfMonth(day));
   }
 
   @FXML
   public void switchToPreviousMonth(ActionEvent event) {
     date = date.minusMonths(1);
-    initialize(null, null);
+    setScene();
   }
 
   @FXML
   public void switchToNextMonth(ActionEvent event) {
     date = date.plusMonths(1);
-    initialize(null, null);
+    setScene();
   }
 
   protected void setMonthLabel() {
@@ -60,10 +58,10 @@ public class CalendarMonthController implements Initializable {
   }
 
   protected void setTimeSpanLabel() {
-    LocalDate startDate = date.withDayOfMonth(1);
-    LocalDate endDate = date.withDayOfMonth(date.lengthOfMonth());
+    LocalDateTime startDate = date.withDayOfMonth(1);
+    LocalDateTime endDate = date.withDayOfMonth(1).plusMonths(1).minusDays(1);
 
-    timeSpanLabel.setText(startDate + "  |  " + endDate);
+    timeSpanLabel.setText(startDate.toLocalDate() + "  |  " + endDate.toLocalDate());
   }
 
   private void fillGrid() {
@@ -71,9 +69,9 @@ public class CalendarMonthController implements Initializable {
 
     int weekDay = date.withDayOfMonth(1).getDayOfWeek().getValue();
     int day = 1;
-    int maxDay = date.withDayOfMonth(date.lengthOfMonth()).getDayOfMonth();
-    LocalDate lastMonth = date.minusMonths(1);
-    int lastMonthDays = lastMonth.withDayOfMonth(lastMonth.lengthOfMonth()).getDayOfMonth() - weekDay + 1;
+    int maxDay = date.withDayOfMonth(date.withDayOfMonth(1).plusMonths(1).minusDays(1).getDayOfMonth()).getDayOfMonth();
+    LocalDateTime lastMonth = date.minusMonths(1);
+    int lastMonthDays = lastMonth.withDayOfMonth(lastMonth.withDayOfMonth(1).plusMonths(1).minusDays(1).getDayOfMonth()).getDayOfMonth() - weekDay + 1;
     int nextMonthDays = 1;
     int rowHeight = -1;
     int lastColIndex = 0;
@@ -131,7 +129,7 @@ public class CalendarMonthController implements Initializable {
 
   private void addButtonToGrid(String text, int row, int col) {
       int day = Integer.parseInt(text);
-      LocalDate dayDate = date.withDayOfMonth(day);
+    LocalDateTime dayDate = date.withDayOfMonth(day);
 
       var events = calendarService.getSpecificEvent(dayDate);
 
@@ -154,8 +152,7 @@ public class CalendarMonthController implements Initializable {
     gridPane.add(button, col, row);
   }
 
-  @Override
-  public void initialize(URL url, ResourceBundle resourceBundle) {
+  public void setScene() {
     gridPane.getChildren().clear();
     setMonthLabel();
     setTimeSpanLabel();
