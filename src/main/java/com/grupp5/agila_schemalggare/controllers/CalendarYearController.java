@@ -4,15 +4,24 @@ import com.grupp5.agila_schemalggare.services.CalendarService;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
+
 import java.time.LocalDate;
-import java.time.Month;
 import java.time.format.DateTimeFormatter;
 
 public class CalendarYearController {
     private final CalendarService calendarService = new CalendarService();
+
+    private CalendarViewController calendarViewController;
+
+    public void setCalendarViewController(CalendarViewController controller) {
+        this.calendarViewController = controller;
+    }
+
+    private LocalDate clickedMonth;
 
     @FXML
     private Button prevYearButton;
@@ -27,14 +36,16 @@ public class CalendarYearController {
 
     private LocalDate year = LocalDate.now();
 
-    @FXML
-    public void buttonAction() {
-
-    }
+    private Parent monthView;
+    private CalendarMonthController calendarMonthController;
 
     @FXML
-    public void buttonAction(ActionEvent event) {
+    public void buttonAction(ActionEvent event, LocalDate month) {
         Button button = (Button) event.getSource();
+
+        button.getUserData();
+
+        System.out.println();
     }
 
     @FXML
@@ -96,7 +107,7 @@ public class CalendarYearController {
                 monthButton.setDisable(true);
             }
 
-            monthButton.setOnAction(event -> System.out.println("Clicked: " + monthDate));
+            monthButton.setOnAction(event -> calendarViewController.showMonthViewWithDate(monthDate));
 
             yearGrid.add(monthButton, col, row);
 

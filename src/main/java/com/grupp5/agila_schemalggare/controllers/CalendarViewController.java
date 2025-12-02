@@ -7,6 +7,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
 import java.io.IOException;
+import java.time.LocalDate;
 
 public class CalendarViewController {
     @FXML
@@ -53,6 +54,7 @@ public class CalendarViewController {
         FXMLLoader yearLoader = new FXMLLoader(getClass().getResource("/com/grupp5/agila_schemalggare/calendarYear.fxml"));
         yearView = yearLoader.load();
         calendarYearController = yearLoader.getController();
+        calendarYearController.setCalendarViewController(this);
 
         viewRender.getChildren().setAll(monthView);
 
@@ -62,6 +64,11 @@ public class CalendarViewController {
         sideMenuController.setCalendarViewController(this);
 
         sideMenu.getChildren().setAll(sideMenuNode);
+    }
+
+    public void showMonthViewWithDate(LocalDate date) {
+        calendarMonthController.setDate(date);
+        showMonthView();
     }
 
 

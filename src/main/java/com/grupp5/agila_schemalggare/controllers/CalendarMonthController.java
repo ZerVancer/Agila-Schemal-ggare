@@ -17,6 +17,8 @@ public class CalendarMonthController implements Initializable {
 
     private final CalendarService calendarService = new CalendarService();
 
+
+
     @FXML
     private Button previousMonthButton;
     @FXML
@@ -31,6 +33,10 @@ public class CalendarMonthController implements Initializable {
   // TEMP:
   private LocalDate date = LocalDate.now();
 
+    public void setDate(LocalDate date) {
+        this.date = date;
+        initialize(null, null);
+    }
   // Future button use
   @FXML
   public void buttonAction(ActionEvent event) {
