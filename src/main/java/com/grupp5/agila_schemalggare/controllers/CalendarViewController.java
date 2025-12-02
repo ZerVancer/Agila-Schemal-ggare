@@ -7,6 +7,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class CalendarViewController {
@@ -22,9 +23,10 @@ public class CalendarViewController {
     private Parent monthView;
     private CalendarMonthController calendarMonthController;
 
-    // TODO: Inför year controllern om vi gör det i tid.
-//    private Parent yearView;
-//    private CalendarYearController calendarYearController;
+    private Parent yearView;
+    private CalendarYearController calendarYearController;
+
+    private SideMenuController sideMenuController;
 
     public void showWeekView() {
         viewRender.getChildren().setAll(weekView);
@@ -36,7 +38,7 @@ public class CalendarViewController {
 
     // Inför year, om vi har tid.
     public void showYearView() {
-        // Fyll ut här när Year-view finns.
+        viewRender.getChildren().setAll(yearView);
     }
 
     // Vid start
@@ -56,19 +58,24 @@ public class CalendarViewController {
         calendarMonthController.setCurrentDate(LocalDateTime.now());
         calendarMonthController.setScene();
 
-        // Inför year.
-//        FXMLLoader yearLoader = new FXMLLoader(getClass().getResource("/com/grupp5/agila_schemalggare/<Fyll ut här>.fxml"));
-//        yearView = yearLoader.load();
-//        calendarYearController = yearLoader.getController();
+        FXMLLoader yearLoader = new FXMLLoader(getClass().getResource("/com/grupp5/agila_schemalggare/calendarYear.fxml"));
+        yearView = yearLoader.load();
+        calendarYearController = yearLoader.getController();
+        calendarYearController.setCalendarViewController(this);
 
-        viewRender.getChildren().setAll(weekView);
+        viewRender.getChildren().setAll(yearView);
 
         FXMLLoader sideLoader = new FXMLLoader(getClass().getResource("/com/grupp5/agila_schemalggare/side-menu.fxml"));
         VBox sideMenuNode = sideLoader.load();
-        SideMenuController sideMenuController = sideLoader.getController();
+        sideMenuController = sideLoader.getController();
         sideMenuController.setCalendarViewController(this);
 
         sideMenu.getChildren().setAll(sideMenuNode);
+    }
+
+    public void showMonthViewWithDate(LocalDate date) {
+        calendarMonthController.setDate(date);
+        sideMenuController.handleMonthlyClick();
     }
 
 

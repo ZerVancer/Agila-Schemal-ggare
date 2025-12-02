@@ -17,7 +17,7 @@ public class SideMenuController {
 
     public void setCalendarViewController(CalendarViewController controller) {
         this.calendarViewController = controller;
-        setActiveButton(renderMonthly);
+        setActiveButton(renderYearly);
     }
 
     @FXML
@@ -35,8 +35,7 @@ public class SideMenuController {
     // Nu togglar den bara activeButton
     @FXML
     public void handleYearlyClick() {
-        // TODO finns inget på plats för års vy
-        // calendarViewController.showYearView(); <-- Inför
+        calendarViewController.showYearView();
         setActiveButton(renderYearly);
     }
 
