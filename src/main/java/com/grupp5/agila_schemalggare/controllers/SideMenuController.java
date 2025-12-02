@@ -17,7 +17,7 @@ public class SideMenuController {
 
     public void setCalendarViewController(CalendarViewController controller) {
         this.calendarViewController = controller;
-        setActiveButton(renderMonthly);
+        setActiveButton(renderYearly);
     }
 
     @FXML

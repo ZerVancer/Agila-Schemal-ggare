@@ -17,7 +17,7 @@
     <HBox alignment="CENTER">
         <Button fx:id="prevYearButton" text="&lt;" onAction="#switchToPrevYear" />
         <Label fx:id="yearLabel" alignment="CENTER" prefWidth="125" style="-fx-font-size: 18px; -fx-font-weight: bold" text="Year" />
-        <Button fx:id="nextYearButton" text="&lt;" onAction="#switchToNextYear" />
+        <Button fx:id="nextYearButton" text="&gt;" onAction="#switchToNextYear" />
     </HBox>
 
     <Label fx:id="monthsLabel" style="-fx-font-size: 14px; -fx-font-weight: bold" text="month" />

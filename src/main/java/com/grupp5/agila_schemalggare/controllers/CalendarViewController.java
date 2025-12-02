@@ -25,6 +25,8 @@ public class CalendarViewController {
     private Parent yearView;
     private CalendarYearController calendarYearController;
 
+    private SideMenuController sideMenuController;
+
     public void showWeekView() {
         viewRender.getChildren().setAll(weekView);
     }
@@ -56,11 +58,11 @@ public class CalendarViewController {
         calendarYearController = yearLoader.getController();
         calendarYearController.setCalendarViewController(this);
 
-        viewRender.getChildren().setAll(monthView);
+        viewRender.getChildren().setAll(yearView);
 
         FXMLLoader sideLoader = new FXMLLoader(getClass().getResource("/com/grupp5/agila_schemalggare/side-menu.fxml"));
         VBox sideMenuNode = sideLoader.load();
-        SideMenuController sideMenuController = sideLoader.getController();
+        sideMenuController = sideLoader.getController();
         sideMenuController.setCalendarViewController(this);
 
         sideMenu.getChildren().setAll(sideMenuNode);
@@ -68,7 +70,7 @@ public class CalendarViewController {
 
     public void showMonthViewWithDate(LocalDate date) {
         calendarMonthController.setDate(date);
-        showMonthView();
+        sideMenuController.handleMonthlyClick();
     }
 
 
