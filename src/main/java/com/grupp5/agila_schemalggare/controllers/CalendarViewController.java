@@ -7,6 +7,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 
 public class CalendarViewController {
     @FXML
@@ -43,22 +44,24 @@ public class CalendarViewController {
         // Försökte få ihop det med SceneManager, problemet är att den just nu påverkar hela scenen.
         // Därav får FXMLLoader ordna detta.
 
-         FXMLLoader weekLoader = new FXMLLoader(getClass().getResource("/com/grupp5/agila_schemalggare/calendarWeek.fxml"));
-         weekView = weekLoader.load();
-         calendarWeekController = weekLoader.getController();
+        FXMLLoader weekLoader = new FXMLLoader(getClass().getResource("/com/grupp5/agila_schemalggare/calendarWeek.fxml"));
+        weekView = weekLoader.load();
+        calendarWeekController = weekLoader.getController();
+        calendarWeekController.setCurrentDate(LocalDateTime.now());
+        calendarWeekController.setScene();
 
         FXMLLoader monthLoader = new FXMLLoader(getClass().getResource("/com/grupp5/agila_schemalggare/calendarMonth.fxml"));
         monthView = monthLoader.load();
         calendarMonthController = monthLoader.getController();
+        calendarMonthController.setCurrentDate(LocalDateTime.now());
+        calendarMonthController.setScene();
 
         // Inför year.
 //        FXMLLoader yearLoader = new FXMLLoader(getClass().getResource("/com/grupp5/agila_schemalggare/<Fyll ut här>.fxml"));
 //        yearView = yearLoader.load();
 //        calendarYearController = yearLoader.getController();
 
-        viewRender.getChildren().setAll(monthView);
-
-
+        viewRender.getChildren().setAll(weekView);
 
         FXMLLoader sideLoader = new FXMLLoader(getClass().getResource("/com/grupp5/agila_schemalggare/side-menu.fxml"));
         VBox sideMenuNode = sideLoader.load();
