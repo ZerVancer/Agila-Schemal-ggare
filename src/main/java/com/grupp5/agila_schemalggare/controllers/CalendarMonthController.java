@@ -12,8 +12,6 @@ import java.time.LocalDateTime;
 
 public class CalendarMonthController {
 
-
-
     @FXML
     private Button previousMonthButton;
     @FXML
@@ -35,7 +33,7 @@ public class CalendarMonthController {
   @FXML
   public void buttonAction(ActionEvent event) {
     Button button = (Button) event.getSource();
-    int day = Integer.parseInt(button.getText());
+    int day = Integer.parseInt(button.getText().split(" ")[0]);
     CalendarService calendarService = new CalendarService();
     if (calendarService.getSpecificEvent(date.withDayOfMonth(day)).isEmpty()) calendarService.openEventCreatingWindow(date.withDayOfMonth(day));
     else calendarService.openEventHandlingWindow(date.withDayOfMonth(day));
