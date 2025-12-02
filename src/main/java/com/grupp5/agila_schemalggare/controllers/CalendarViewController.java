@@ -7,7 +7,6 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
 import java.io.IOException;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class CalendarViewController {
@@ -73,8 +72,8 @@ public class CalendarViewController {
         sideMenu.getChildren().setAll(sideMenuNode);
     }
 
-    public void showMonthViewWithDate(LocalDate date) {
-        calendarMonthController.setDate(date);
+    public void showMonthViewWithDate(LocalDateTime date) {
+        calendarMonthController.setCurrentDate(date);
         sideMenuController.handleMonthlyClick();
     }
 

@@ -10,6 +10,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class CalendarYearController {
@@ -34,7 +35,7 @@ public class CalendarYearController {
     @FXML
     private GridPane yearGrid;
 
-    private LocalDate year = LocalDate.now();
+    private LocalDateTime year = LocalDateTime.now();
 
     private Parent monthView;
     private CalendarMonthController calendarMonthController;
@@ -65,16 +66,16 @@ public class CalendarYearController {
     }
 
     protected void setMonthsLabel() {
-        LocalDate startDate = year.withDayOfYear(1);
-        LocalDate endDate = year.withDayOfYear(year.lengthOfYear());
+        LocalDateTime startDate = year.withDayOfYear(1);
+        LocalDateTime endDate = year.withDayOfYear(year.toLocalDate().lengthOfYear());
 
-        monthsLabel.setText(startDate + " | " + endDate);
+        monthsLabel.setText(startDate.toLocalDate() + " | " + endDate.toLocalDate());
     }
 
     private void createYear() {
         yearGrid.getChildren().clear();
 
-        LocalDate startMonth = LocalDate.of(year.getYear() - 1, 7, 1);
+        LocalDateTime startMonth = year.minusYears(1).withMonth(7).withDayOfMonth(1);
 
         int col = 0;
         int row = 0;
@@ -84,7 +85,7 @@ public class CalendarYearController {
         var allEvents = calendarService.getAllEvents();
 
         for (int i = 0; i < 24; i++) {
-            LocalDate monthDate = startMonth.plusMonths(i);
+            LocalDateTime monthDate = startMonth.plusMonths(i);
 
             long eventCount = allEvents.stream()
                     .filter(event ->
