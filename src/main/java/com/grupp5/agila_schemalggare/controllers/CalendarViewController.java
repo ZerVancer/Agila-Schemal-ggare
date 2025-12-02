@@ -1,5 +1,7 @@
 package com.grupp5.agila_schemalggare.controllers;
 
+import com.grupp5.agila_schemalggare.services.AccountService;
+import com.grupp5.agila_schemalggare.utils.Updator;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -32,7 +34,7 @@ public class CalendarViewController {
     }
 
     public void showMonthView() {;
-      calendarMonthController.setScene();
+      calendarMonthController.updateView();
         viewRender.getChildren().setAll(monthView);
     }
 
@@ -50,13 +52,11 @@ public class CalendarViewController {
         weekView = weekLoader.load();
         calendarWeekController = weekLoader.getController();
         calendarWeekController.setCurrentDate(LocalDateTime.now());
-        calendarWeekController.setScene();
 
         FXMLLoader monthLoader = new FXMLLoader(getClass().getResource("/com/grupp5/agila_schemalggare/calendarMonth.fxml"));
         monthView = monthLoader.load();
         calendarMonthController = monthLoader.getController();
         calendarMonthController.setCurrentDate(LocalDateTime.now());
-        calendarMonthController.setScene();
 
         FXMLLoader yearLoader = new FXMLLoader(getClass().getResource("/com/grupp5/agila_schemalggare/calendarYear.fxml"));
         yearView = yearLoader.load();
@@ -69,6 +69,9 @@ public class CalendarViewController {
         VBox sideMenuNode = sideLoader.load();
         sideMenuController = sideLoader.getController();
         sideMenuController.setCalendarViewController(this);
+
+        AccountService.setUpdator(new Updator[]{calendarWeekController, calendarMonthController, calendarYearController});
+        AccountService.update();
 
         sideMenu.getChildren().setAll(sideMenuNode);
     }

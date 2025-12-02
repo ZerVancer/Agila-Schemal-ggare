@@ -1,6 +1,7 @@
 package com.grupp5.agila_schemalggare.controllers;
 
 import com.grupp5.agila_schemalggare.services.CalendarService;
+import com.grupp5.agila_schemalggare.utils.Updator;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -11,7 +12,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.WeekFields;
 import java.util.Locale;
 
-public class CalendarWeekController {
+public class CalendarWeekController implements Updator {
 
   @FXML
   public Button previousWeekButton;
@@ -79,12 +80,12 @@ public class CalendarWeekController {
   @FXML
   protected void switchToPreviousWeek() {
     date = date.minusWeeks(1);
-    setScene();
+    updateView();
   }
   @FXML
   protected void switchToNextWeek() {
     date = date.plusWeeks(1);
-    setScene();
+    updateView();
   }
 
   public void setWeekLabel() {
@@ -156,8 +157,8 @@ public class CalendarWeekController {
         }
     }
 
-
-  public void setScene() {
+  @Override
+  public void updateView() {
     dayButtons = new Button[]{mondayButton, tuesdayButton, wednesdayButton, thursdayButton, fridayButton, saturdayButton, sundayButton};
     dayLabels = new Label[]{mondayLabel, tuesdayLabel, wednesdayLabel, thursdayLabel, fridayLabel, saturdayLabel, sundayLabel};
 

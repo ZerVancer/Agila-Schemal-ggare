@@ -1,6 +1,7 @@
 package com.grupp5.agila_schemalggare.controllers;
 
 import com.grupp5.agila_schemalggare.models.Event;
+import com.grupp5.agila_schemalggare.services.AccountService;
 import com.grupp5.agila_schemalggare.services.CalendarService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -77,6 +78,8 @@ public class EventServiceController {
       calenderService.editEvent(currentEvent, title, description, startTime, endTime);
     }
 
+    AccountService.update();
+
     closeWindowAction(event);
   }
 
@@ -89,6 +92,7 @@ public class EventServiceController {
   @FXML
   public void deleteButton(ActionEvent event) {
     calenderService.deleteEvent(currentEvent);
+    AccountService.update();
     closeWindowAction(event);
   }
 
