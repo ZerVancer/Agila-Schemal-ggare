@@ -59,6 +59,8 @@ public class AccountService {
 
         loggedInAccount = account;
 
+        setLoggedInAccount(loggedInAccount);
+
         return account;
     }
 
