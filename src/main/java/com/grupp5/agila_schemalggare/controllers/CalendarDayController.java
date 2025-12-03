@@ -15,6 +15,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class CalendarDayController {
@@ -30,7 +31,8 @@ public class CalendarDayController {
 
     public void setDate(LocalDateTime date) {
         this.selectedDate = date;
-        dayAndDateLabel.setText(date.toString());
+        dayAndDateLabel.setText(date.getDayOfWeek().name() + ", " + date.getMonth().toString() + " " + date.getDayOfMonth());
+        dayAndDateLabel.setStyle("-fx-font-size: 20; -fx-font-weight: bold");
         loadEventsForDate();
     }
 
@@ -64,14 +66,19 @@ public class CalendarDayController {
         titleRow.getChildren().addAll(titleLabel, editButton, deleteButton);
 
         // === Time row ===
-        HBox timeRow = new HBox(10);
+        HBox timeRow = new HBox(5);
         timeRow.setAlignment(Pos.TOP_CENTER);
+
+        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
 
         LocalDateTime startTime = event.getStartDate();
         LocalDateTime endTime = event.getEndDate();
 
-        Label startTimeLabel = new Label(startTime.getHour() + ":" + startTime.getMinute());
-        Label endTimeLabel = new Label(endTime.getHour() + ":" + endTime.getMinute());
+        String startTimeFormatted = startTime.format(timeFormatter);
+        String endTimeFormatted = endTime.format(timeFormatter);
+
+        Label startTimeLabel = new Label(startTimeFormatted + " - ");
+        Label endTimeLabel = new Label(endTimeFormatted);
 
         timeRow.getChildren().addAll(startTimeLabel, endTimeLabel);
 
@@ -102,9 +109,6 @@ public class CalendarDayController {
             stage.setTitle("Edit Event");
             stage.setScene(new Scene(root));
             stage.showAndWait();
-
-            // Refresh events after editing
-            // renderEvents();
 
         } catch (Exception e) {
             e.printStackTrace();
