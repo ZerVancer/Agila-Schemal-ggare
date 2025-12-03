@@ -50,15 +50,14 @@ public class CalendarDayController {
         Label titleLabel = new Label(event.getTitle());
         titleLabel.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;");
 
-        /*
         Button editButton = new Button("Edit event");
         editButton.setOnAction(e -> openEditEventWindow(event));
 
         Button deleteButton = new Button("Delete event");
         deleteButton.setOnAction(e -> deleteEvent(event));
-        */
 
-        titleRow.getChildren().addAll(titleLabel /*, editButton, deleteButton */);
+
+        titleRow.getChildren().addAll(titleLabel, editButton, deleteButton);
 
         // === Time row ===
         HBox timeRow = new HBox(10);
@@ -85,6 +84,13 @@ public class CalendarDayController {
         return container;
     }
 
+    private void openEditEventWindow(Event event) {
+    }
+
+    private void deleteEvent(Event event) {
+        CalendarService calendarService = new CalendarService();
+        calendarService.deleteEvent(event);
+    }
 
     @FXML
     public void returnToCalendar() { //optimally you'd return to the view you came from but for now always returns to month view
