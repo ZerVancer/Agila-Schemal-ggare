@@ -108,8 +108,8 @@ public class CalendarDayController {
     }
 
     private void deleteEvent(Event event) {
-      calendarService.deleteEvent(event);
-  }
+        calendarService.deleteEvent(event);
+    }
 
     @FXML
     public void returnToCalendar() { //optimally you'd return to the view you came from but for now always returns to month view
