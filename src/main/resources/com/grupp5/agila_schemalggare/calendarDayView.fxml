@@ -14,7 +14,7 @@
     </VBox>
 
     <!--events list-->
-    <VBox fx:id="eventsContainer" alignment="TOP_CENTER" spacing="10" AnchorPane.bottomAnchor="50"
+    <VBox fx:id="eventsContainer" alignment="TOP_CENTER" spacing="30" AnchorPane.bottomAnchor="50"
           AnchorPane.leftAnchor="10" AnchorPane.rightAnchor="10" AnchorPane.topAnchor="50">
     </VBox>
 
