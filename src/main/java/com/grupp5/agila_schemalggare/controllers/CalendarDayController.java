@@ -4,11 +4,15 @@ import com.grupp5.agila_schemalggare.models.Event;
 import com.grupp5.agila_schemalggare.services.CalendarService;
 import com.grupp5.agila_schemalggare.utils.SceneManagerProvider;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -85,10 +89,29 @@ public class CalendarDayController {
     }
 
     private void openEditEventWindow(Event event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/grupp5/agila_schemalggare/eventService.fxml"));
+            Parent root = loader.load();
+
+            EventServiceController controller = loader.getController();
+            controller.setCurrentEvent(event);
+            controller.setCurrentDate(selectedDate);
+            controller.setScene();
+
+            Stage stage = new Stage();
+            stage.setTitle("Edit Event");
+            stage.setScene(new Scene(root));
+            stage.showAndWait();
+
+            // Refresh events after editing
+            // renderEvents();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void deleteEvent(Event event) {
-        CalendarService calendarService = new CalendarService();
         calendarService.deleteEvent(event);
     }
 
