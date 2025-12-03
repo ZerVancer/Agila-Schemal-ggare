@@ -45,11 +45,16 @@ public class CalendarDayController {
             VBox eventModal = createEventModal(event);
             eventsContainer.getChildren().add(eventModal);
         }
+
+        //add event button under list of daily events
+        VBox buttonModal = createAddEventButton();
+        eventsContainer.getChildren().add(buttonModal);
     }
 
     private VBox createEventModal(Event event) {
         VBox container = new VBox(10);
 
+        // title row
         HBox titleRow = new HBox(10);
         titleRow.setAlignment(Pos.TOP_CENTER);
 
@@ -65,7 +70,7 @@ public class CalendarDayController {
 
         titleRow.getChildren().addAll(titleLabel, editButton, deleteButton);
 
-        // === Time row ===
+        // time row
         HBox timeRow = new HBox(5);
         timeRow.setAlignment(Pos.TOP_CENTER);
 
@@ -82,6 +87,7 @@ public class CalendarDayController {
 
         timeRow.getChildren().addAll(startTimeLabel, endTimeLabel);
 
+        // description label
         Label descriptionLabel = new Label(event.getDescription());
         descriptionLabel.setWrapText(true);
 
@@ -93,6 +99,19 @@ public class CalendarDayController {
         container.setAlignment(Pos.TOP_CENTER);
 
         return container;
+    }
+
+    private VBox createAddEventButton() {
+        VBox buttonModal = new VBox(10);
+
+        Button addButton = new Button("Add event");
+        addButton.maxWidth(100.00);
+        addButton.setOnAction(e -> openEditEventWindow(null));
+
+        buttonModal.getChildren().add(addButton);
+        buttonModal.setAlignment(Pos.CENTER);
+
+        return buttonModal;
     }
 
     private void openEditEventWindow(Event event) {
