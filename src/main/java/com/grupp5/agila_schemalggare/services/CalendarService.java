@@ -1,6 +1,6 @@
 package com.grupp5.agila_schemalggare.services;
 
-import com.grupp5.agila_schemalggare.controllers.CalendarServiceController;
+import com.grupp5.agila_schemalggare.controllers.CalendarDayController;
 import com.grupp5.agila_schemalggare.controllers.EventServiceController;
 import com.grupp5.agila_schemalggare.models.Account;
 import com.grupp5.agila_schemalggare.models.Calendar;
@@ -19,7 +19,7 @@ public class CalendarService {
 
     //Account loggedInAccount = new User("milo_soder", "smörgåsrån"); //tillfällig användare
 
-    public Account createEvent(String title, String desc, LocalDateTime startDate, LocalDateTime endDate) {
+    public void createEvent(String title, String desc, LocalDateTime startDate, LocalDateTime endDate) {
         if (!userIsLoggedIn()) {
             throw new IllegalStateException("User is not logged in");
         }
@@ -28,57 +28,36 @@ public class CalendarService {
         loggedInAccount.addEvent(event);
 
         //saveChangesToFile(); <-- empty method for later
-
-        return loggedInAccount;
     }
 
-    public Account deleteEvent(Event event) {
+    public void deleteEvent(Event event) {
         if (!userIsLoggedIn()) {
             throw new IllegalStateException("User is not logged in");
         }
 
         Calendar calendar = loggedInAccount.getCalendar();
 
-        for (Event e : calendar.getEvents()) {
-            if  (e.getId().equals(event.getId())) {
-                calendar.removeEvent(e);
-                AccountService.update();
-                return loggedInAccount;
-            }
-        }
+        calendar.removeEvent(event);
+        AccountService.updateViews();
 
         //saveChangesToFile(); <-- empty method for later
-
-        return loggedInAccount;
     }
 
-    public Account editEvent(Event eventToEdit, String title, String desc, LocalDateTime startDate, LocalDateTime endDate) {
+    public void editEvent(Event eventToEdit, String title, String desc, LocalDateTime startDate, LocalDateTime endDate) {
         if (!userIsLoggedIn()) {
             throw new IllegalStateException("User is not logged in");
         }
 
-        Calendar calendar = loggedInAccount.getCalendar();
-
-        Event editedEvent = null;
-
-        for (Event e : calendar.getEvents()) {
-            if (e.getId().equals(eventToEdit.getId())) {
-                editedEvent = e;
-            }
-        }
-
-        if  (editedEvent == null) {
+        if  (eventToEdit == null) {
             throw new IllegalArgumentException("No such event found.");
         }
 
-        editedEvent.setTitle(title);
-        editedEvent.setDescription(desc);
-        editedEvent.setStartDate(startDate);
-        editedEvent.setEndDate(endDate);
+        eventToEdit.setTitle(title);
+        eventToEdit.setDescription(desc);
+        eventToEdit.setStartDate(startDate);
+        eventToEdit.setEndDate(endDate);
 
         //saveChangesToFile(); <-- empty method for later
-
-        return loggedInAccount;
     }
 
     public List<Event> getAllEvents() {
@@ -87,49 +66,32 @@ public class CalendarService {
 
     public List<Event> getSpecificEvent(LocalDateTime date) {
         return getAllEvents()
-                .stream()
-                .filter(event -> event.getStartDate().toLocalDate().equals(date.toLocalDate()))
-                .toList();
+            .stream()
+            .filter(event -> event.getStartDate().toLocalDate().equals(date.toLocalDate()))
+            .toList();
     }
-
-    public void openEventHandlingWindow(LocalDateTime currentDate) {
-      FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/grupp5/agila_schemalggare/calendarService.fxml"));
-      try {
-        Parent root = loader.load();
-        CalendarServiceController controller = loader.getController();
-        controller.setCurrentDate(currentDate);
-        controller.updateView();
-        Stage stage = new  Stage();
-        stage.setTitle("Event Handling");
-        stage.setScene(new Scene(root, 300, 300));
-        stage.show();
-      } catch (IOException e) {
-        throw new RuntimeException(e);
-      }
-    }
-
-    public void openEventCreatingWindow(LocalDateTime currentDate) {
-      FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/grupp5/agila_schemalggare/eventService.fxml"));
-      try {
-        Parent root = loader.load();
-        EventServiceController controller = loader.getController();
-        controller.setCurrentDate(currentDate);
-        controller.setScene();
-        Stage stage = new  Stage();
-        stage.setTitle("Event Handling");
-        stage.setScene(new Scene(root, 300, 300));
-        stage.show();
-      } catch (IOException e) {
-        throw new RuntimeException(e);
-      }
-    }
-
-    //room for possible extra calendar display logic here
-    //<<<---->>>
 
     private boolean userIsLoggedIn() {
         return loggedInAccount != null;
     }
 
-    // private void saveChangesToFile() {}
+  public void openDayView(LocalDateTime date) {
+    try {
+      FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/grupp5/agila_schemalggare/calendarDayView.fxml"));
+      Parent root = loader.load();
+
+      CalendarDayController controller = loader.getController();
+      controller.setCurrentDate(date);
+      AccountService.addUpdator(controller);
+      AccountService.updateViews();
+
+      Stage stage = new Stage();
+      stage.setTitle("Day View");
+      stage.setScene(new Scene(root, 400, 800));
+      stage.show();
+
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
+  }
 }

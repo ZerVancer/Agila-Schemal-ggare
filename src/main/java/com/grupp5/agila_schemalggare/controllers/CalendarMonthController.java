@@ -1,70 +1,59 @@
 package com.grupp5.agila_schemalggare.controllers;
 
-import com.grupp5.agila_schemalggare.services.AccountService;
 import com.grupp5.agila_schemalggare.services.CalendarService;
-import com.grupp5.agila_schemalggare.utils.Updator;
+import com.grupp5.agila_schemalggare.utils.DynamicController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
-import javafx.stage.Stage;
 
-import java.io.IOException;
 import java.time.LocalDateTime;
 
-public class CalendarMonthController implements Updator {
-
-    @FXML
-    private Button previousMonthButton;
-    @FXML
-    private Label monthLabel;
-    @FXML
-    private Button nextMonthButton;
-    @FXML
-    private Label timeSpanLabel;
-    @FXML
-    private GridPane gridPane;
+public class CalendarMonthController implements DynamicController {
+  @FXML
+  private Button previousMonthButton;
+  @FXML
+  private Label monthLabel;
+  @FXML
+  private Button nextMonthButton;
+  @FXML
+  private Label timeSpanLabel;
+  @FXML
+  private GridPane gridPane;
 
   private final CalendarService calendarService = new CalendarService();
-  private LocalDateTime date;
-
-  public void setCurrentDate(LocalDateTime date) {
-    this.date = date;
-  }
+  private LocalDateTime currentDate;
 
   @FXML
-  public void buttonAction(ActionEvent event) {
+  public void openDayAction(ActionEvent event) {
     Button button = (Button) event.getSource();
     int day = Integer.parseInt(button.getText().split(" ")[0]);
-    LocalDateTime chosenDay = date.withDayOfMonth(day);
+    LocalDateTime chosenDay = currentDate.withDayOfMonth(day);
 
-    openDayView(chosenDay, button);
+    calendarService.openDayView(chosenDay);
   }
 
   @FXML
   public void switchToPreviousMonth(ActionEvent event) {
-    date = date.minusMonths(1);
+    currentDate = currentDate.minusMonths(1);
     updateView();
   }
 
   @FXML
   public void switchToNextMonth(ActionEvent event) {
-    date = date.plusMonths(1);
+    currentDate = currentDate.plusMonths(1);
     updateView();
   }
 
   protected void setMonthLabel() {
-    this.monthLabel.setText(date.getMonth().toString());
+    this.monthLabel.setText(currentDate.getMonth().toString());
   }
 
   protected void setTimeSpanLabel() {
-    LocalDateTime startDate = date.withDayOfMonth(1);
-    LocalDateTime endDate = date.withDayOfMonth(1).plusMonths(1).minusDays(1);
+    LocalDateTime startDate = currentDate.withDayOfMonth(1);
+    LocalDateTime endDate = currentDate.withDayOfMonth(1).plusMonths(1).minusDays(1);
 
     timeSpanLabel.setText(startDate.toLocalDate() + "  |  " + endDate.toLocalDate());
   }
@@ -72,10 +61,10 @@ public class CalendarMonthController implements Updator {
   private void fillGrid() {
     addDaysToGrid();
 
-    int weekDay = date.withDayOfMonth(1).getDayOfWeek().getValue();
+    int weekDay = currentDate.withDayOfMonth(1).getDayOfWeek().getValue();
     int day = 1;
-    int maxDay = date.withDayOfMonth(date.withDayOfMonth(1).plusMonths(1).minusDays(1).getDayOfMonth()).getDayOfMonth();
-    LocalDateTime lastMonth = date.minusMonths(1);
+    int maxDay = currentDate.withDayOfMonth(currentDate.withDayOfMonth(1).plusMonths(1).minusDays(1).getDayOfMonth()).getDayOfMonth();
+    LocalDateTime lastMonth = currentDate.minusMonths(1);
     int lastMonthDays = lastMonth.withDayOfMonth(lastMonth.withDayOfMonth(1).plusMonths(1).minusDays(1).getDayOfMonth()).getDayOfMonth() - weekDay + 1;
     int nextMonthDays = 1;
     int rowHeight = -1;
@@ -134,7 +123,7 @@ public class CalendarMonthController implements Updator {
 
   private void addButtonToGrid(String text, int row, int col) {
       int day = Integer.parseInt(text);
-    LocalDateTime dayDate = date.withDayOfMonth(day);
+      LocalDateTime dayDate = currentDate.withDayOfMonth(day);
 
       var events = calendarService.getSpecificEvent(dayDate);
 
@@ -147,7 +136,7 @@ public class CalendarMonthController implements Updator {
       Button button = new Button(buttonText);
       button.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
       button.setStyle("-fx-cursor: pointer;");
-      button.setOnAction(this::buttonAction);
+      button.setOnAction(this::openDayAction);
 
       // Om vi vill ha färg för att highlighta?
 //      if (!events.isEmpty()) {
@@ -166,24 +155,8 @@ public class CalendarMonthController implements Updator {
     fillGrid();
   }
 
-  private void openDayView(LocalDateTime date, Button button) {
-      try {
-          FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/grupp5/agila_schemalggare/CalendarDayView.fxml"));
-          Parent root = loader.load();
-
-          CalendarDayController controller = loader.getController();
-          controller.setDate(date);
-          AccountService.addUpdator(controller);
-        AccountService.update();
-
-          Stage stage = new Stage();
-          stage.setTitle("Day View");
-          stage.setScene(new Scene(root, 400, 800));
-          stage.show();
-
-      } catch (IOException e) {
-          e.printStackTrace();
-      }
+  @Override
+  public void setCurrentDate(LocalDateTime currentDate) {
+    this.currentDate = currentDate;
   }
-
 }

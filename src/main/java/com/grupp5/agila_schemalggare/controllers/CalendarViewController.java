@@ -1,7 +1,9 @@
 package com.grupp5.agila_schemalggare.controllers;
 
 import com.grupp5.agila_schemalggare.services.AccountService;
-import com.grupp5.agila_schemalggare.utils.Updator;
+import com.grupp5.agila_schemalggare.utils.DynamicController;
+import com.grupp5.agila_schemalggare.utils.SceneManager;
+import com.grupp5.agila_schemalggare.utils.SceneManagerProvider;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -11,10 +13,9 @@ import javafx.scene.layout.VBox;
 import java.io.IOException;
 import java.time.LocalDateTime;
 
-public class CalendarViewController {
+public class CalendarViewController implements DynamicController {
     @FXML
     private StackPane viewRender;
-
     @FXML
     private VBox sideMenu;
 
@@ -29,59 +30,64 @@ public class CalendarViewController {
 
     private SideMenuController sideMenuController;
 
+    private final SceneManager sceneManager = SceneManagerProvider.getSceneManager();
+    private LocalDateTime currentDate;
+
     public void showWeekView() {
         viewRender.getChildren().setAll(weekView);
     }
 
-    public void showMonthView() {;
-      calendarMonthController.updateView();
+    public void showMonthView() {
         viewRender.getChildren().setAll(monthView);
     }
 
     // Inför year, om vi har tid.
     public void showYearView() {
-        viewRender.getChildren().setAll(yearView);
+      viewRender.getChildren().setAll(yearView);
+    }
+
+    public void showMonthViewWithDate(LocalDateTime date) {
+      calendarMonthController.setCurrentDate(date);
+      calendarMonthController.updateView();
+      sideMenuController.handleMonthlyClick();
     }
 
     // Vid start
-    public void initialize() throws IOException {
+    @Override
+    public void updateView() {
         // Försökte få ihop det med SceneManager, problemet är att den just nu påverkar hela scenen.
         // Därav får FXMLLoader ordna detta.
 
-        FXMLLoader weekLoader = new FXMLLoader(getClass().getResource("/com/grupp5/agila_schemalggare/calendarWeek.fxml"));
-        weekView = weekLoader.load();
+
+        FXMLLoader weekLoader = sceneManager.getFXMLLoader("/com/grupp5/agila_schemalggare/calendarWeek.fxml", currentDate);
         calendarWeekController = weekLoader.getController();
-        calendarWeekController.setCurrentDate(LocalDateTime.now());
+        weekView = weekLoader.getRoot();
 
-        FXMLLoader monthLoader = new FXMLLoader(getClass().getResource("/com/grupp5/agila_schemalggare/calendarMonth.fxml"));
-        monthView = monthLoader.load();
+        FXMLLoader monthLoader = sceneManager.getFXMLLoader("/com/grupp5/agila_schemalggare/calendarMonth.fxml", currentDate);
         calendarMonthController = monthLoader.getController();
-        calendarMonthController.setCurrentDate(LocalDateTime.now());
+        monthView = monthLoader.getRoot();
 
-        FXMLLoader yearLoader = new FXMLLoader(getClass().getResource("/com/grupp5/agila_schemalggare/calendarYear.fxml"));
-        yearView = yearLoader.load();
+        FXMLLoader yearLoader = sceneManager.getFXMLLoader("/com/grupp5/agila_schemalggare/calendarYear.fxml", currentDate);
         calendarYearController = yearLoader.getController();
+        yearView = yearLoader.getRoot();
         calendarYearController.setCalendarViewController(this);
 
-        viewRender.getChildren().setAll(yearView);
+        showYearView();
 
-        FXMLLoader sideLoader = new FXMLLoader(getClass().getResource("/com/grupp5/agila_schemalggare/side-menu.fxml"));
-        VBox sideMenuNode = sideLoader.load();
-        sideMenuController = sideLoader.getController();
+        FXMLLoader menuLoader = sceneManager.switchScene("/com/grupp5/agila_schemalggare/side-menu.fxml");
+        sideMenuController = menuLoader.getController();
+        VBox sideMenuNode = menuLoader.getRoot();
         sideMenuController.setCalendarViewController(this);
 
         AccountService.addUpdator(calendarWeekController);
         AccountService.addUpdator(calendarMonthController);
         AccountService.addUpdator(calendarYearController);
-        AccountService.update();
 
         sideMenu.getChildren().setAll(sideMenuNode);
     }
 
-    public void showMonthViewWithDate(LocalDateTime date) {
-        calendarMonthController.setCurrentDate(date);
-        sideMenuController.handleMonthlyClick();
+    @Override
+    public void setCurrentDate(LocalDateTime currentDate) {
+        this.currentDate = currentDate;
     }
-
-
 }

@@ -2,29 +2,17 @@ package com.grupp5.agila_schemalggare.controllers;
 
 import com.grupp5.agila_schemalggare.services.CalendarService;
 
-import com.grupp5.agila_schemalggare.utils.Updator;
+import com.grupp5.agila_schemalggare.utils.DynamicController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-public class CalendarYearController implements Updator {
-    private final CalendarService calendarService = new CalendarService();
-
-    private CalendarViewController calendarViewController;
-
-    public void setCalendarViewController(CalendarViewController controller) {
-        this.calendarViewController = controller;
-    }
-
-    private LocalDate clickedMonth;
-
+public class CalendarYearController implements DynamicController {
     @FXML
     private Button prevYearButton;
     @FXML
@@ -36,39 +24,38 @@ public class CalendarYearController implements Updator {
     @FXML
     private GridPane yearGrid;
 
-    private LocalDateTime year = LocalDateTime.now();
+    private LocalDateTime currentDate;
+    private final CalendarService calendarService = new CalendarService();
+    private CalendarViewController calendarViewController;
 
-    private Parent monthView;
-    private CalendarMonthController calendarMonthController;
-
-    @FXML
-    public void buttonAction(ActionEvent event, LocalDate month) {
-        Button button = (Button) event.getSource();
-
-        button.getUserData();
-
-        System.out.println();
+    @Override
+    public void setCurrentDate(LocalDateTime currentDate) {
+      this.currentDate = currentDate;
     }
 
     @FXML
     public void switchToPrevYear(ActionEvent event) {
-        year = year.minusYears(1);
+        currentDate = currentDate.minusYears(1);
         updateView();
     }
 
     @FXML
     public void switchToNextYear(ActionEvent event) {
-        year = year.plusYears(1);
+        currentDate = currentDate.plusYears(1);
         updateView();
     }
 
+    public void setCalendarViewController(CalendarViewController controller) {
+      this.calendarViewController = controller;
+    }
+
     protected void setYearLabel() {
-        yearLabel.setText(String.valueOf(year.getYear()));
+        yearLabel.setText(String.valueOf(currentDate.getYear()));
     }
 
     protected void setMonthsLabel() {
-        LocalDateTime startDate = year.withDayOfYear(1);
-        LocalDateTime endDate = year.withDayOfYear(year.toLocalDate().lengthOfYear());
+        LocalDateTime startDate = currentDate.withDayOfYear(1);
+        LocalDateTime endDate = currentDate.withDayOfYear(currentDate.toLocalDate().lengthOfYear());
 
         monthsLabel.setText(startDate.toLocalDate() + " | " + endDate.toLocalDate());
     }
@@ -76,7 +63,7 @@ public class CalendarYearController implements Updator {
     private void createYear() {
         yearGrid.getChildren().clear();
 
-        LocalDateTime startMonth = year.minusYears(1).withMonth(7).withDayOfMonth(1);
+        LocalDateTime startMonth = currentDate.minusYears(1).withMonth(7).withDayOfMonth(1);
 
         int col = 0;
         int row = 0;
@@ -104,7 +91,7 @@ public class CalendarYearController implements Updator {
             monthButton.setPrefWidth(100);
             monthButton.setPrefHeight(80);
 
-            if (monthDate.getYear() != year.getYear()) {
+            if (monthDate.getYear() != currentDate.getYear()) {
                 monthButton.setStyle("-fx-background-color: lightgray;");
                 monthButton.setDisable(true);
             }
@@ -121,15 +108,11 @@ public class CalendarYearController implements Updator {
         }
     }
 
-    private void updateYearView() {
-        setYearLabel();
-        setMonthsLabel();
-        createYear();
-    }
-
     @Override
     public void updateView() {
-        updateYearView();
+      setYearLabel();
+      setMonthsLabel();
+      createYear();
     }
 
 }

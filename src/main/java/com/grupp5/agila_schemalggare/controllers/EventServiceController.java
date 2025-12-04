@@ -3,6 +3,7 @@ package com.grupp5.agila_schemalggare.controllers;
 import com.grupp5.agila_schemalggare.models.Event;
 import com.grupp5.agila_schemalggare.services.AccountService;
 import com.grupp5.agila_schemalggare.services.CalendarService;
+import com.grupp5.agila_schemalggare.utils.DynamicController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -11,7 +12,7 @@ import javafx.stage.Stage;
 
 import java.time.LocalDateTime;
 
-public class EventServiceController {
+public class EventServiceController implements DynamicController {
     @FXML
     private TextField titleField;
     @FXML
@@ -27,17 +28,12 @@ public class EventServiceController {
     @FXML
     private Label errorMessage;
 
-    // Change to accountService.getCurrentEvent and accountService.getCurrentDate in Initialize
     private Event currentEvent;
     private LocalDateTime currentDate;
     private final CalendarService calenderService = new CalendarService();
 
     public void setCurrentEvent(Event currentEvent) {
         this.currentEvent = currentEvent;
-    }
-
-    public void setCurrentDate(LocalDateTime currentDate) {
-        this.currentDate = currentDate;
     }
 
     @FXML
@@ -52,12 +48,6 @@ public class EventServiceController {
         if (title.isEmpty()) {
             errorMessage.setTextFill(Color.RED);
             errorMessage.setText("Title cannot be empty");
-            return;
-        }
-        // May be unnecessary
-        if (description.isEmpty()) {
-            errorMessage.setTextFill(Color.RED);
-            errorMessage.setText("Description cannot be empty");
             return;
         }
 
@@ -82,30 +72,27 @@ public class EventServiceController {
     @FXML
     public void closeWindowAction(ActionEvent event) {
         Stage stage = (Stage) titleField.getScene().getWindow();
-        AccountService.update();
+        AccountService.updateViews();
         stage.close();
+    }
+    @Override
+    public void updateView() {
+        if (currentEvent != null) {
+            titleField.setText(currentEvent.getTitle());
+            descriptionField.setText(currentEvent.getDescription());
+            SpinnerValueFactory<Integer> valueFactory1 = startTimeHourSpinner.getValueFactory();
+            valueFactory1.setValue(currentEvent.getStartDate().getHour());
+            SpinnerValueFactory<Integer> valueFactory2 = startTimeMinuteSpinner.getValueFactory();
+            valueFactory2.setValue(currentEvent.getStartDate().getMinute());
+            SpinnerValueFactory<Integer> valueFactory3 = endTimeHourSpinner.getValueFactory();
+            valueFactory3.setValue(currentEvent.getEndDate().getHour());
+            SpinnerValueFactory<Integer> valueFactory4 = endTimeMinuteSpinner.getValueFactory();
+            valueFactory4.setValue(currentEvent.getEndDate().getMinute());
+        }
+    }
 
-  }
-
-  @FXML
-  public void deleteButton(ActionEvent event) {
-    calenderService.deleteEvent(currentEvent);
-    AccountService.update();
-    closeWindowAction(event);
-  }
-
-  public void setScene() {
-      if (currentEvent != null) {
-          titleField.setText(currentEvent.getTitle());
-          descriptionField.setText(currentEvent.getDescription());
-          SpinnerValueFactory<Integer> valueFactory1 = startTimeHourSpinner.getValueFactory();
-          valueFactory1.setValue(currentEvent.getStartDate().getHour());
-          SpinnerValueFactory<Integer> valueFactory2 = startTimeMinuteSpinner.getValueFactory();
-          valueFactory2.setValue(currentEvent.getStartDate().getMinute());
-          SpinnerValueFactory<Integer> valueFactory3 = endTimeHourSpinner.getValueFactory();
-          valueFactory3.setValue(currentEvent.getEndDate().getHour());
-          SpinnerValueFactory<Integer> valueFactory4 = endTimeMinuteSpinner.getValueFactory();
-          valueFactory4.setValue(currentEvent.getEndDate().getMinute());
-      }
-  }
+    @Override
+    public void setCurrentDate(LocalDateTime currentDate) {
+      this.currentDate = currentDate;
+    }
 }

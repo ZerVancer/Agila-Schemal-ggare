@@ -2,12 +2,12 @@ package com.grupp5.agila_schemalggare.controllers;
 
 import com.grupp5.agila_schemalggare.models.Event;
 import com.grupp5.agila_schemalggare.services.CalendarService;
-import com.grupp5.agila_schemalggare.utils.Updator;
+import com.grupp5.agila_schemalggare.utils.DynamicController;
+import com.grupp5.agila_schemalggare.utils.SceneManager;
+import com.grupp5.agila_schemalggare.utils.SceneManagerProvider;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
-public class CalendarDayController implements Updator {
+public class CalendarDayController implements DynamicController {
     @FXML
     private Label dayAndDateLabel;
     @FXML
@@ -26,17 +26,14 @@ public class CalendarDayController implements Updator {
     @FXML
     public Button returnButton;
 
-    CalendarService calendarService = new CalendarService();
-    private LocalDateTime date;
-
-    public void setDate(LocalDateTime date) {
-        this.date = date;
-    }
+    private final SceneManager sceneManager = SceneManagerProvider.getSceneManager();
+    private final CalendarService calendarService = new CalendarService();
+    private LocalDateTime currentDate;
 
     private void loadEventsForDate() {
         eventsContainer.getChildren().clear();
 
-        List<Event> events = calendarService.getSpecificEvent(date);
+        List<Event> events = calendarService.getSpecificEvent(currentDate);
 
         for (Event event : events) {
             VBox eventModal = createEventModal(event);
@@ -59,7 +56,12 @@ public class CalendarDayController implements Updator {
         titleLabel.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;");
 
         Button editButton = new Button("Edit event");
-        editButton.setOnAction(e -> openEditEventWindow(event));
+        editButton.setOnAction(e -> {
+          FXMLLoader loader = sceneManager.openNewScene("/com/grupp5/agila_schemalggare/eventService.fxml", currentDate, "EditEvent", 400, 300);
+          EventServiceController controller = loader.getController();
+          controller.setCurrentEvent(event);
+          controller.updateView();
+        });
 
         Button deleteButton = new Button("Delete event");
         deleteButton.setOnAction(e -> deleteEvent(event));
@@ -102,32 +104,12 @@ public class CalendarDayController implements Updator {
 
         Button addButton = new Button("Add event");
         addButton.maxWidth(100.00);
-        addButton.setOnAction(e -> openEditEventWindow(null));
+        addButton.setOnAction(e -> sceneManager.openNewScene("/com/grupp5/agila_schemalggare/eventService.fxml", currentDate, "Create Event", 400, 300));
 
         buttonModal.getChildren().add(addButton);
         buttonModal.setAlignment(Pos.CENTER);
 
         return buttonModal;
-    }
-
-    private void openEditEventWindow(Event event) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/grupp5/agila_schemalggare/eventService.fxml"));
-            Parent root = loader.load();
-
-            EventServiceController controller = loader.getController();
-            controller.setCurrentEvent(event);
-            controller.setCurrentDate(date);
-            controller.setScene();
-
-            Stage stage = new Stage();
-            stage.setTitle("Edit Event");
-            stage.setScene(new Scene(root));
-            stage.showAndWait();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     private void deleteEvent(Event event) {
@@ -141,8 +123,13 @@ public class CalendarDayController implements Updator {
 
     @Override
     public void updateView() {
-      dayAndDateLabel.setText(date.toLocalDate().toString());
+      dayAndDateLabel.setText(currentDate.toLocalDate().toString());
       dayAndDateLabel.setStyle("-fx-font-size: 20; -fx-font-weight: bold");
       loadEventsForDate();
     }
+
+    @Override
+    public void setCurrentDate(LocalDateTime currentDate) {
+    this.currentDate = currentDate;
+  }
 }
