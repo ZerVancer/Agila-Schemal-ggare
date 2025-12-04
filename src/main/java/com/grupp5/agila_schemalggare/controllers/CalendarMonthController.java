@@ -164,21 +164,22 @@ public class CalendarMonthController {
     fillGrid();
   }
 
-    private void openDayView(LocalDateTime date, Button button) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/grupp5/agila_schemalggare/CalendarDayView.fxml"));
-            Parent root = loader.load();
+  private void openDayView(LocalDateTime date, Button button) {
+      try {
+          FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/grupp5/agila_schemalggare/CalendarDayView.fxml"));
+          Parent root = loader.load();
 
-            CalendarDayController controller = loader.getController();
-            controller.setDate(date);
+          CalendarDayController controller = loader.getController();
+          controller.setDate(date);
 
-            Stage stage = (Stage) button.getScene().getWindow();
-            stage.setScene(new Scene(root));
-            stage.show();
+          Stage stage = new Stage();
+          stage.setTitle("Day View");
+          stage.setScene(new Scene(root, 400, 800));
+          stage.show();
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+      } catch (IOException e) {
+          e.printStackTrace();
+      }
+  }
 
 }

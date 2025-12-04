@@ -72,16 +72,6 @@ public class CalendarWeekController {
     }
 
     // Future button use
-  /*
-    @FXML
-  protected void buttonAction(ActionEvent event) {
-    Button button = (Button) event.getSource();
-    String dayString = button.getText().split("-")[2];
-    if (dayString.charAt(0) == '0') dayString = String.valueOf(dayString.charAt(1));
-    int day = Integer.parseInt(dayString);
-    if (calendarService.getSpecificEvent(date.withDayOfMonth(day)).isEmpty()) calendarService.openEventCreatingWindow(date.withDayOfMonth(day));
-    else calendarService.openEventHandlingWindow(date.withDayOfMonth(day));
-  }*/
     @FXML
     protected void buttonAction(ActionEvent event) {
         Button button = (Button) event.getSource();
@@ -154,13 +144,13 @@ public class CalendarWeekController {
                 String endTime = String.format("%02d:%02d", event.getEndDate().getHour(), event.getEndDate().getMinute());
 
                 stringBuilder.append("| ")
-                        .append(event.getTitle())
-                        .append(" |\n")
-                        .append("| ")
-                        .append(startTime)
-                        .append(" - ")
-                        .append(endTime)
-                        .append(" |\n");
+                    .append(event.getTitle())
+                    .append(" |\n")
+                    .append("| ")
+                    .append(startTime)
+                    .append(" - ")
+                    .append(endTime)
+                    .append(" |\n");
             }
 
             dayButtons[i].setText(stringBuilder.toString());
@@ -193,8 +183,9 @@ public class CalendarWeekController {
             CalendarDayController controller = loader.getController();
             controller.setDate(date);
 
-            Stage stage = (Stage) button.getScene().getWindow();
-            stage.setScene(new Scene(root));
+            Stage stage = new Stage();
+            stage.setTitle("Day View");
+            stage.setScene(new Scene(root, 200, 200));
             stage.show();
 
         } catch (IOException e) {

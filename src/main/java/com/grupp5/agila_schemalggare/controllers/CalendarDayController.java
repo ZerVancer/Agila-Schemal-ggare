@@ -2,7 +2,6 @@ package com.grupp5.agila_schemalggare.controllers;
 
 import com.grupp5.agila_schemalggare.models.Event;
 import com.grupp5.agila_schemalggare.services.CalendarService;
-import com.grupp5.agila_schemalggare.utils.SceneManagerProvider;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
@@ -139,6 +138,6 @@ public class CalendarDayController {
 
     @FXML
     public void returnToCalendar() { //optimally you'd return to the view you came from but for now always returns to month view
-        SceneManagerProvider.getSceneManager().switchScene("/com/grupp5/agila_schemalggare/calendar-viex.fxml");
+      ((Stage) returnButton.getScene().getWindow()).close();
     }
 }
