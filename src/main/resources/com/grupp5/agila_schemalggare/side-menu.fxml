@@ -42,7 +42,11 @@
 
         <Label text="Upcoming Events:" style="-fx-font-size: 14px; -fx-font-weight: bold;" />
 
-        <GridPane fx:id=""/>
+        <GridPane fx:id="currentEventsGrid">
+            <padding>
+                <Insets top="5" right="10" bottom="10" left="5" />
+            </padding>
+        </GridPane>
 
     </VBox>
 
