@@ -1,6 +1,7 @@
 package com.grupp5.agila_schemalggare.controllers;
 
 import com.grupp5.agila_schemalggare.services.CalendarService;
+import com.grupp5.agila_schemalggare.utils.Updator;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -17,7 +18,7 @@ import java.time.temporal.WeekFields;
 import java.util.Arrays;
 import java.util.Locale;
 
-public class CalendarWeekController {
+public class CalendarWeekController implements Updator {
 
   @FXML
   public Button previousWeekButton;
@@ -76,24 +77,16 @@ public class CalendarWeekController {
     protected void buttonAction(ActionEvent event) {
         Button button = (Button) event.getSource();
 
-        int buttonIndex = Arrays.asList(dayButtons).indexOf(button);
-        LocalDateTime chosenDay = weekDates[buttonIndex];
-
-        openDayView(chosenDay, button);
-    }
-
-
-    @FXML
-    protected void switchToPreviousWeek() {
-        date = date.minusWeeks(1);
-        setScene();
-    }
-
-    @FXML
-    protected void switchToNextWeek() {
-        date = date.plusWeeks(1);
-        setScene();
-    }
+  @FXML
+  protected void switchToPreviousWeek() {
+    date = date.minusWeeks(1);
+    updateView();
+  }
+  @FXML
+  protected void switchToNextWeek() {
+    date = date.plusWeeks(1);
+    updateView();
+  }
 
   public void setWeekLabel() {
     weekLabel.setText("Week " + date.get(WeekFields.of(Locale.getDefault()).weekOfWeekBasedYear()));
@@ -164,8 +157,8 @@ public class CalendarWeekController {
         }
     }
 
-
-  public void setScene() {
+  @Override
+  public void updateView() {
     dayButtons = new Button[]{mondayButton, tuesdayButton, wednesdayButton, thursdayButton, fridayButton, saturdayButton, sundayButton};
     dayLabels = new Label[]{mondayLabel, tuesdayLabel, wednesdayLabel, thursdayLabel, fridayLabel, saturdayLabel, sundayLabel};
 

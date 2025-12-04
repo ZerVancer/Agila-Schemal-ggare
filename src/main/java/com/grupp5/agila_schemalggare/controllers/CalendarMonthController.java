@@ -1,6 +1,7 @@
 package com.grupp5.agila_schemalggare.controllers;
 
 import com.grupp5.agila_schemalggare.services.CalendarService;
+import com.grupp5.agila_schemalggare.utils.Updator;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -15,7 +16,8 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.time.LocalDateTime;
 
-public class CalendarMonthController {
+public class CalendarMonthController implements Updator {
+
     @FXML
     private Button previousMonthButton;
     @FXML
@@ -46,13 +48,13 @@ public class CalendarMonthController {
   @FXML
   public void switchToPreviousMonth(ActionEvent event) {
     date = date.minusMonths(1);
-    setScene();
+    updateView();
   }
 
   @FXML
   public void switchToNextMonth(ActionEvent event) {
     date = date.plusMonths(1);
-    setScene();
+    updateView();
   }
 
   protected void setMonthLabel() {
@@ -154,7 +156,8 @@ public class CalendarMonthController {
     gridPane.add(button, col, row);
   }
 
-  public void setScene() {
+  @Override
+  public void updateView() {
     gridPane.getChildren().clear();
     setMonthLabel();
     setTimeSpanLabel();

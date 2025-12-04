@@ -1,6 +1,7 @@
 package com.grupp5.agila_schemalggare.controllers;
 
 import com.grupp5.agila_schemalggare.models.Event;
+import com.grupp5.agila_schemalggare.services.AccountService;
 import com.grupp5.agila_schemalggare.services.CalendarService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -82,6 +83,37 @@ public class EventServiceController {
     public void closeWindowAction(ActionEvent event) {
         Stage stage = (Stage) titleField.getScene().getWindow();
         stage.close();
+    AccountService.update();
+
+    closeWindowAction(event);
+  }
+
+  @FXML
+  public void closeWindowAction(ActionEvent event) {
+    Stage stage = (Stage) titleField.getScene().getWindow();
+    stage.close();
+  }
+
+  @FXML
+  public void deleteButton(ActionEvent event) {
+    calenderService.deleteEvent(currentEvent);
+    AccountService.update();
+    closeWindowAction(event);
+  }
+
+  public void setScene() {
+    if (currentEvent != null) {
+      titleField.setText(currentEvent.getTitle());
+      descriptionField.setText(currentEvent.getDescription());
+      SpinnerValueFactory<Integer> valueFactory1 = startTimeHourSpinner.getValueFactory();
+      valueFactory1.setValue(currentEvent.getStartDate().getHour());
+      SpinnerValueFactory<Integer> valueFactory2 = startTimeMinuteSpinner.getValueFactory();
+      valueFactory2.setValue(currentEvent.getStartDate().getMinute());
+      SpinnerValueFactory<Integer> valueFactory3 = endTimeHourSpinner.getValueFactory();
+      valueFactory3.setValue(currentEvent.getEndDate().getHour());
+      SpinnerValueFactory<Integer> valueFactory4 = endTimeMinuteSpinner.getValueFactory();
+      valueFactory4.setValue(currentEvent.getEndDate().getMinute());
+      deleteButton.setVisible(true);
     }
 
     public void setScene() {
