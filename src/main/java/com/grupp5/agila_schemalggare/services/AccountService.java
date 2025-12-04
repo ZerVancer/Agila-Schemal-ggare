@@ -37,8 +37,8 @@ public class AccountService {
     }
 
     public static void update() {
-      for (Updator updator : updator) {
-        updator.updateView();
+      for (Updator update : updator) {
+        update.updateView();
       }
     }
 

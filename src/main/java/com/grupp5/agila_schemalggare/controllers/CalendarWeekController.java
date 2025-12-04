@@ -76,6 +76,7 @@ public class CalendarWeekController implements Updator {
     @FXML
     protected void buttonAction(ActionEvent event) {
         Button button = (Button) event.getSource();
+    }
 
   @FXML
   protected void switchToPreviousWeek() {
