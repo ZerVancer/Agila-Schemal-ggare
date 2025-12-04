@@ -13,6 +13,13 @@
 
     <Label text="Menu" style="-fx-font-size: 18px; -fx-font-weight: bold; "/>
 
+    <!-- Logged in user with logout button -->
+    <VBox alignment="CENTER" spacing="5.0">
+        <Label fx:id="loggedInUser" text=""  style="-fx-font-weight: bold; "/>
+        <Button fx:id="logOutButton" text="Log out" minWidth="80" onAction="#handleLogoutClick"/>
+    </VBox>
+
+
     <!-- Meny för rendering -->
     <VBox alignment="CENTER"
           spacing="5.0">

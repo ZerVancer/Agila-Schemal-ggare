@@ -1,10 +1,19 @@
 package com.grupp5.agila_schemalggare.controllers;
 
+import com.grupp5.agila_schemalggare.models.Account;
+import com.grupp5.agila_schemalggare.services.AccountService;
+import com.grupp5.agila_schemalggare.utils.SceneManagerProvider;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 
 public class SideMenuController {
     private CalendarViewController calendarViewController;
+
+    @FXML
+    private Label loggedInUser;
+    @FXML
+    private Button logOutButton;
 
     @FXML
     private Button renderWeekly;
@@ -14,6 +23,20 @@ public class SideMenuController {
     private Button renderYearly;
 
     private Button activeButton;
+
+    public void initialize() {
+        updateUserLoggedIn();
+    }
+
+    private void updateUserLoggedIn() {
+        Account account = AccountService.getLoggedInAccount();
+
+        if (account != null) {
+            loggedInUser.setText("User: " + account.getUsername());
+        } else {
+            loggedInUser.setText("");
+        }
+    }
 
     public void setCalendarViewController(CalendarViewController controller) {
         this.calendarViewController = controller;
@@ -37,6 +60,19 @@ public class SideMenuController {
     public void handleYearlyClick() {
         calendarViewController.showYearView();
         setActiveButton(renderYearly);
+    }
+
+    @FXML
+    public void handleLogoutClick() {
+        switchSceneToLogin();
+    }
+
+    public void switchSceneToLogin() {
+        AccountService.setLoggedInAccount(null);
+
+        if (AccountService.getLoggedInAccount() == null) {
+            SceneManagerProvider.getSceneManager().switchScene("/com/grupp5/agila_schemalggare/login-view.fxml");
+        }
     }
 
     private void setActiveButton(Button clickedButton) {
