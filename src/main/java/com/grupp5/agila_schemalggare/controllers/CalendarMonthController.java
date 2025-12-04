@@ -4,11 +4,16 @@ import com.grupp5.agila_schemalggare.services.CalendarService;
 import com.grupp5.agila_schemalggare.utils.Updator;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 
 public class CalendarMonthController implements Updator {
@@ -35,9 +40,9 @@ public class CalendarMonthController implements Updator {
   public void buttonAction(ActionEvent event) {
     Button button = (Button) event.getSource();
     int day = Integer.parseInt(button.getText().split(" ")[0]);
-    CalendarService calendarService = new CalendarService();
-    if (calendarService.getSpecificEvent(date.withDayOfMonth(day)).isEmpty()) calendarService.openEventCreatingWindow(date.withDayOfMonth(day));
-    else calendarService.openEventHandlingWindow(date.withDayOfMonth(day));
+    LocalDateTime chosenDay = date.withDayOfMonth(day);
+
+    openDayView(chosenDay, button);;
   }
 
   @FXML
@@ -158,6 +163,24 @@ public class CalendarMonthController implements Updator {
     setTimeSpanLabel();
 
     fillGrid();
+  }
+
+  private void openDayView(LocalDateTime date, Button button) {
+      try {
+          FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/grupp5/agila_schemalggare/CalendarDayView.fxml"));
+          Parent root = loader.load();
+
+          CalendarDayController controller = loader.getController();
+          controller.setDate(date);
+
+          Stage stage = new Stage();
+          stage.setTitle("Day View");
+          stage.setScene(new Scene(root, 400, 800));
+          stage.show();
+
+      } catch (IOException e) {
+          e.printStackTrace();
+      }
   }
 
 }

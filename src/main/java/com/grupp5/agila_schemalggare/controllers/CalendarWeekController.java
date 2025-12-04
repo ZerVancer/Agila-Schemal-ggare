@@ -4,12 +4,18 @@ import com.grupp5.agila_schemalggare.services.CalendarService;
 import com.grupp5.agila_schemalggare.utils.Updator;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.WeekFields;
+import java.util.Arrays;
 import java.util.Locale;
 
 public class CalendarWeekController implements Updator {
@@ -66,16 +72,10 @@ public class CalendarWeekController implements Updator {
     this.date = date;
   }
 
-  // Future button use
-  @FXML
-  protected void buttonAction(ActionEvent event) {
-    Button button = (Button) event.getSource();
-    String dayString = button.getText().split("-")[2];
-    if (dayString.charAt(0) == '0') dayString = String.valueOf(dayString.charAt(1));
-    int day = Integer.parseInt(dayString);
-    if (calendarService.getSpecificEvent(date.withDayOfMonth(day)).isEmpty()) calendarService.openEventCreatingWindow(date.withDayOfMonth(day));
-    else calendarService.openEventHandlingWindow(date.withDayOfMonth(day));
-  }
+    // Future button use
+    @FXML
+    protected void buttonAction(ActionEvent event) {
+        Button button = (Button) event.getSource();
 
   @FXML
   protected void switchToPreviousWeek() {
@@ -162,9 +162,27 @@ public class CalendarWeekController implements Updator {
     dayButtons = new Button[]{mondayButton, tuesdayButton, wednesdayButton, thursdayButton, fridayButton, saturdayButton, sundayButton};
     dayLabels = new Label[]{mondayLabel, tuesdayLabel, wednesdayLabel, thursdayLabel, fridayLabel, saturdayLabel, sundayLabel};
 
-    setWeekLabel();
-    setTimeSpanLabel();
-    setDayDate();
-    renderEvents();
-  }
+        setWeekLabel();
+        setTimeSpanLabel();
+        setDayDate();
+        renderEvents();
+    }
+
+    private void openDayView(LocalDateTime date, Button button) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/grupp5/agila_schemalggare/calendarDayView.fxml"));
+            Parent root = loader.load();
+
+            CalendarDayController controller = loader.getController();
+            controller.setDate(date);
+
+            Stage stage = new Stage();
+            stage.setTitle("Day View");
+            stage.setScene(new Scene(root, 200, 200));
+            stage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

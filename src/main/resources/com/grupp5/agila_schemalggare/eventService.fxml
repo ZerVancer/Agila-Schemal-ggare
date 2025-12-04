@@ -39,6 +39,5 @@
             <Button fx:id="confirmButton" mnemonicParsing="false" onAction="#confirmButton" text="Confirm" />
             <Button fx:id="cancelButton" mnemonicParsing="false" onAction="#closeWindowAction" text="Cancel" />
         </HBox>
-        <Button fx:id="deleteButton" mnemonicParsing="false" onAction="#deleteButton" text="Delete" visible="false" />
     </VBox>
 </VBox>
