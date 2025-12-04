@@ -3,6 +3,7 @@ package com.grupp5.agila_schemalggare.services;
 import com.grupp5.agila_schemalggare.models.Account;
 import com.grupp5.agila_schemalggare.models.Admin;
 import com.grupp5.agila_schemalggare.models.User;
+import com.grupp5.agila_schemalggare.utils.Updator;
 
 import java.util.HashSet;
 
@@ -13,6 +14,7 @@ public class AccountService {
     // La till denna "variabeln" för att verkligen deklarera ett konto som man kan använda sig utav
     // om så önskas i andra delar i projektet, istället för att behöva filtrera igenom och jämföra etc.
     private static Account loggedInAccount = null;
+    private static Updator[] updator;
 
     public AccountService() {
         // Går att ta bort, skapar bara ett konto för att testa logiken.
@@ -32,6 +34,16 @@ public class AccountService {
 
     public static void setLoggedInAccount(Account account) {
         loggedInAccount = account;
+    }
+
+    public static void update() {
+      for (Updator updator : updator) {
+        updator.updateView();
+      }
+    }
+
+    public static void setUpdator(Updator[] updator) {
+      AccountService.updator = updator;
     }
 
     public Account loginUser(String username, String password) {

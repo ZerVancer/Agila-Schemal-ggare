@@ -2,6 +2,7 @@ package com.grupp5.agila_schemalggare.controllers;
 
 import com.grupp5.agila_schemalggare.services.CalendarService;
 
+import com.grupp5.agila_schemalggare.utils.Updator;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
@@ -13,7 +14,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-public class CalendarYearController {
+public class CalendarYearController implements Updator {
     private final CalendarService calendarService = new CalendarService();
 
     private CalendarViewController calendarViewController;
@@ -52,13 +53,13 @@ public class CalendarYearController {
     @FXML
     public void switchToPrevYear(ActionEvent event) {
         year = year.minusYears(1);
-        initialize();
+        updateView();
     }
 
     @FXML
     public void switchToNextYear(ActionEvent event) {
         year = year.plusYears(1);
-        initialize();
+        updateView();
     }
 
     protected void setYearLabel() {
@@ -126,7 +127,8 @@ public class CalendarYearController {
         createYear();
     }
 
-    public void initialize() {
+    @Override
+    public void updateView() {
         updateYearView();
     }
 
