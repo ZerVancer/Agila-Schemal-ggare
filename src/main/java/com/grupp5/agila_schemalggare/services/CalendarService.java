@@ -42,6 +42,7 @@ public class CalendarService {
         for (Event e : calendar.getEvents()) {
             if  (e.getId().equals(event.getId())) {
                 calendar.removeEvent(e);
+                AccountService.update();
                 return loggedInAccount;
             }
         }
@@ -97,7 +98,7 @@ public class CalendarService {
         Parent root = loader.load();
         CalendarServiceController controller = loader.getController();
         controller.setCurrentDate(currentDate);
-        controller.setScene();
+        controller.updateView();
         Stage stage = new  Stage();
         stage.setTitle("Event Handling");
         stage.setScene(new Scene(root, 300, 300));

@@ -1,9 +1,8 @@
 package com.grupp5.agila_schemalggare.controllers;
 
 import com.grupp5.agila_schemalggare.models.Event;
-import com.grupp5.agila_schemalggare.services.AccountService;
 import com.grupp5.agila_schemalggare.services.CalendarService;
-import com.grupp5.agila_schemalggare.utils.SceneManager;
+import com.grupp5.agila_schemalggare.utils.Updator;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -18,7 +17,7 @@ import javafx.scene.control.Label;
 import java.io.IOException;
 import java.time.LocalDateTime;
 
-public class CalendarServiceController {
+public class CalendarServiceController implements Updator {
   @FXML
   protected Label label;
   @FXML
@@ -67,7 +66,8 @@ public class CalendarServiceController {
     choiceBox.getSelectionModel().select(0);
   }
 
-  public void setScene() {
+  @Override
+  public void updateView() {
     fillBoxWithEvents();
   }
 

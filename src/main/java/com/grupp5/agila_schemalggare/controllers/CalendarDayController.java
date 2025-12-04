@@ -2,6 +2,7 @@ package com.grupp5.agila_schemalggare.controllers;
 
 import com.grupp5.agila_schemalggare.models.Event;
 import com.grupp5.agila_schemalggare.services.CalendarService;
+import com.grupp5.agila_schemalggare.utils.Updator;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
@@ -17,7 +18,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
-public class CalendarDayController {
+public class CalendarDayController implements Updator {
     @FXML
     private Label dayAndDateLabel;
     @FXML
@@ -26,19 +27,16 @@ public class CalendarDayController {
     public Button returnButton;
 
     CalendarService calendarService = new CalendarService();
-    private LocalDateTime selectedDate;
+    private LocalDateTime date;
 
     public void setDate(LocalDateTime date) {
-        this.selectedDate = date;
-      dayAndDateLabel.setText(date.toLocalDate().toString());
-        dayAndDateLabel.setStyle("-fx-font-size: 20; -fx-font-weight: bold");
-        loadEventsForDate();
+        this.date = date;
     }
 
     private void loadEventsForDate() {
         eventsContainer.getChildren().clear();
 
-        List<Event> events = calendarService.getSpecificEvent(selectedDate);
+        List<Event> events = calendarService.getSpecificEvent(date);
 
         for (Event event : events) {
             VBox eventModal = createEventModal(event);
@@ -119,7 +117,7 @@ public class CalendarDayController {
 
             EventServiceController controller = loader.getController();
             controller.setCurrentEvent(event);
-            controller.setCurrentDate(selectedDate);
+            controller.setCurrentDate(date);
             controller.setScene();
 
             Stage stage = new Stage();
@@ -139,5 +137,12 @@ public class CalendarDayController {
     @FXML
     public void returnToCalendar() { //optimally you'd return to the view you came from but for now always returns to month view
       ((Stage) returnButton.getScene().getWindow()).close();
+    }
+
+    @Override
+    public void updateView() {
+      dayAndDateLabel.setText(date.toLocalDate().toString());
+      dayAndDateLabel.setStyle("-fx-font-size: 20; -fx-font-weight: bold");
+      loadEventsForDate();
     }
 }

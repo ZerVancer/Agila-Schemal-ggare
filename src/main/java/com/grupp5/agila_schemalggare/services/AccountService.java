@@ -5,7 +5,9 @@ import com.grupp5.agila_schemalggare.models.Admin;
 import com.grupp5.agila_schemalggare.models.User;
 import com.grupp5.agila_schemalggare.utils.Updator;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 
 public class AccountService {
 
@@ -14,7 +16,7 @@ public class AccountService {
     // La till denna "variabeln" för att verkligen deklarera ett konto som man kan använda sig utav
     // om så önskas i andra delar i projektet, istället för att behöva filtrera igenom och jämföra etc.
     private static Account loggedInAccount = null;
-    private static Updator[] updator;
+    private static List<Updator> updator = new ArrayList<>();
 
     public AccountService() {
         // Går att ta bort, skapar bara ett konto för att testa logiken.
@@ -42,8 +44,8 @@ public class AccountService {
       }
     }
 
-    public static void setUpdator(Updator[] updator) {
-      AccountService.updator = updator;
+    public static void addUpdator(Updator updator) {
+      AccountService.updator.add(updator);
     }
 
     public Account loginUser(String username, String password) {

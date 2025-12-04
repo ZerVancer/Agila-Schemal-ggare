@@ -82,11 +82,9 @@ public class EventServiceController {
     @FXML
     public void closeWindowAction(ActionEvent event) {
         Stage stage = (Stage) titleField.getScene().getWindow();
+        AccountService.update();
         stage.close();
 
-    AccountService.update();
-
-    closeWindowAction(event);
   }
 
   @FXML

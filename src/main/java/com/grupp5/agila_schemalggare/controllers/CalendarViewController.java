@@ -70,7 +70,9 @@ public class CalendarViewController {
         sideMenuController = sideLoader.getController();
         sideMenuController.setCalendarViewController(this);
 
-        AccountService.setUpdator(new Updator[]{calendarWeekController, calendarMonthController, calendarYearController});
+        AccountService.addUpdator(calendarWeekController);
+        AccountService.addUpdator(calendarMonthController);
+        AccountService.addUpdator(calendarYearController);
         AccountService.update();
 
         sideMenu.getChildren().setAll(sideMenuNode);

@@ -1,5 +1,6 @@
 package com.grupp5.agila_schemalggare.controllers;
 
+import com.grupp5.agila_schemalggare.services.AccountService;
 import com.grupp5.agila_schemalggare.services.CalendarService;
 import com.grupp5.agila_schemalggare.utils.Updator;
 import javafx.event.ActionEvent;
@@ -42,7 +43,7 @@ public class CalendarMonthController implements Updator {
     int day = Integer.parseInt(button.getText().split(" ")[0]);
     LocalDateTime chosenDay = date.withDayOfMonth(day);
 
-    openDayView(chosenDay, button);;
+    openDayView(chosenDay, button);
   }
 
   @FXML
@@ -172,6 +173,8 @@ public class CalendarMonthController implements Updator {
 
           CalendarDayController controller = loader.getController();
           controller.setDate(date);
+          AccountService.addUpdator(controller);
+        AccountService.update();
 
           Stage stage = new Stage();
           stage.setTitle("Day View");
