@@ -16,6 +16,7 @@
     <!-- Logged in user with logout button -->
     <VBox alignment="CENTER" spacing="5.0">
         <Label fx:id="loggedInUser" text=""  style="-fx-font-weight: bold; "/>
+        <Button fx:id="adminButton" text="Admin menu" minWidth="80" onAction="#handleAdminClick"/>
         <Button fx:id="logOutButton" text="Log out" minWidth="80" onAction="#handleLogoutClick"/>
     </VBox>
 

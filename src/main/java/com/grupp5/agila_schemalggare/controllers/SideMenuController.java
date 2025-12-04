@@ -13,6 +13,8 @@ public class SideMenuController {
     @FXML
     private Label loggedInUser;
     @FXML
+    private Button adminButton;
+    @FXML
     private Button logOutButton;
 
     @FXML
@@ -35,6 +37,11 @@ public class SideMenuController {
             loggedInUser.setText("User: " + account.getUsername());
         } else {
             loggedInUser.setText("");
+        }
+
+        if (account.getRole().equals("USER")) {
+            adminButton.setVisible(false);
+            adminButton.setManaged(false);
         }
     }
 
@@ -67,12 +74,20 @@ public class SideMenuController {
         switchSceneToLogin();
     }
 
+    public void handleAdminClick() {
+        switchSceneToAdminMenu();
+    }
+
     public void switchSceneToLogin() {
         AccountService.setLoggedInAccount(null);
 
         if (AccountService.getLoggedInAccount() == null) {
             SceneManagerProvider.getSceneManager().switchScene("/com/grupp5/agila_schemalggare/login-view.fxml");
         }
+    }
+
+    public void switchSceneToAdminMenu() {
+
     }
 
     private void setActiveButton(Button clickedButton) {
