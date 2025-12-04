@@ -19,57 +19,57 @@ import java.util.Locale;
 
 public class CalendarWeekController {
 
-    @FXML
-    public Button previousWeekButton;
-    @FXML
-    private Label weekLabel;
-    @FXML
-    public Button nextWeekButton;
-    @FXML
-    public Label timeSpanLabel;
-    @FXML
-    public Label mondayLabel;
-    @FXML
-    public Label tuesdayLabel;
-    @FXML
-    public Label wednesdayLabel;
-    @FXML
-    public Label thursdayLabel;
-    @FXML
-    public Label fridayLabel;
-    @FXML
-    public Label saturdayLabel;
-    @FXML
-    public Label sundayLabel;
+  @FXML
+  public Button previousWeekButton;
+  @FXML
+  private Label weekLabel;
+  @FXML
+  public Button nextWeekButton;
+  @FXML
+  public Label timeSpanLabel;
+  @FXML
+  public Label mondayLabel;
+  @FXML
+  public Label tuesdayLabel;
+  @FXML
+  public Label wednesdayLabel;
+  @FXML
+  public Label thursdayLabel;
+  @FXML
+  public Label fridayLabel;
+  @FXML
+  public Label saturdayLabel;
+  @FXML
+  public Label sundayLabel;
 
-    // Arbetar utifrån hur du strukturerade det hela - Joel
-    @FXML
-    public Button mondayButton;
-    @FXML
-    public Button tuesdayButton;
-    @FXML
-    public Button wednesdayButton;
-    @FXML
-    public Button thursdayButton;
-    @FXML
-    public Button fridayButton;
-    @FXML
-    public Button saturdayButton;
-    @FXML
-    public Button sundayButton;
+  // Arbetar utifrån hur du strukturerade det hela - Joel
+  @FXML
+  public Button mondayButton;
+  @FXML
+  public Button tuesdayButton;
+  @FXML
+  public Button wednesdayButton;
+  @FXML
+  public Button thursdayButton;
+  @FXML
+  public Button fridayButton;
+  @FXML
+  public Button saturdayButton;
+  @FXML
+  public Button sundayButton;
 
-    private Button[] dayButtons;
-    private Label[] dayLabels;
+  private Button[] dayButtons;
+  private Label[] dayLabels;
 
-    private LocalDateTime[] weekDates;
-    // - Joel
+  private LocalDateTime[] weekDates;
+  // - Joel
 
-    private final CalendarService calendarService = new CalendarService();
-    private LocalDateTime date;
+  private final CalendarService calendarService = new CalendarService();
+  private LocalDateTime date;
 
-    public void setCurrentDate(LocalDateTime date) {
-        this.date = date;
-    }
+  public void setCurrentDate(LocalDateTime date) {
+    this.date = date;
+  }
 
     // Future button use
     @FXML
@@ -95,41 +95,41 @@ public class CalendarWeekController {
         setScene();
     }
 
-    public void setWeekLabel() {
-        weekLabel.setText("Week " + date.get(WeekFields.of(Locale.getDefault()).weekOfWeekBasedYear()));
-    }
+  public void setWeekLabel() {
+    weekLabel.setText("Week " + date.get(WeekFields.of(Locale.getDefault()).weekOfWeekBasedYear()));
+  }
 
     // Uppdaterade och tog bort offset namnet för tydlighet.
     // Märkte även att den gjorde inget för det andra datumet dvs endDate.
-    public void setTimeSpanLabel() {
-        int dayOfWeek = date.getDayOfWeek().getValue();
+  public void setTimeSpanLabel() {
+      int dayOfWeek = date.getDayOfWeek().getValue();
 
-        LocalDateTime startDate = date.minusDays(dayOfWeek - 1);
-        LocalDateTime endDate = date.plusDays(7 - dayOfWeek);
+      LocalDateTime startDate = date.minusDays(dayOfWeek - 1);
+      LocalDateTime endDate = date.plusDays(7 - dayOfWeek);
 
-        timeSpanLabel.setText(startDate.toLocalDate() + "  |  " + endDate.toLocalDate());
+      timeSpanLabel.setText(startDate.toLocalDate() + "  |  " + endDate.toLocalDate());
+  }
+
+  public void setDayDate() {
+    weekDates = new LocalDateTime[7];
+    int dayOfWeek = date.getDayOfWeek().getValue();
+
+    LocalDateTime monday = date.minusDays(dayOfWeek - 1);
+
+    DateTimeFormatter dayFormat = DateTimeFormatter.ofPattern("EEEE MMM");
+
+    for (int i = 0; i < 7; i++) {
+        LocalDateTime current = monday.plusDays(i);
+
+        weekDates[i] = current;
+
+        String dayName = current.toLocalDate().format(dayFormat);
+        int dayNumber = current.getDayOfMonth();
+
+        String labelText = dayName + " " + dayNumber;
+        dayLabels[i].setText(labelText);
     }
-
-    public void setDayDate() {
-        weekDates = new LocalDateTime[7];
-        int dayOfWeek = date.getDayOfWeek().getValue();
-
-        LocalDateTime monday = date.minusDays(dayOfWeek - 1);
-
-        DateTimeFormatter dayFormat = DateTimeFormatter.ofPattern("EEEE MMM");
-
-        for (int i = 0; i < 7; i++) {
-            LocalDateTime current = monday.plusDays(i);
-
-            weekDates[i] = current;
-
-            String dayName = current.toLocalDate().format(dayFormat);
-            int dayNumber = current.getDayOfMonth();
-
-            String labelText = dayName + " " + dayNumber;
-            dayLabels[i].setText(labelText);
-        }
-    }
+  }
 
     public void renderEvents() {
         for (int i = 0; i < weekDates.length; i++) {
@@ -144,13 +144,13 @@ public class CalendarWeekController {
                 String endTime = String.format("%02d:%02d", event.getEndDate().getHour(), event.getEndDate().getMinute());
 
                 stringBuilder.append("| ")
-                    .append(event.getTitle())
-                    .append(" |\n")
-                    .append("| ")
-                    .append(startTime)
-                    .append(" - ")
-                    .append(endTime)
-                    .append(" |\n");
+                        .append(event.getTitle())
+                        .append(" |\n")
+                        .append("| ")
+                        .append(startTime)
+                        .append(" - ")
+                        .append(endTime)
+                        .append(" |\n");
             }
 
             dayButtons[i].setText(stringBuilder.toString());
@@ -165,9 +165,9 @@ public class CalendarWeekController {
     }
 
 
-    public void setScene() {
-        dayButtons = new Button[]{mondayButton, tuesdayButton, wednesdayButton, thursdayButton, fridayButton, saturdayButton, sundayButton};
-        dayLabels = new Label[]{mondayLabel, tuesdayLabel, wednesdayLabel, thursdayLabel, fridayLabel, saturdayLabel, sundayLabel};
+  public void setScene() {
+    dayButtons = new Button[]{mondayButton, tuesdayButton, wednesdayButton, thursdayButton, fridayButton, saturdayButton, sundayButton};
+    dayLabels = new Label[]{mondayLabel, tuesdayLabel, wednesdayLabel, thursdayLabel, fridayLabel, saturdayLabel, sundayLabel};
 
         setWeekLabel();
         setTimeSpanLabel();
