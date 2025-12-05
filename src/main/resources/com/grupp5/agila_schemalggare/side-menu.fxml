@@ -2,15 +2,24 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-
 <?import javafx.geometry.Insets?>
+
 <VBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
       alignment="CENTER"
       spacing="5.0"
-      minWidth="60">
+      minWidth="60"
+      maxWidth="200"
+      fx:controller="com.grupp5.agila_schemalggare.controllers.SideMenuController">
 
     <Label text="Menu" style="-fx-font-size: 18px; -fx-font-weight: bold; "/>
+
+    <!-- Logged in user with logout button -->
+    <VBox alignment="CENTER" spacing="5.0">
+        <Label fx:id="loggedInUser" text=""  style="-fx-font-weight: bold; "/>
+        <Button fx:id="adminButton" text="Admin menu" prefWidth="85" onAction="#handleAdminClick"/>
+        <Button fx:id="logOutButton" text="Log out" minWidth="85" onAction="#handleLogoutClick"/>
+    </VBox>
 
 
     <!-- Meny för rendering -->
@@ -21,14 +30,13 @@
             <Insets top="5" />
         </VBox.margin>
 
-        <Button text="Daily" minWidth="80"/>
-        <Button text="Weekly" minWidth="80"/>
-        <Button text="Monthly" minWidth="80"/>
-        <Button text="Yearly" minWidth="80"/>
+        <Button fx:id="renderWeekly" text="Weekly" minWidth="85" onAction="#handleWeeklyClick"/>
+        <Button fx:id="renderMonthly" text="Monthly" minWidth="85" onAction="#handleMonthlyClick"/>
+        <Button fx:id="renderYearly" text="Yearly" minWidth="85" onAction="#handleYearlyClick"/>
     </VBox>
 
     <!-- Kommande event -->
-    <VBox>
+    <VBox alignment="CENTER">
 
         <VBox.margin>
             <Insets top="10" />
@@ -36,7 +44,11 @@
 
         <Label text="Upcoming Events:" style="-fx-font-size: 14px; -fx-font-weight: bold;" />
 
-        <GridPane fx:id=""/>
+        <GridPane fx:id="currentEventsGrid" alignment="CENTER">
+            <padding>
+                <Insets top="5" right="10" bottom="5" left="10" />
+            </padding>
+        </GridPane>
 
     </VBox>
 

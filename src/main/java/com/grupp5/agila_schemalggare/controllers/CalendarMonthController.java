@@ -1,18 +1,17 @@
 package com.grupp5.agila_schemalggare.controllers;
 
+import com.grupp5.agila_schemalggare.services.CalendarService;
+import com.grupp5.agila_schemalggare.utils.DynamicController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 
-import java.net.URL;
-import java.time.LocalDate;
-import java.util.ResourceBundle;
+import java.time.LocalDateTime;
 
-public class CalendarMonthController implements Initializable {
+public class CalendarMonthController implements DynamicController {
   @FXML
   private Button previousMonthButton;
   @FXML
@@ -24,46 +23,49 @@ public class CalendarMonthController implements Initializable {
   @FXML
   private GridPane gridPane;
 
-  // TEMP:
-  private LocalDate date = LocalDate.now();
+  private final CalendarService calendarService = new CalendarService();
+  private LocalDateTime currentDate;
 
-  // Future button use
   @FXML
-  public void buttonAction(ActionEvent event) {
+  public void openDayAction(ActionEvent event) {
     Button button = (Button) event.getSource();
+    int day = Integer.parseInt(button.getText().split(" ")[0]);
+    LocalDateTime chosenDay = currentDate.withDayOfMonth(day);
+
+    calendarService.openDayView(chosenDay);
   }
 
   @FXML
   public void switchToPreviousMonth(ActionEvent event) {
-    date = date.minusMonths(1);
-    initialize(null, null);
+    currentDate = currentDate.minusMonths(1);
+    updateView();
   }
 
   @FXML
   public void switchToNextMonth(ActionEvent event) {
-    date = date.plusMonths(1);
-    initialize(null, null);
+    currentDate = currentDate.plusMonths(1);
+    updateView();
   }
 
   protected void setMonthLabel() {
-    this.monthLabel.setText(date.getMonth().toString());
+    this.monthLabel.setText(currentDate.getMonth().toString());
   }
 
   protected void setTimeSpanLabel() {
-    LocalDate startDate = date.withDayOfMonth(1);
-    LocalDate endDate = date.withDayOfMonth(date.lengthOfMonth());
+    LocalDateTime startDate = currentDate.withDayOfMonth(1);
+    LocalDateTime endDate = currentDate.withDayOfMonth(1).plusMonths(1).minusDays(1);
 
-    timeSpanLabel.setText(startDate + "  |  " + endDate);
+    timeSpanLabel.setText(startDate.toLocalDate() + "  |  " + endDate.toLocalDate());
   }
 
   private void fillGrid() {
     addDaysToGrid();
 
-    int weekDay = date.withDayOfMonth(1).getDayOfWeek().getValue();
+    int weekDay = currentDate.withDayOfMonth(1).getDayOfWeek().getValue();
     int day = 1;
-    int maxDay = date.withDayOfMonth(date.lengthOfMonth()).getDayOfMonth();
-    LocalDate lastMonth = date.minusMonths(1);
-    int lastMonthDays = lastMonth.withDayOfMonth(lastMonth.lengthOfMonth()).getDayOfMonth() - weekDay + 1;
+    int maxDay = currentDate.withDayOfMonth(currentDate.withDayOfMonth(1).plusMonths(1).minusDays(1).getDayOfMonth()).getDayOfMonth();
+    LocalDateTime lastMonth = currentDate.minusMonths(1);
+    int lastMonthDays = lastMonth.withDayOfMonth(lastMonth.withDayOfMonth(1).plusMonths(1).minusDays(1).getDayOfMonth()).getDayOfMonth() - weekDay + 1;
     int nextMonthDays = 1;
     int rowHeight = -1;
     int lastColIndex = 0;
@@ -120,14 +122,26 @@ public class CalendarMonthController implements Initializable {
   }
 
   private void addButtonToGrid(String text, int row, int col) {
-    Button button = new Button(String.valueOf(text));
-    button.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-    button.setOnAction(this::buttonAction);
+      int day = Integer.parseInt(text);
+      LocalDateTime dayDate = currentDate.withDayOfMonth(day);
+
+      var events = calendarService.getSpecificEvent(dayDate);
+
+      // Lägger till en siffra beroende på hur många och om det finns events för det datumet.
+      String buttonText = text;
+      if (!events.isEmpty()) {
+          buttonText += " (" + events.size() + ")";
+      }
+
+      Button button = new Button(buttonText);
+      button.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+      button.setOnAction(this::openDayAction);
+
     gridPane.add(button, col, row);
   }
 
   @Override
-  public void initialize(URL url, ResourceBundle resourceBundle) {
+  public void updateView() {
     gridPane.getChildren().clear();
     setMonthLabel();
     setTimeSpanLabel();
@@ -135,4 +149,8 @@ public class CalendarMonthController implements Initializable {
     fillGrid();
   }
 
+  @Override
+  public void setCurrentDate(LocalDateTime currentDate) {
+    this.currentDate = currentDate;
+  }
 }

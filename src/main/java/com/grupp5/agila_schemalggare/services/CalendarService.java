@@ -1,21 +1,23 @@
 package com.grupp5.agila_schemalggare.services;
 
+import com.grupp5.agila_schemalggare.controllers.CalendarDayController;
 import com.grupp5.agila_schemalggare.models.Account;
 import com.grupp5.agila_schemalggare.models.Calendar;
 import com.grupp5.agila_schemalggare.models.Event;
-import com.grupp5.agila_schemalggare.models.User;
 import com.grupp5.agila_schemalggare.repositories.AccountFileRepository;
 
 import java.io.IOException;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class CalendarService {
-    // AccountService accountService = new AccountService(); //solve dependency injection at a later point
-    // Account loggedInAccount = accountService.getLoggedInAccount(); <-- fetch loggedInAccount later when variable is available
+    Account loggedInAccount = AccountService.getLoggedInAccount(); //<-- fetch loggedInAccount later when variable is available
 
-    Account loggedInAccount = new User("milo_soder", "smörgåsrån"); //tillfällig användare
-
-    public Account createEvent(String title, String desc, LocalDateTime startDate, LocalDateTime endDate) {
+    public void createEvent(String title, String desc, LocalDateTime startDate, LocalDateTime endDate) {
         if (!userIsLoggedIn()) {
             throw new IllegalStateException("User is not logged in");
         }
@@ -24,59 +26,48 @@ public class CalendarService {
         loggedInAccount.addEvent(event);
 
         saveChangesToFile(loggedInAccount);
-
-        return loggedInAccount;
     }
 
-    public Account deleteEvent(Event event) {
+    public void deleteEvent(Event event) {
         if (!userIsLoggedIn()) {
             throw new IllegalStateException("User is not logged in");
         }
 
         Calendar calendar = loggedInAccount.getCalendar();
 
-        for (Event e : calendar.getEvents()) {
-            if  (e.getId().equals(event.getId())) {
-                calendar.removeEvent(e);
-            }
-        }
+        calendar.removeEvent(event);
+        AccountService.updateViews();
 
         saveChangesToFile(loggedInAccount);
-
-        return loggedInAccount;
     }
 
-    public Account editEvent(Event eventToEdit, String title, String desc, LocalDateTime startDate, LocalDateTime endDate) {
+    public void editEvent(Event eventToEdit, String title, String desc, LocalDateTime startDate, LocalDateTime endDate) {
         if (!userIsLoggedIn()) {
             throw new IllegalStateException("User is not logged in");
         }
 
-        Calendar calendar = loggedInAccount.getCalendar();
-
-        Event editedEvent = null;
-
-        for (Event e : calendar.getEvents()) {
-            if (e.getId().equals(eventToEdit.getId())) {
-                editedEvent = e;
-            }
-        }
-
-        if  (editedEvent == null) {
+        if  (eventToEdit == null) {
             throw new IllegalArgumentException("No such event found.");
         }
 
-        editedEvent.setTitle(title);
-        editedEvent.setDescription(desc);
-        editedEvent.setStartDate(startDate);
-        editedEvent.setEndDate(endDate);
+        eventToEdit.setTitle(title);
+        eventToEdit.setDescription(desc);
+        eventToEdit.setStartDate(startDate);
+        eventToEdit.setEndDate(endDate);
 
         saveChangesToFile(loggedInAccount);
-
-        return loggedInAccount;
     }
 
-    //room for possible extra calendar display logic here
-    //<<<---->>>
+    public List<Event> getAllEvents() {
+        return loggedInAccount.getCalendar().getEvents();
+    }
+
+    public List<Event> getSpecificEvent(LocalDateTime date) {
+        return getAllEvents()
+            .stream()
+            .filter(event -> event.getStartDate().toLocalDate().equals(date.toLocalDate()))
+            .toList();
+    }
 
     private boolean userIsLoggedIn() {
         return loggedInAccount != null;
@@ -90,5 +81,25 @@ public class CalendarService {
         } catch (IOException e) {
         throw new RuntimeException();
         }
+    }
+
+    public void openDayView(LocalDateTime date) {
+      try {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/grupp5/agila_schemalggare/calendarDayView.fxml"));
+        Parent root = loader.load();
+
+        CalendarDayController controller = loader.getController();
+        controller.setCurrentDate(date);
+        AccountService.addUpdator(controller);
+        AccountService.updateViews();
+
+        Stage stage = new Stage();
+        stage.setTitle("Day View");
+        stage.setScene(new Scene(root, 400, 800));
+        stage.show();
+
+      } catch (IOException e) {
+        throw new RuntimeException(e);
+      }
     }
 }

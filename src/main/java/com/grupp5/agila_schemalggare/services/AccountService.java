@@ -3,19 +3,19 @@ package com.grupp5.agila_schemalggare.services;
 import com.grupp5.agila_schemalggare.models.Account;
 import com.grupp5.agila_schemalggare.models.Admin;
 import com.grupp5.agila_schemalggare.models.User;
+import com.grupp5.agila_schemalggare.utils.DynamicController;
 import com.grupp5.agila_schemalggare.repositories.AccountFileRepository;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 
 public class AccountService {
-    AccountFileRepository accountFileRepository = new AccountFileRepository();
-
-    public HashSet<Account> registeredUsers;
-
-    // La till denna "variabeln" för att verkligen deklarera ett konto som man kan använda sig utav
-    // om så önskas i andra delar i projektet, istället för att behöva filtrera igenom och jämföra etc.
+    private static HashSet<Account> registeredUsers = new HashSet<>();
     private static Account loggedInAccount = null;
+    private static final List<DynamicController> dynamicControllers = new ArrayList<>();
+    private final AccountFileRepository accountFileRepository = new AccountFileRepository();
 
     public AccountService() {
         try {
@@ -23,15 +23,19 @@ public class AccountService {
         } catch (IOException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
+    }
 
-        // Går att ta bort, skapar bara ett konto för att testa logiken.
-        // Uppdaterade lite för att säkerställa att första kontot blir en "Admin"
-        if (registeredUsers.isEmpty()) {
-            registeredUsers.add(new Admin("First", "first"));
-            registeredUsers.add(new User("Second", "second"));
-        } else {
-            registeredUsers.add(new User("Second", "second"));
+    public static HashSet<Account> getRegisteredUsers() {
+        return registeredUsers;
+    }
+
+    public Account getUserByUsername(String username) {
+        for (Account account : registeredUsers) {
+            if (account.getUsername().equals(username)) {
+                return account;
+            }
         }
+        return null;
     }
 
     // Getter för resterande komponenter för att hämta kontot om så önskas.
@@ -41,6 +45,16 @@ public class AccountService {
 
     public static void setLoggedInAccount(Account account) {
         loggedInAccount = account;
+    }
+
+    public static void updateViews() {
+        for (DynamicController controller : dynamicControllers) {
+            controller.updateView();
+        }
+    }
+
+    public static void addUpdator(DynamicController updator) {
+        dynamicControllers.add(updator);
     }
 
     public Account loginUser(String username, String password) {
@@ -66,7 +80,7 @@ public class AccountService {
             return null;
         }
 
-        loggedInAccount = account;
+        setLoggedInAccount(account);
 
         return account;
     }
@@ -113,5 +127,62 @@ public class AccountService {
         return password.length() > 5 && //longer than 5 characters
                 password.length() < 31 && //shorter than 31
                 password.matches(".*[!@#$%^&*()_+=\\-{}\\[\\]:;\"'<>,.?/].*"); //must contain at least one special character
+    }
+
+    public void updateAccountPassword(Account updatedAccount) {
+        for (Account account : registeredUsers) {
+            if (account.getUsername().equals(updatedAccount.getUsername())) {
+                account.setPassword(updatedAccount.getPassword());
+            }
+            try {
+                accountFileRepository.updateExistingAccount(account);
+            } catch (IOException exception) {
+                throw new RuntimeException(exception);
+            }
+        }
+    }
+
+    public void deleteAccount(Account account) {
+        registeredUsers.remove(account);
+        try {
+            accountFileRepository.deleteExistingAccount(account);
+        } catch (IOException exception) {
+            throw new RuntimeException(exception);
+        }
+    }
+
+    public void promoteUserToAdmin(Account user) {
+        Admin admin = new Admin(user.getUsername(), user.getPassword());
+        admin.setId(user.getId());
+        admin.setCalendar(user.getCalendar());
+        admin.setRole("ADMIN");
+
+        promoteDemoteHelper(admin, user);
+    }
+
+
+    public void demoteAdminToUser(Account admin) {
+        User user = new User(admin.getUsername(), admin.getPassword());
+        user.setId(admin.getId());
+        user.setCalendar(user.getCalendar());
+        user.setRole("USER");
+
+        promoteDemoteHelper(user, admin);
+    }
+
+    private void promoteDemoteHelper(Account promote, Account demote) {
+      registeredUsers.remove(demote);
+      try {
+        accountFileRepository.deleteExistingAccount(demote);
+      } catch (IOException exception) {
+        throw new RuntimeException(exception);
+      }
+
+      registeredUsers.add(promote);
+      try {
+        accountFileRepository.saveAccountToFile(promote);
+      } catch (IOException exception) {
+        throw new RuntimeException(exception);
+      }
     }
 }

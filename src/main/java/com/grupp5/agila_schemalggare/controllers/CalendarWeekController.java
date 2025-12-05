@@ -1,89 +1,166 @@
 package com.grupp5.agila_schemalggare.controllers;
 
+import com.grupp5.agila_schemalggare.models.Event;
+import com.grupp5.agila_schemalggare.services.CalendarService;
+import com.grupp5.agila_schemalggare.utils.DynamicController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.layout.GridPane;
 
-import java.net.URL;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.WeekFields;
 import java.util.Locale;
-import java.util.ResourceBundle;
 
-public class CalendarWeekController implements Initializable {
-  @FXML
-  public Button previousWeekButton;
-  @FXML
-  private Label weekLabel;
-  @FXML
-  public Button nextWeekButton;
-  @FXML
-  public Label timeSpanLabel;
-  @FXML
-  public Label mondayLabel;
-  @FXML
-  public Label tuesdayLabel;
-  @FXML
-  public Label wednesdayLabel;
-  @FXML
-  public Label thursdayLabel;
-  @FXML
-  public Label fridayLabel;
-  @FXML
-  public Label saturdayLabel;
-  @FXML
-  public Label sundayLabel;
+public class CalendarWeekController implements DynamicController {
 
-  // TEMP:
-  private LocalDate date = LocalDate.now();
+    @FXML
+    private GridPane weekGrid;
+    @FXML
+    public Button previousWeekButton;
+    @FXML
+    private Label weekLabel;
+    @FXML
+    public Button nextWeekButton;
+    @FXML
+    public Label timeSpanLabel;
 
-  // Future button use
-  @FXML
-  protected void buttonAction(ActionEvent event) {
-  }
+    private LocalDateTime[] weekDates;
+    // - Joel
 
-  @FXML
-  protected void switchToPreviousWeek() {
-    date = date.minusWeeks(1);
-    initialize(null, null);
-  }
-  @FXML
-  protected void switchToNextWeek() {
-    date = date.plusWeeks(1);
-    initialize(null, null);
-  }
+    private final CalendarService calendarService = new CalendarService();
+    private LocalDateTime currentDate;
 
-  public void setWeekLabel() {
-    weekLabel.setText("Week " + date.get(WeekFields.of(Locale.getDefault()).weekOfWeekBasedYear()));
-  }
+    // Future button use
+    @FXML
+    protected void openDayAction(ActionEvent event) {
+        Button button = (Button) event.getSource();
+        String dayString = button.getText().split("-")[2];
+        if (dayString.charAt(0) == '0') dayString = String.valueOf(dayString.charAt(1));
+        int day = Integer.parseInt(dayString);
+        calendarService.openDayView(currentDate.withDayOfMonth(day));
+    }
 
-  public void setTimeSpanLabel() {
-    int offset = date.getDayOfWeek().getValue();
+    @FXML
+    protected void switchToPreviousWeek() {
+        currentDate = currentDate.minusWeeks(1);
+        updateView();
+    }
 
-    LocalDate startDate = date.minusDays(--offset);
-    LocalDate endDate = date.plusDays(offset);
+    @FXML
+    protected void switchToNextWeek() {
+        currentDate = currentDate.plusWeeks(1);
+        updateView();
+    }
 
-    timeSpanLabel.setText(startDate + "  |  " + endDate);
-  }
+    public void setWeekLabel() {
+        weekLabel.setText("Week " + currentDate.get(WeekFields.of(Locale.getDefault()).weekOfWeekBasedYear()));
+    }
 
-  public void setDayDate() {
-    int offset = date.getDayOfWeek().getValue();
+    // Uppdaterade och tog bort offset namnet för tydlighet.
+    // Märkte även att den gjorde inget för det andra datumet dvs endDate.
+    public void setTimeSpanLabel() {
+        int dayOfWeek = currentDate.getDayOfWeek().getValue();
 
-    mondayLabel.setText("Monday " + (date.getDayOfMonth()-(--offset)));
-    tuesdayLabel.setText("Tuesday " + (date.getDayOfMonth()-(--offset)));
-    wednesdayLabel.setText("Wednesday " + (date.getDayOfMonth()-(--offset)));
-    thursdayLabel.setText("Thursday " + (date.getDayOfMonth()-(--offset)));
-    fridayLabel.setText("Friday " + (date.getDayOfMonth()-(--offset)));
-    saturdayLabel.setText("Saturday " + (date.getDayOfMonth()-(--offset)));
-    sundayLabel.setText("Sunday " + (date.getDayOfMonth()-(--offset)));
-  }
+        LocalDateTime startDate = currentDate.minusDays(dayOfWeek - 1);
+        LocalDateTime endDate = currentDate.plusDays(7 - dayOfWeek);
+
+        timeSpanLabel.setText(startDate.toLocalDate() + "  |  " + endDate.toLocalDate());
+    }
+
+    public void setDayDate() {
+        weekDates = new LocalDateTime[7];
+        int dayOfWeek = currentDate.getDayOfWeek().getValue();
+
+        LocalDateTime monday = currentDate.minusDays(dayOfWeek - 1);
+
+        DateTimeFormatter dayFormat = DateTimeFormatter.ofPattern("EEEE MMM");
+
+        for (int i = 0; i < 7; i++) {
+            LocalDateTime current = monday.plusDays(i);
+
+            weekDates[i] = current;
+
+            String dayName = current.toLocalDate().format(dayFormat);
+            int dayNumber = current.getDayOfMonth();
+
+            String labelText = dayName + " " + dayNumber;
+            Label label = new Label(labelText);
+            label.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+            label.setAlignment(Pos.CENTER);
+            weekGrid.add(label, i, 0);
+        }
+    }
+
+    public void renderEvents() {
+        weekGrid.getChildren().clear();
+        for (int i = 0; i < weekDates.length; i++) {
+            LocalDateTime day = weekDates[i];
+
+            var events = calendarService.getSpecificEvent(day);
+
+            StringBuilder stringBuilder = new StringBuilder(day.toLocalDate().toString() + "\n");
+            int counter = 0;
+
+            for (int j = 0; j < events.size(); j++) {
+                Event event = events.get(j);
+
+                if (j < 3) { //show max 3 events
+
+                    String startTime = String.format("%02d:%02d", event.getStartDate().getHour(), event.getStartDate().getMinute());
+                    String endTime = String.format("%02d:%02d", event.getEndDate().getHour(), event.getEndDate().getMinute());
+
+                    stringBuilder.append("| ")
+                            .append(event.getTitle())
+                            .append(" |\n")
+                            .append("| ")
+                            .append(startTime)
+                            .append(" - ")
+                            .append(endTime)
+                            .append(" |\n");
+                } else {
+                    counter++;
+                }
+            }
+
+            if (counter > 0) {
+                stringBuilder.append("and ")
+                        .append(counter)
+                        .append(" more...");
+            }
+
+            Button button = new Button(weekDates[i].getDayOfWeek().toString());
+            button.setOnAction(this::openDayAction);
+            button.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+            button.setAlignment(Pos.CENTER);
+            button.setText(stringBuilder.toString());
+
+            weekGrid.add(button, i, 1);
+
+            if (!events.isEmpty()) {
+                button.setStyle("-fx-border-color: lightblue;");
+            } else {
+                button.setStyle("");
+            }
+
+            setDayDate();
+
+        }
+    }
+
+    @Override
+    public void updateView() {
+        setWeekLabel();
+        setTimeSpanLabel();
+        setDayDate();
+        renderEvents();
+    }
 
   @Override
-  public void initialize(URL url, ResourceBundle resourceBundle) {
-    setWeekLabel();
-    setTimeSpanLabel();
-    setDayDate();
+  public void setCurrentDate(LocalDateTime currentDate) {
+    this.currentDate = currentDate;
   }
 }

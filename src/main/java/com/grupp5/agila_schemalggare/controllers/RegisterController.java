@@ -3,7 +3,6 @@ package com.grupp5.agila_schemalggare.controllers;
 import com.grupp5.agila_schemalggare.models.User;
 import com.grupp5.agila_schemalggare.services.AccountService;
 import com.grupp5.agila_schemalggare.utils.SceneManagerProvider;
-import com.grupp5.agila_schemalggare.utils.ServiceRegister;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -11,14 +10,9 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
 
-public class RegisterController implements ServiceRegister {
-    private AccountService accountService;
+import java.time.LocalDateTime;
 
-    @Override
-    public void registerAccountService(AccountService accountService) {
-        this.accountService = accountService;
-    }
-
+public class RegisterController {
     @FXML
     TextField usernameInputField;
     @FXML
@@ -29,6 +23,8 @@ public class RegisterController implements ServiceRegister {
     Button changeToLogin;
     @FXML
     Label submitConfirmation;
+
+    private final AccountService accountService = new AccountService();
 
     @FXML
     private void submitUserDetails() {
@@ -52,13 +48,11 @@ public class RegisterController implements ServiceRegister {
             submitConfirmation.setTextFill(Color.GREEN);
             submitConfirmation.setText("Account creation success!");
         }
-
-        changeSceneToLogin();
     }
 
     @FXML
     private void changeSceneToLogin() {
-        SceneManagerProvider.getSceneManager().switchScene("/com/grupp5/agila_schemalggare/login-view.fxml");
+        SceneManagerProvider.getSceneManager().switchScene("/com/grupp5/agila_schemalggare/login-view.fxml", LocalDateTime.now());
     }
 
     private boolean validateUsername(String username) { //later also validate that no two users can have the same username

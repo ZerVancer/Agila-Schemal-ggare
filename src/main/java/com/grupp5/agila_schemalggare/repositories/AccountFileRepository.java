@@ -26,12 +26,10 @@ public class AccountFileRepository {
     }
 
     public Account loadSingleAccountFromFile(String username) throws IOException, ClassNotFoundException {
-        Account account;
-
         File folder = new File("accountsSaveData");
 
         if (!folder.exists()) {
-            throw new NullPointerException("Folder doesn't exist");
+          folder.mkdir();
         }
 
         for (File file : folder.listFiles()) {
@@ -57,7 +55,7 @@ public class AccountFileRepository {
         File folder = new File("accountsSaveData");
 
         if (!folder.exists()) {
-            throw new NullPointerException("Folder doesn't exist");
+          folder.mkdir();
         }
 
         for (File file : folder.listFiles()) {

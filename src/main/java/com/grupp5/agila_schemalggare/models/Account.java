@@ -17,40 +17,44 @@ public abstract class Account implements Serializable {
         this.id = UUID.randomUUID();
         this.username = username;
         this.password = password;
-        this.calendar = new Calendar();
+        // För att testa så att events är synligt
+        //this.calendar.populateEvents();
     }
 
     // Framtida användning för sparning/hämtning av konton från Repositories.
     public Account(UUID id, String username, String password) {
+        this(username, password);
         this.id = id;
-        this.username = username;
-        this.password = password;
     }
 
     public void addEvent(Event event) {
-      calendar.addEvent(event);
+        calendar.addEvent(event);
     }
 
-    public UUID getId() {
-        return id;
+    public void setId(UUID id) {
     }
-    public void setId(UUID id) {}
 
     // Getters
-    public UUID getAccountId() {
-        return id;
+    public UUID getId() {
+      return id;
     }
-
     public String getUsername() {
         return username;
     }
-
     public String getPassword() {
         return password;
     }
 
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     public Calendar getCalendar() {
         return calendar;
+    }
+
+    public void setCalendar(Calendar calendar) {
+        this.calendar = calendar;
     }
 
     public abstract String getRole();
@@ -79,6 +83,8 @@ public abstract class Account implements Serializable {
     public int hashCode() {
         return username.hashCode();
     }
+
+    public abstract void setRole(String role);
 
     // Går alltid att lägga till saker i framtiden etc.
 }
