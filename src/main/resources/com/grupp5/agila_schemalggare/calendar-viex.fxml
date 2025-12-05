@@ -16,7 +16,7 @@
     </center>
 
     <right >
-        <VBox fx:id="sideMenu" alignment="CENTER" minWidth="100" />
+        <VBox fx:id="sideMenu" alignment="CENTER" minWidth="180" />
     </right>
 
 </BorderPane>

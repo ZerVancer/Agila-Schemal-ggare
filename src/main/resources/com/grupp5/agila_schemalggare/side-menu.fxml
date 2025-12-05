@@ -16,6 +16,7 @@
     <!-- Logged in user with logout button -->
     <VBox alignment="CENTER" spacing="5.0">
         <Label fx:id="loggedInUser" text=""  style="-fx-font-weight: bold; "/>
+        <Button fx:id="adminButton" text="Admin menu" minWidth="80" onAction="#handleAdminClick"/>
         <Button fx:id="logOutButton" text="Log out" minWidth="80" onAction="#handleLogoutClick"/>
     </VBox>
 
@@ -42,7 +43,11 @@
 
         <Label text="Upcoming Events:" style="-fx-font-size: 14px; -fx-font-weight: bold;" />
 
-        <GridPane fx:id=""/>
+        <GridPane fx:id="currentEventsGrid">
+            <padding>
+                <Insets top="5" right="10" bottom="10" left="5" />
+            </padding>
+        </GridPane>
 
     </VBox>
 

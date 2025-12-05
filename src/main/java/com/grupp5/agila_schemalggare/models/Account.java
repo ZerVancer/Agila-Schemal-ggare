@@ -26,20 +26,15 @@ public abstract class Account {
     }
 
     public void addEvent(Event event) {
-      calendar.addEvent(event);
+        calendar.addEvent(event);
     }
 
-    // Någon eventuell funktion för om användaren är Admin?
-    public boolean canEditOthers() {
-    return false;
-  }
-    public abstract String getRole();
+    public UUID getId() {
+        return id;
+    }
 
-    // Setters
-    public void setId(UUID id) {}
-    public void setUsername(String username) {}
-    public void setPassword(String password) {}
-    public void setCalendar(Calendar calendar) {}
+    public void setId(UUID id) {
+    }
 
     // Getters
     public UUID getId() {
@@ -51,8 +46,24 @@ public abstract class Account {
     public String getPassword() {
         return password;
     }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     public Calendar getCalendar() {
         return calendar;
+    }
+
+    public void setCalendar(Calendar calendar) {
+        this.calendar = calendar;
+    }
+
+    public abstract String getRole();
+
+    // Någon eventuell funktion för om användaren är Admin?
+    public boolean canEditOthers() {
+        return false;
     }
 
     // Check för HashSet
@@ -74,6 +85,8 @@ public abstract class Account {
     public int hashCode() {
         return username.hashCode();
     }
+
+    public abstract void setRole(String role);
 
     // Går alltid att lägga till saker i framtiden etc.
 }

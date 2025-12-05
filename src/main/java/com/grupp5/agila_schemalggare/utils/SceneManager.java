@@ -35,7 +35,11 @@ public class SceneManager {
 
             setCurrentDateOnController(loader, currentDate);
 
-            stage.getScene().setRoot(root);
+            if (stage.getScene() == null) {
+                stage.setScene(new javafx.scene.Scene(root, 800, 530));
+            } else {
+                stage.getScene().setRoot(root);
+            }
 
             return loader;
         } catch (Exception exception) {
