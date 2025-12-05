@@ -19,9 +19,6 @@ public class AdminMenuController implements ServiceRegister {
     @FXML
     private VBox roleChangeContainer;
 
-    @FXML
-    private Button saveAndReturnButton;
-
     private AccountService accountService;
     private HashSet<Account> accounts;
 
@@ -43,21 +40,21 @@ public class AdminMenuController implements ServiceRegister {
 
     private void generatePasswordChangeContainer() {
         for (Account account : accounts) {
+            Label titleLabel = new Label("Change " + account.getUsername() + "'s password:");
             HBox accountModal = new HBox(10);
 
-            Label accountLabel = new Label(account.getUsername());
             TextField passwordField = new TextField(account.getPassword());
 
-            accountModal.getChildren().addAll(accountLabel, passwordField);
-            passwordChangeContainer.getChildren().add(accountModal);
+            accountModal.getChildren().add(passwordField);
+            passwordChangeContainer.getChildren().addAll(titleLabel, accountModal);
         }
     }
 
     private void generateRoleChangeContainer() {
         for (Account account : accounts) {
+            Label titleLabel = new Label("Change " + account.getUsername() + "'s role:");
             HBox accountModal = new HBox(10);
 
-            Label accountLabel = new Label(account.getUsername());
             ToggleGroup toggleGroup = new ToggleGroup();
             ToggleButton adminRoleButton = new ToggleButton("Admin");
             ToggleButton userRoleButton = new ToggleButton("User");
@@ -71,8 +68,8 @@ public class AdminMenuController implements ServiceRegister {
                 userRoleButton.setSelected(true);
             }
 
-            accountModal.getChildren().addAll(accountLabel, adminRoleButton, userRoleButton);
-            roleChangeContainer.getChildren().add(accountModal);
+            accountModal.getChildren().addAll(adminRoleButton, userRoleButton);
+            roleChangeContainer.getChildren().addAll(titleLabel, accountModal);
         }
     }
 
@@ -86,34 +83,38 @@ public class AdminMenuController implements ServiceRegister {
     }
 
     private void savePassWordChanges() {
+        String currentUsername = null;
+
         for (Node node : passwordChangeContainer.getChildren()) {
-            if (node instanceof HBox modal) {
-                Label accountLabel = (Label) modal.getChildren().get(0);
-                TextField passwordField = (TextField) modal.getChildren().get(1);
+            if (node instanceof Label label) {
+                String text = label.getText();
+                currentUsername = text.substring(7, text.indexOf("'s password"));
+            } else if (node instanceof HBox modal) {
+                TextField passwordField = (TextField) modal.getChildren().get(0);
 
-                String username = accountLabel.getText();
-                String password = passwordField.getText();
-
-                Account account = accountService.getUserByUsername(username);
-                account.setPassword(password);
+                Account account = accountService.getUserByUsername(currentUsername);
+                account.setPassword(passwordField.getText());
                 accountService.updateAccountPassword(account);
             }
         }
     }
 
     private void saveRoleChanges() {
-        for (Node node : roleChangeContainer.getChildren()) {
-            if (node instanceof HBox modal) {
-                Label accountLabel = (Label) modal.getChildren().get(0);
-                String username = accountLabel.getText();
+        String currentUsername = null;
 
-                ToggleButton adminToggle = (ToggleButton) modal.getChildren().get(1);
+        for (Node node : roleChangeContainer.getChildren()) {
+            if (node instanceof Label label) {
+                String text = label.getText();
+                currentUsername = text.substring(7, text.indexOf("'s role"));
+
+            } else if (node instanceof HBox modal) {
+                ToggleButton adminToggle = (ToggleButton) modal.getChildren().get(0);
+
+                Account account = accountService.getUserByUsername(currentUsername);
 
                 if (adminToggle.isSelected()) {
-                    Account account = accountService.getUserByUsername(username);
                     accountService.promoteUserToAdmin(account);
                 } else {
-                    Account account = accountService.getUserByUsername(username);
                     accountService.demoteAdminToUser(account);
                 }
             }
