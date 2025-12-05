@@ -3,21 +3,15 @@ package com.grupp5.agila_schemalggare.controllers;
 import com.grupp5.agila_schemalggare.models.Event;
 import com.grupp5.agila_schemalggare.services.AccountService;
 import com.grupp5.agila_schemalggare.services.CalendarService;
-import com.grupp5.agila_schemalggare.utils.Updator;
+import com.grupp5.agila_schemalggare.utils.DynamicController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.stage.Stage;
 
-import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.WeekFields;
-import java.util.Arrays;
 import java.util.Locale;
 
 public class CalendarWeekController implements Updator {
@@ -76,7 +70,7 @@ public class CalendarWeekController implements Updator {
 
     // Future button use
     @FXML
-    protected void buttonAction(ActionEvent event) {
+    protected void openDayAction(ActionEvent event) {
         Button button = (Button) event.getSource();
         String dayString = button.getText().split("-")[2];
         if (dayString.charAt(0) == '0') dayString = String.valueOf(dayString.charAt(1));
@@ -190,23 +184,8 @@ public class CalendarWeekController implements Updator {
         renderEvents();
     }
 
-    private void openDayView(LocalDateTime date, Button button) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/grupp5/agila_schemalggare/calendarDayView.fxml"));
-            Parent root = loader.load();
-
-            CalendarDayController controller = loader.getController();
-            controller.setDate(date);
-            AccountService.addUpdator(controller);
-            AccountService.update();
-
-            Stage stage = new Stage();
-            stage.setTitle("Day View");
-            stage.setScene(new Scene(root, 400, 800));
-            stage.show();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+  @Override
+  public void setCurrentDate(LocalDateTime currentDate) {
+    this.currentDate = currentDate;
+  }
 }

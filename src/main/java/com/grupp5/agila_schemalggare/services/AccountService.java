@@ -3,7 +3,7 @@ package com.grupp5.agila_schemalggare.services;
 import com.grupp5.agila_schemalggare.models.Account;
 import com.grupp5.agila_schemalggare.models.Admin;
 import com.grupp5.agila_schemalggare.models.User;
-import com.grupp5.agila_schemalggare.utils.Updator;
+import com.grupp5.agila_schemalggare.utils.DynamicController;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -11,22 +11,22 @@ import java.util.List;
 
 public class AccountService {
 
-    public HashSet<Account> registeredUsers = new HashSet<>();
+    public static HashSet<Account> registeredUsers = new HashSet<>();
 
     // La till denna "variabeln" för att verkligen deklarera ett konto som man kan använda sig utav
     // om så önskas i andra delar i projektet, istället för att behöva filtrera igenom och jämföra etc.
     private static Account loggedInAccount = null;
-    private static List<Updator> updator = new ArrayList<>();
+    private static final List<DynamicController> dynamicControllers = new ArrayList<>();
 
     public AccountService() {
         // Går att ta bort, skapar bara ett konto för att testa logiken.
         // Uppdaterade lite för att säkerställa att första kontot blir en "Admin"
-        if (registeredUsers.isEmpty()) {
-            registeredUsers.add(new Admin("First", "first"));
-            registeredUsers.add(new User("Second", "second"));
-        } else {
-            registeredUsers.add(new User("Second", "second"));
-        }
+//        if (registeredUsers.isEmpty()) {
+//            registeredUsers.add(new Admin("First", "first"));
+//            registeredUsers.add(new User("Second", "second"));
+//        } else {
+//            registeredUsers.add(new User("Second", "second"));
+//        }
     }
 
     public HashSet<Account> getRegisteredUsers() {

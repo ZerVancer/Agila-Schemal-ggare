@@ -35,13 +35,13 @@
             <RowConstraints minHeight="10.0" prefHeight="200.0" vgrow="SOMETIMES" />
         </rowConstraints>
         <children>
-            <Button fx:id="mondayButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#buttonAction" GridPane.rowIndex="1" />
-            <Button fx:id="tuesdayButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#buttonAction" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <Button fx:id="wednesdayButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#buttonAction" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-            <Button fx:id="thursdayButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#buttonAction" GridPane.columnIndex="3" GridPane.rowIndex="1" />
-            <Button fx:id="fridayButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#buttonAction" GridPane.columnIndex="4" GridPane.rowIndex="1" />
-            <Button fx:id="saturdayButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#buttonAction" GridPane.columnIndex="5" GridPane.rowIndex="1" />
-            <Button fx:id="sundayButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#buttonAction" GridPane.columnIndex="6" GridPane.rowIndex="1" />
+            <Button fx:id="mondayButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#openDayAction" GridPane.rowIndex="1" />
+            <Button fx:id="tuesdayButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#openDayAction" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <Button fx:id="wednesdayButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#openDayAction" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+            <Button fx:id="thursdayButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#openDayAction" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+            <Button fx:id="fridayButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#openDayAction" GridPane.columnIndex="4" GridPane.rowIndex="1" />
+            <Button fx:id="saturdayButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#openDayAction" GridPane.columnIndex="5" GridPane.rowIndex="1" />
+            <Button fx:id="sundayButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#openDayAction" GridPane.columnIndex="6" GridPane.rowIndex="1" />
             <Label fx:id="mondayLabel" alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Monday" />
             <Label fx:id="tuesdayLabel" alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Tuesday" GridPane.columnIndex="1" />
             <Label fx:id="wednesdayLabel" alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Monday" GridPane.columnIndex="2" />

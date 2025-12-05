@@ -15,16 +15,14 @@ public abstract class Account {
         this.id = UUID.randomUUID();
         this.username = username;
         this.password = password;
-        this.calendar = new Calendar();
         // För att testa så att events är synligt
-        this.calendar.populateEvents();
+        //this.calendar.populateEvents();
     }
 
     // Framtida användning för sparning/hämtning av konton från Repositories.
     public Account(UUID id, String username, String password) {
+        this(username, password);
         this.id = id;
-        this.username = username;
-        this.password = password;
     }
 
     public void addEvent(Event event) {
@@ -39,14 +37,12 @@ public abstract class Account {
     }
 
     // Getters
-    public UUID getAccountId() {
-        return id;
+    public UUID getId() {
+      return id;
     }
-
     public String getUsername() {
         return username;
     }
-
     public String getPassword() {
         return password;
     }

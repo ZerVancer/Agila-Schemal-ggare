@@ -20,44 +20,35 @@ public class Event {
         this.endDate = endDate.toInstant(ZoneOffset.UTC);
     }
 
+    // Setters
+    public void setTitle(String title) {
+      this.title = title;
+    }
+    public void setDescription(String description) {
+      this.description = description;
+    }
+    public void setStartDate(LocalDateTime startDate) {
+    this.startDate = startDate.toInstant(ZoneOffset.UTC);
+  }
+    public void setEndDate(LocalDateTime endDate) {
+    this.endDate = endDate.toInstant(ZoneOffset.UTC);
+  }
+
+    // Getters
     public UUID getId() {
         return id;
     }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
     public String getTitle() {
         return title;
     }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
     public String getDescription() {
         return description;
     }
-
-    public void setStartDate(LocalDateTime startDate) {
-        this.startDate = startDate.toInstant(ZoneOffset.UTC);
-    }
-
     public LocalDateTime getStartDate() {
-        return LocalDateTime.ofInstant(startDate, ZoneOffset.UTC);
-    }
-
-    public void setEndDate(LocalDateTime endDate) {
-        this.endDate = endDate.toInstant(ZoneOffset.UTC);
-    }
-
+    return LocalDateTime.ofInstant(startDate, ZoneOffset.UTC);
+  }
     public LocalDateTime getEndDate() { //getters send out LocalDateTime to display time in user's time zone
-        return LocalDateTime.ofInstant(endDate, ZoneOffset.UTC);
-    }
+    return LocalDateTime.ofInstant(endDate, ZoneOffset.UTC);
+  }
 
-    @Override
-    public String toString() {
-      return title;
-    }
 }

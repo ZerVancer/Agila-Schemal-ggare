@@ -16,6 +16,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import java.time.LocalDateTime;
+
 public class SideMenuController {
     private CalendarViewController calendarViewController;
     private CalendarService calendarService = new CalendarService();
@@ -26,7 +28,6 @@ public class SideMenuController {
     private Button adminButton;
     @FXML
     private Button logOutButton;
-
     @FXML
     private Button renderWeekly;
     @FXML
@@ -96,7 +97,7 @@ public class SideMenuController {
         AccountService.setLoggedInAccount(null);
 
         if (AccountService.getLoggedInAccount() == null) {
-            SceneManagerProvider.getSceneManager().switchScene("/com/grupp5/agila_schemalggare/login-view.fxml");
+            SceneManagerProvider.getSceneManager().switchScene("/com/grupp5/agila_schemalggare/login-view.fxml", LocalDateTime.now());
         }
     }
 

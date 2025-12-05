@@ -1,28 +1,39 @@
 package com.grupp5.agila_schemalggare.utils;
 
-import com.grupp5.agila_schemalggare.services.AccountService;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.stage.Stage;
+
+import java.io.IOException;
+import java.time.LocalDateTime;
 
 public class SceneManager {
     private final Stage stage;
-    private final AccountService accountService;
 
-    public SceneManager(Stage stage, AccountService accountService) {
+    public SceneManager(Stage stage) {
         this.stage = stage;
-        this.accountService = accountService;
     }
 
-    public void switchScene(String fxmlPath) {
+    public FXMLLoader getFXMLLoader(String fxmlPath, LocalDateTime currentDate) {
+      try {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
+        loader.load();
+
+        setCurrentDateOnController(loader, currentDate);
+
+        return loader;
+      } catch (IOException e) {
+        throw new RuntimeException(e);
+      }
+    }
+
+    public FXMLLoader switchScene(String fxmlPath, LocalDateTime currentDate) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
             Parent root = loader.load();
 
-            Object controller = loader.getController();
-            if(controller instanceof ServiceRegister) {
-                ((ServiceRegister) controller).registerAccountService(accountService);
-            }
+            setCurrentDateOnController(loader, currentDate);
 
             if (stage.getScene() == null) {
                 stage.setScene(new javafx.scene.Scene(root, 800, 530));
@@ -30,9 +41,47 @@ public class SceneManager {
                 stage.getScene().setRoot(root);
             }
 
-
+            return loader;
         } catch (Exception exception) {
-            exception.printStackTrace();
+            throw new RuntimeException(exception);
         }
+    }
+
+    public FXMLLoader switchScene(String fxmlPath) {
+      try {
+        return switchScene(fxmlPath, null);
+      }
+      catch (Exception exception) {
+        throw new RuntimeException("Incorrect method used, missing date");
+      }
+    }
+
+    public FXMLLoader openNewScene(String fxmlPath, LocalDateTime currentDate, String title, double width, double height) {
+        try {
+          FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
+          Parent root = loader.load();
+
+          Object controller;
+          if ((controller = loader.getController()) instanceof DynamicController) {
+            ((DynamicController) controller).setCurrentDate(currentDate);
+            ((DynamicController) controller).updateView();
+          }
+
+          Stage stage = new Stage();
+          stage.setTitle(title);
+          stage.setScene(new Scene(root, width, height));
+          stage.show();
+          return loader;
+        } catch (Exception exception) {
+          throw new RuntimeException(exception);
+        }
+    }
+
+    private void setCurrentDateOnController(FXMLLoader loader, LocalDateTime currentDate) {
+      Object controller;
+      if ((controller = loader.getController()) instanceof DynamicController) {
+        ((DynamicController) controller).setCurrentDate(currentDate);
+        ((DynamicController) controller).updateView();
+      }
     }
 }
