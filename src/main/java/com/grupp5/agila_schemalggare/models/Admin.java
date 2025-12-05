@@ -12,4 +12,9 @@ public class Admin extends Account {
     public String getRole() {
         return role;
     }
+
+    @Override
+    public void setRole(String role) {
+        this.role = role;
+    }
 }

@@ -29,6 +29,19 @@ public class AccountService {
         }
     }
 
+    public HashSet<Account> getRegisteredUsers() {
+        return registeredUsers;
+    }
+
+    public Account getUserByUsername(String username) {
+        for (Account account : registeredUsers) {
+            if (account.getUsername().equals(username)) {
+                return account;
+            }
+        }
+        return null;
+    }
+
     // Getter för resterande komponenter för att hämta kontot om så önskas.
     public static Account getLoggedInAccount() {
         return loggedInAccount;
@@ -39,13 +52,13 @@ public class AccountService {
     }
 
     public static void update() {
-      for (Updator update : updator) {
-        update.updateView();
-      }
+        for (Updator update : updator) {
+            update.updateView();
+        }
     }
 
     public static void addUpdator(Updator updator) {
-      AccountService.updator.add(updator);
+        AccountService.updator.add(updator);
     }
 
     public Account loginUser(String username, String password) {
@@ -115,5 +128,40 @@ public class AccountService {
                 password.matches(".*[!@#$%^&*()_+=\\-{}\\[\\]:;\"'<>,.?/].*"); //must contain at least one special character
     }
 
-    //private void saveAccountToFile() {}
+    private void saveAccountToFile() {
+        //saves new account
+    }
+
+    public void updateAccountPassword(Account updatedAccount) {
+        for (Account account : registeredUsers) {
+            if (account.getUsername().equals(updatedAccount.getUsername())) {
+                account.setPassword(updatedAccount.getPassword());
+            }
+        }
+    }
+
+    public void deleteAccount(Account account) {
+        registeredUsers.remove(account);
+    }
+
+    public void promoteUserToAdmin(Account user) {
+        Admin admin = new Admin(user.getUsername(), user.getPassword());
+        admin.setId(user.getId());
+        admin.setCalendar(user.getCalendar());
+        admin.setRole("ADMIN");
+
+        registeredUsers.remove(user);
+        registeredUsers.add(admin);
+    }
+
+
+    public void demoteAdminToUser(Account admin) {
+        User user = new User(admin.getUsername(), admin.getPassword());
+        user.setId(admin.getId());
+        user.setCalendar(user.getCalendar());
+        user.setRole("USER");
+
+        registeredUsers.remove(admin);
+        registeredUsers.add(user);
+    }
 }

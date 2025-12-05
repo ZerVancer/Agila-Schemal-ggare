@@ -28,13 +28,15 @@ public abstract class Account {
     }
 
     public void addEvent(Event event) {
-      calendar.addEvent(event);
+        calendar.addEvent(event);
     }
 
     public UUID getId() {
         return id;
     }
-    public void setId(UUID id) {}
+
+    public void setId(UUID id) {
+    }
 
     // Getters
     public UUID getAccountId() {
@@ -49,8 +51,16 @@ public abstract class Account {
         return password;
     }
 
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     public Calendar getCalendar() {
         return calendar;
+    }
+
+    public void setCalendar(Calendar calendar) {
+        this.calendar = calendar;
     }
 
     public abstract String getRole();
@@ -79,6 +89,8 @@ public abstract class Account {
     public int hashCode() {
         return username.hashCode();
     }
+
+    public abstract void setRole(String role);
 
     // Går alltid att lägga till saker i framtiden etc.
 }
