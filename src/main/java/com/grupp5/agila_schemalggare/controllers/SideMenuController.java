@@ -4,6 +4,7 @@ import com.grupp5.agila_schemalggare.models.Account;
 import com.grupp5.agila_schemalggare.models.Event;
 import com.grupp5.agila_schemalggare.services.AccountService;
 import com.grupp5.agila_schemalggare.services.CalendarService;
+import com.grupp5.agila_schemalggare.utils.DynamicController;
 import com.grupp5.agila_schemalggare.utils.SceneManagerProvider;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -16,12 +17,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import java.time.LocalDateTime;
-
-public class SideMenuController {
-    private CalendarViewController calendarViewController;
-    private CalendarService calendarService = new CalendarService();
-
+public class SideMenuController implements DynamicController {
     @FXML
     private Label loggedInUser;
     @FXML
@@ -34,16 +30,13 @@ public class SideMenuController {
     private Button renderMonthly;
     @FXML
     private Button renderYearly;
-
     @FXML
     private GridPane currentEventsGrid;
 
+    private CalendarViewController calendarViewController;
+    private final CalendarService calendarService = new CalendarService();
+    private LocalDateTime currentDate;
     private Button activeButton;
-
-    public void initialize() {
-        updateUserLoggedIn();
-        renderTheEvents();
-    }
 
     private void updateUserLoggedIn() {
         Account account = AccountService.getLoggedInAccount();
@@ -102,7 +95,7 @@ public class SideMenuController {
     }
 
     public void switchSceneToAdminMenu() {
-        SceneManagerProvider.getSceneManager().switchScene("/com/grupp5/agila_schemalggare/adminMenu-view.fxml");
+        SceneManagerProvider.getSceneManager().switchScene("/com/grupp5/agila_schemalggare/adminMenu-view.fxml", LocalDateTime.now());
     }
 
     private void setActiveButton(Button clickedButton) {
@@ -156,11 +149,28 @@ public class SideMenuController {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         Label startTimeLabel = new Label(event.getStartDate().format(formatter));
 
-        Label descriptionLabel = new Label(event.getDescription());
+        String visibleDesc;
+        if (event.getDescription().length() > 47) {
+          visibleDesc = event.getDescription().substring(0, 47) + "...";
+        } else {
+          visibleDesc = event.getDescription();
+        }
+        Label descriptionLabel = new Label(visibleDesc);
         descriptionLabel.setWrapText(true);
 
         eventCard.getChildren().addAll(titleLabel, startTimeLabel, descriptionLabel);
 
         return eventCard;
     }
+
+  @Override
+  public void updateView() {
+    updateUserLoggedIn();
+    renderTheEvents();
+  }
+
+  @Override
+  public void setCurrentDate(LocalDateTime currentDate) {
+      this.currentDate = currentDate;
+  }
 }

@@ -11,7 +11,7 @@ import java.util.List;
 
 public class AccountService {
 
-    public static HashSet<Account> registeredUsers = new HashSet<>();
+    private static final HashSet<Account> registeredUsers = new HashSet<>();
 
     // La till denna "variabeln" för att verkligen deklarera ett konto som man kan använda sig utav
     // om så önskas i andra delar i projektet, istället för att behöva filtrera igenom och jämföra etc.
@@ -29,8 +29,12 @@ public class AccountService {
 //        }
     }
 
-    public HashSet<Account> getRegisteredUsers() {
+    public static HashSet<Account> getRegisteredUsers() {
         return registeredUsers;
+    }
+
+    public static void removeRegisteredUser(Account account) {
+      registeredUsers.remove(account);
     }
 
     public Account getUserByUsername(String username) {
@@ -51,14 +55,14 @@ public class AccountService {
         loggedInAccount = account;
     }
 
-    public static void update() {
-        for (Updator update : updator) {
-            update.updateView();
+    public static void updateViews() {
+        for (DynamicController controller : dynamicControllers) {
+            controller.updateView();
         }
     }
 
-    public static void addUpdator(Updator updator) {
-        AccountService.updator.add(updator);
+    public static void addUpdator(DynamicController updator) {
+        AccountService.dynamicControllers.add(updator);
     }
 
     public Account loginUser(String username, String password) {

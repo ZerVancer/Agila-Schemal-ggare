@@ -37,6 +37,7 @@ public class LoginController {
 
        } catch (IllegalArgumentException exception) {
            changeStatus(exception.getMessage(), "red");
+           return;
        }
 
         switchToCalendarView();

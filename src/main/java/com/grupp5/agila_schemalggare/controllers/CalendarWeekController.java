@@ -1,21 +1,24 @@
 package com.grupp5.agila_schemalggare.controllers;
 
 import com.grupp5.agila_schemalggare.models.Event;
-import com.grupp5.agila_schemalggare.services.AccountService;
 import com.grupp5.agila_schemalggare.services.CalendarService;
 import com.grupp5.agila_schemalggare.utils.DynamicController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.layout.GridPane;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.WeekFields;
 import java.util.Locale;
 
-public class CalendarWeekController implements Updator {
+public class CalendarWeekController implements DynamicController {
 
+    @FXML
+    private GridPane weekGrid;
     @FXML
     public Button previousWeekButton;
     @FXML
@@ -24,49 +27,12 @@ public class CalendarWeekController implements Updator {
     public Button nextWeekButton;
     @FXML
     public Label timeSpanLabel;
-    @FXML
-    public Label mondayLabel;
-    @FXML
-    public Label tuesdayLabel;
-    @FXML
-    public Label wednesdayLabel;
-    @FXML
-    public Label thursdayLabel;
-    @FXML
-    public Label fridayLabel;
-    @FXML
-    public Label saturdayLabel;
-    @FXML
-    public Label sundayLabel;
-
-    // Arbetar utifrån hur du strukturerade det hela - Joel
-    @FXML
-    public Button mondayButton;
-    @FXML
-    public Button tuesdayButton;
-    @FXML
-    public Button wednesdayButton;
-    @FXML
-    public Button thursdayButton;
-    @FXML
-    public Button fridayButton;
-    @FXML
-    public Button saturdayButton;
-    @FXML
-    public Button sundayButton;
-
-    private Button[] dayButtons;
-    private Label[] dayLabels;
 
     private LocalDateTime[] weekDates;
     // - Joel
 
     private final CalendarService calendarService = new CalendarService();
-    private LocalDateTime date;
-
-    public void setCurrentDate(LocalDateTime date) {
-        this.date = date;
-    }
+    private LocalDateTime currentDate;
 
     // Future button use
     @FXML
@@ -75,41 +41,41 @@ public class CalendarWeekController implements Updator {
         String dayString = button.getText().split("-")[2];
         if (dayString.charAt(0) == '0') dayString = String.valueOf(dayString.charAt(1));
         int day = Integer.parseInt(dayString);
-        openDayView(date.withDayOfMonth(day), button);
+        calendarService.openDayView(currentDate.withDayOfMonth(day));
     }
 
     @FXML
     protected void switchToPreviousWeek() {
-        date = date.minusWeeks(1);
+        currentDate = currentDate.minusWeeks(1);
         updateView();
     }
 
     @FXML
     protected void switchToNextWeek() {
-        date = date.plusWeeks(1);
+        currentDate = currentDate.plusWeeks(1);
         updateView();
     }
 
     public void setWeekLabel() {
-        weekLabel.setText("Week " + date.get(WeekFields.of(Locale.getDefault()).weekOfWeekBasedYear()));
+        weekLabel.setText("Week " + currentDate.get(WeekFields.of(Locale.getDefault()).weekOfWeekBasedYear()));
     }
 
     // Uppdaterade och tog bort offset namnet för tydlighet.
     // Märkte även att den gjorde inget för det andra datumet dvs endDate.
     public void setTimeSpanLabel() {
-        int dayOfWeek = date.getDayOfWeek().getValue();
+        int dayOfWeek = currentDate.getDayOfWeek().getValue();
 
-        LocalDateTime startDate = date.minusDays(dayOfWeek - 1);
-        LocalDateTime endDate = date.plusDays(7 - dayOfWeek);
+        LocalDateTime startDate = currentDate.minusDays(dayOfWeek - 1);
+        LocalDateTime endDate = currentDate.plusDays(7 - dayOfWeek);
 
         timeSpanLabel.setText(startDate.toLocalDate() + "  |  " + endDate.toLocalDate());
     }
 
     public void setDayDate() {
         weekDates = new LocalDateTime[7];
-        int dayOfWeek = date.getDayOfWeek().getValue();
+        int dayOfWeek = currentDate.getDayOfWeek().getValue();
 
-        LocalDateTime monday = date.minusDays(dayOfWeek - 1);
+        LocalDateTime monday = currentDate.minusDays(dayOfWeek - 1);
 
         DateTimeFormatter dayFormat = DateTimeFormatter.ofPattern("EEEE MMM");
 
@@ -122,11 +88,15 @@ public class CalendarWeekController implements Updator {
             int dayNumber = current.getDayOfMonth();
 
             String labelText = dayName + " " + dayNumber;
-            dayLabels[i].setText(labelText);
+            Label label = new Label(labelText);
+            label.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+            label.setAlignment(Pos.CENTER);
+            weekGrid.add(label, i, 0);
         }
     }
 
     public void renderEvents() {
+        weekGrid.getChildren().clear();
         for (int i = 0; i < weekDates.length; i++) {
             LocalDateTime day = weekDates[i];
 
@@ -162,22 +132,27 @@ public class CalendarWeekController implements Updator {
                         .append(" more...");
             }
 
-            dayButtons[i].setText(stringBuilder.toString());
+            Button button = new Button(weekDates[i].getDayOfWeek().toString());
+            button.setOnAction(this::openDayAction);
+            button.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+            button.setAlignment(Pos.CENTER);
+            button.setText(stringBuilder.toString());
 
+            weekGrid.add(button, i, 1);
 
             if (!events.isEmpty()) {
-                dayButtons[i].setStyle("-fx-border-color: lightblue;");
+                button.setStyle("-fx-border-color: lightblue;");
             } else {
-                dayButtons[i].setStyle("");
+                button.setStyle("");
             }
+
+            setDayDate();
+
         }
     }
 
     @Override
     public void updateView() {
-        dayButtons = new Button[]{mondayButton, tuesdayButton, wednesdayButton, thursdayButton, fridayButton, saturdayButton, sundayButton};
-        dayLabels = new Label[]{mondayLabel, tuesdayLabel, wednesdayLabel, thursdayLabel, fridayLabel, saturdayLabel, sundayLabel};
-
         setWeekLabel();
         setTimeSpanLabel();
         setDayDate();

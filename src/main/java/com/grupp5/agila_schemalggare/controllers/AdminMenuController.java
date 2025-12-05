@@ -2,17 +2,18 @@ package com.grupp5.agila_schemalggare.controllers;
 
 import com.grupp5.agila_schemalggare.models.Account;
 import com.grupp5.agila_schemalggare.services.AccountService;
+import com.grupp5.agila_schemalggare.utils.DynamicController;
 import com.grupp5.agila_schemalggare.utils.SceneManagerProvider;
-import com.grupp5.agila_schemalggare.utils.ServiceRegister;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
+import java.time.LocalDateTime;
 import java.util.HashSet;
 
-public class AdminMenuController implements ServiceRegister {
+public class AdminMenuController implements DynamicController {
 
     @FXML
     private VBox passwordChangeContainer;
@@ -21,25 +22,9 @@ public class AdminMenuController implements ServiceRegister {
     @FXML
     private VBox deleteAccountContainer;
 
-    private AccountService accountService;
-    private HashSet<Account> accounts;
-
-    public AdminMenuController() {
-    }
-
-    @Override
-    public void registerAccountService(AccountService accountService) {
-        this.accountService = accountService;
-        this.accounts = accountService.getRegisteredUsers();
-
-        populateMenuContainer();
-    }
-
-    private void populateMenuContainer() {
-        generatePasswordChangeContainer();
-        generateRoleChangeContainer();
-        generateDeleteAccountContainer();
-    }
+    private LocalDateTime currentDate;
+    private final HashSet<Account> accounts = AccountService.getRegisteredUsers();
+    private final AccountService accountService = new AccountService();
 
     private void generatePasswordChangeContainer() {
         for (Account account : accounts) {
@@ -94,7 +79,6 @@ public class AdminMenuController implements ServiceRegister {
 
     @FXML
     private void saveAllChanges() {
-
         savePassWordChanges();
         saveRoleChanges();
 
@@ -109,7 +93,7 @@ public class AdminMenuController implements ServiceRegister {
                 String text = label.getText();
                 currentUsername = text.substring(7, text.indexOf("'s password"));
             } else if (node instanceof HBox modal) {
-                TextField passwordField = (TextField) modal.getChildren().get(0);
+                TextField passwordField = (TextField) modal.getChildren().getFirst();
 
                 Account account = accountService.getUserByUsername(currentUsername);
                 account.setPassword(passwordField.getText());
@@ -145,16 +129,28 @@ public class AdminMenuController implements ServiceRegister {
         if (account == null) return;
 
         accountService.deleteAccount(account);
-        accounts.remove(account);
+        AccountService.removeRegisteredUser(account);
 
         passwordChangeContainer.getChildren().clear();
         roleChangeContainer.getChildren().clear();
         deleteAccountContainer.getChildren().clear();
-        populateMenuContainer();
+        updateView();
     }
 
     private void returnToCalendar() {
-        SceneManagerProvider.getSceneManager().switchScene("/com/grupp5/agila_schemalggare/calendar-viex.fxml");
+        SceneManagerProvider.getSceneManager().switchScene("/com/grupp5/agila_schemalggare/calendar-viex.fxml", currentDate);
     }
+
+  @Override
+  public void updateView() {
+    generatePasswordChangeContainer();
+    generateRoleChangeContainer();
+    generateDeleteAccountContainer();
+  }
+
+  @Override
+  public void setCurrentDate(LocalDateTime currentDate) {
+    this.currentDate = currentDate;
+  }
 }
 

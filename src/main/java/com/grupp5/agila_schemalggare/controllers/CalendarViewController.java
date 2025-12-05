@@ -10,7 +10,6 @@ import javafx.scene.Parent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
-import java.io.IOException;
 import java.time.LocalDateTime;
 
 public class CalendarViewController implements DynamicController {
@@ -82,6 +81,7 @@ public class CalendarViewController implements DynamicController {
         AccountService.addUpdator(calendarWeekController);
         AccountService.addUpdator(calendarMonthController);
         AccountService.addUpdator(calendarYearController);
+        AccountService.addUpdator(sideMenuController);
 
         sideMenu.getChildren().setAll(sideMenuNode);
     }

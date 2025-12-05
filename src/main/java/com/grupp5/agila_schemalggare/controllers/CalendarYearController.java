@@ -88,8 +88,7 @@ public class CalendarYearController implements DynamicController {
                     : monthText + " " + monthDate.getYear();
 
             Button monthButton = new Button(buttonText);
-            monthButton.setPrefWidth(100);
-            monthButton.setPrefHeight(80);
+            monthButton.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
 
             if (monthDate.getYear() != currentDate.getYear()) {
                 monthButton.setStyle("-fx-background-color: lightgray;");

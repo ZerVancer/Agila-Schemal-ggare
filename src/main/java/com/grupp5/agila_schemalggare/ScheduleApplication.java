@@ -17,7 +17,7 @@ public class ScheduleApplication extends Application {
 
       FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/grupp5/agila_schemalggare/login-view.fxml"));
       Parent root = loader.load();
-      stage.setScene(new Scene(root, 800, 500));
+      stage.setScene(new Scene(root, 850, 550));
       stage.setTitle("Schedule Application");
       stage.show();
   }

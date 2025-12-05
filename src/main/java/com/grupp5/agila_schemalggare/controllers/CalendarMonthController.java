@@ -135,13 +135,7 @@ public class CalendarMonthController implements DynamicController {
 
       Button button = new Button(buttonText);
       button.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-      button.setStyle("-fx-cursor: pointer;");
       button.setOnAction(this::openDayAction);
-
-      // Om vi vill ha färg för att highlighta?
-//      if (!events.isEmpty()) {
-//          button.setStyle("-fx-background-color: lightblue; -fx-border-color: darkblue;");
-//      }
 
     gridPane.add(button, col, row);
   }

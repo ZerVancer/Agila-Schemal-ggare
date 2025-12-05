@@ -29,10 +29,6 @@ public abstract class Account {
         calendar.addEvent(event);
     }
 
-    public UUID getId() {
-        return id;
-    }
-
     public void setId(UUID id) {
     }
 
