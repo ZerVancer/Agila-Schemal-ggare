@@ -16,6 +16,7 @@
     <!--events list-->
     <ScrollPane fitToWidth="true"
                 hbarPolicy="NEVER"
+                style="-fx-background-color:transparent"
                 AnchorPane.bottomAnchor="50"
                 AnchorPane.leftAnchor="10"
                 AnchorPane.rightAnchor="10"
