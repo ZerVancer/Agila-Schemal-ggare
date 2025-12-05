@@ -115,6 +115,7 @@ public class SideMenuController {
         return threeEvents;
     }
 
+    // Uppdatera med dynamiccontroller för att gör allt dynamiskt och uppdaterbart i realtid.
     @FXML
     private void renderTheEvents() {
         currentEventsGrid.getChildren().clear();
