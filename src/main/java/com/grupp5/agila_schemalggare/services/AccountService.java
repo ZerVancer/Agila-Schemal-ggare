@@ -14,7 +14,7 @@ import java.util.List;
 public class AccountService {
     AccountFileRepository accountFileRepository = new AccountFileRepository();
 
-    private static final HashSet<Account> registeredUsers = new HashSet<>();
+    private static HashSet<Account> registeredUsers = new HashSet<>();
 
     // La till denna "variabeln" för att verkligen deklarera ett konto som man kan använda sig utav
     // om så önskas i andra delar i projektet, istället för att behöva filtrera igenom och jämföra etc.
@@ -43,7 +43,7 @@ public class AccountService {
     }
 
     public static void removeRegisteredUser(Account account) {
-      registeredUsers.remove(account);
+        registeredUsers.remove(account);
     }
 
     public Account getUserByUsername(String username) {
@@ -148,20 +148,26 @@ public class AccountService {
                 password.matches(".*[!@#$%^&*()_+=\\-{}\\[\\]:;\"'<>,.?/].*"); //must contain at least one special character
     }
 
-    private void saveAccountToFile() {
-        //saves new account
-    }
-
     public void updateAccountPassword(Account updatedAccount) {
         for (Account account : registeredUsers) {
             if (account.getUsername().equals(updatedAccount.getUsername())) {
                 account.setPassword(updatedAccount.getPassword());
+            }
+            try {
+                accountFileRepository.updateExistingAccount(account);
+            } catch (IOException exception) {
+                throw new RuntimeException(exception);
             }
         }
     }
 
     public void deleteAccount(Account account) {
         registeredUsers.remove(account);
+        try {
+            accountFileRepository.deleteExistingAccount(account);
+        } catch (IOException exception) {
+            throw new RuntimeException(exception);
+        }
     }
 
     public void promoteUserToAdmin(Account user) {
@@ -171,7 +177,18 @@ public class AccountService {
         admin.setRole("ADMIN");
 
         registeredUsers.remove(user);
+        try {
+            accountFileRepository.deleteExistingAccount(user);
+        } catch (IOException exception) {
+            throw new RuntimeException(exception);
+        }
+
         registeredUsers.add(admin);
+        try {
+            accountFileRepository.saveAccountToFile(admin);
+        } catch (IOException exception) {
+            throw new RuntimeException(exception);
+        }
     }
 
 
@@ -182,6 +199,17 @@ public class AccountService {
         user.setRole("USER");
 
         registeredUsers.remove(admin);
+        try {
+            accountFileRepository.deleteExistingAccount(admin);
+        } catch (IOException exception) {
+            throw new RuntimeException(exception);
+        }
+
         registeredUsers.add(user);
+        try {
+            accountFileRepository.saveAccountToFile(user);
+        } catch (IOException exception) {
+            throw new RuntimeException(exception);
+        }
     }
 }

@@ -19,8 +19,6 @@ import java.util.List;
 public class CalendarService {
     Account loggedInAccount = AccountService.getLoggedInAccount(); //<-- fetch loggedInAccount later when variable is available
 
-    //Account loggedInAccount = new User("milo_soder", "smörgåsrån"); //tillfällig användare
-
     public void createEvent(String title, String desc, LocalDateTime startDate, LocalDateTime endDate) {
         if (!userIsLoggedIn()) {
             throw new IllegalStateException("User is not logged in");
@@ -30,8 +28,6 @@ public class CalendarService {
         loggedInAccount.addEvent(event);
 
         saveChangesToFile(loggedInAccount);
-
-        return loggedInAccount;
     }
 
     public void deleteEvent(Event event) {
@@ -45,8 +41,6 @@ public class CalendarService {
         AccountService.updateViews();
 
         saveChangesToFile(loggedInAccount);
-
-        return loggedInAccount;
     }
 
     public void editEvent(Event eventToEdit, String title, String desc, LocalDateTime startDate, LocalDateTime endDate) {
@@ -64,8 +58,6 @@ public class CalendarService {
         eventToEdit.setEndDate(endDate);
 
         saveChangesToFile(loggedInAccount);
-
-        return loggedInAccount;
     }
 
     public List<Event> getAllEvents() {

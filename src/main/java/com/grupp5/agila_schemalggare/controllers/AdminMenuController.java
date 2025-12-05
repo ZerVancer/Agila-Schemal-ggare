@@ -32,11 +32,13 @@ public class AdminMenuController implements DynamicController {
             HBox accountModal = new HBox(10);
 
             TextField passwordField = new TextField(account.getPassword());
+            passwordField.setUserData(account.getUsername());
 
             accountModal.getChildren().add(passwordField);
             passwordChangeContainer.getChildren().addAll(titleLabel, accountModal);
         }
     }
+
 
     private void generateRoleChangeContainer() {
         for (Account account : accounts) {
@@ -49,6 +51,11 @@ public class AdminMenuController implements DynamicController {
 
             adminRoleButton.setToggleGroup(toggleGroup);
             userRoleButton.setToggleGroup(toggleGroup);
+
+            adminRoleButton.setUserData(account.getUsername());
+            userRoleButton.setUserData(account.getUsername());
+
+
 
             if (account.getRole().equals("ADMIN")) {
                 adminRoleButton.setSelected(true);
@@ -66,11 +73,16 @@ public class AdminMenuController implements DynamicController {
             Label titleLabel = new Label("Delete " + account.getUsername() + "'s account:");
             HBox accountModal = new HBox(10);
 
+
             Button deleteAccountButton = new Button("Delete account");
 
             deleteAccountButton.setUserData(account.getUsername());
 
             deleteAccountButton.setOnAction(e -> deleteAccountAction(account.getUsername()));
+
+            if (account.equals(accountService.getLoggedInAccount())) { //logged in user's delete button is invisible to not delete themselves
+                deleteAccountButton.setVisible(false);
+            }
 
             accountModal.getChildren().add(deleteAccountButton);
             deleteAccountContainer.getChildren().addAll(titleLabel, accountModal);
@@ -86,34 +98,29 @@ public class AdminMenuController implements DynamicController {
     }
 
     private void savePassWordChanges() {
-        String currentUsername = null;
-
         for (Node node : passwordChangeContainer.getChildren()) {
-            if (node instanceof Label label) {
-                String text = label.getText();
-                currentUsername = text.substring(7, text.indexOf("'s password"));
-            } else if (node instanceof HBox modal) {
+            if (node instanceof HBox modal) {
                 TextField passwordField = (TextField) modal.getChildren().getFirst();
 
-                Account account = accountService.getUserByUsername(currentUsername);
-                account.setPassword(passwordField.getText());
-                accountService.updateAccountPassword(account);
+                String username = (String) passwordField.getUserData();
+                Account account = accountService.getUserByUsername(username);
+
+                if (account != null) {
+                    account.setPassword(passwordField.getText());
+                    accountService.updateAccountPassword(account);
+                }
             }
         }
     }
 
     private void saveRoleChanges() {
-        String currentUsername = null;
-
         for (Node node : roleChangeContainer.getChildren()) {
-            if (node instanceof Label label) {
-                String text = label.getText();
-                currentUsername = text.substring(7, text.indexOf("'s role"));
-
-            } else if (node instanceof HBox modal) {
+            if (node instanceof HBox modal) {
                 ToggleButton adminToggle = (ToggleButton) modal.getChildren().get(0);
+                String username = (String) adminToggle.getUserData();
 
-                Account account = accountService.getUserByUsername(currentUsername);
+                Account account = accountService.getUserByUsername(username);
+                if (account == null) continue;
 
                 if (adminToggle.isSelected()) {
                     accountService.promoteUserToAdmin(account);
@@ -141,16 +148,16 @@ public class AdminMenuController implements DynamicController {
         SceneManagerProvider.getSceneManager().switchScene("/com/grupp5/agila_schemalggare/calendar-viex.fxml", currentDate);
     }
 
-  @Override
-  public void updateView() {
-    generatePasswordChangeContainer();
-    generateRoleChangeContainer();
-    generateDeleteAccountContainer();
-  }
+    @Override
+    public void updateView() {
+        generatePasswordChangeContainer();
+        generateRoleChangeContainer();
+        generateDeleteAccountContainer();
+    }
 
-  @Override
-  public void setCurrentDate(LocalDateTime currentDate) {
-    this.currentDate = currentDate;
-  }
+    @Override
+    public void setCurrentDate(LocalDateTime currentDate) {
+        this.currentDate = currentDate;
+    }
 }
 
