@@ -18,6 +18,8 @@ public class AdminMenuController implements ServiceRegister {
     private VBox passwordChangeContainer;
     @FXML
     private VBox roleChangeContainer;
+    @FXML
+    private VBox deleteAccountContainer;
 
     private AccountService accountService;
     private HashSet<Account> accounts;
@@ -36,6 +38,7 @@ public class AdminMenuController implements ServiceRegister {
     private void populateMenuContainer() {
         generatePasswordChangeContainer();
         generateRoleChangeContainer();
+        generateDeleteAccountContainer();
     }
 
     private void generatePasswordChangeContainer() {
@@ -70,6 +73,22 @@ public class AdminMenuController implements ServiceRegister {
 
             accountModal.getChildren().addAll(adminRoleButton, userRoleButton);
             roleChangeContainer.getChildren().addAll(titleLabel, accountModal);
+        }
+    }
+
+    private void generateDeleteAccountContainer() {
+        for (Account account : accounts) {
+            Label titleLabel = new Label("Delete " + account.getUsername() + "'s account:");
+            HBox accountModal = new HBox(10);
+
+            Button deleteAccountButton = new Button("Delete account");
+
+            deleteAccountButton.setUserData(account.getUsername());
+
+            deleteAccountButton.setOnAction(e -> deleteAccountAction(account.getUsername()));
+
+            accountModal.getChildren().add(deleteAccountButton);
+            deleteAccountContainer.getChildren().addAll(titleLabel, accountModal);
         }
     }
 
@@ -119,6 +138,19 @@ public class AdminMenuController implements ServiceRegister {
                 }
             }
         }
+    }
+
+    private void deleteAccountAction(String username) {
+        Account account = accountService.getUserByUsername(username);
+        if (account == null) return;
+
+        accountService.deleteAccount(account);
+        accounts.remove(account);
+
+        passwordChangeContainer.getChildren().clear();
+        roleChangeContainer.getChildren().clear();
+        deleteAccountContainer.getChildren().clear();
+        populateMenuContainer();
     }
 
     private void returnToCalendar() {

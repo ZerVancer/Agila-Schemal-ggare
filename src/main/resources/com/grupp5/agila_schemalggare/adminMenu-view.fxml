@@ -15,6 +15,7 @@
           AnchorPane.leftAnchor="10">
         <VBox fx:id="passwordChangeContainer"/>
         <VBox fx:id="roleChangeContainer"/>
+        <VBox fx:id="deleteAccountContainer"/>
     </VBox>
     <VBox AnchorPane.bottomAnchor="10"
           AnchorPane.leftAnchor="10"

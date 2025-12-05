@@ -140,6 +140,10 @@ public class AccountService {
         }
     }
 
+    public void deleteAccount(Account account) {
+        registeredUsers.remove(account);
+    }
+
     public void promoteUserToAdmin(Account user) {
         Admin admin = new Admin(user.getUsername(), user.getPassword());
         admin.setId(user.getId());
