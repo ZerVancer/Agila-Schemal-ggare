@@ -28,7 +28,7 @@
     <!--return to calendar button-->
     <HBox alignment="CENTER" spacing="10" AnchorPane.bottomAnchor="10" AnchorPane.leftAnchor="10"
           AnchorPane.rightAnchor="10">
-        <Button fx:id="returnButton" maxWidth="100.00" onAction="#returnToCalendar" text="Return to calendar"/>
+        <Button fx:id="returnButton" onAction="#returnToCalendar" text="Return to calendar"/>
     </HBox>
 
 </AnchorPane>
