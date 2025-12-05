@@ -24,6 +24,8 @@ public class CalendarDayController implements DynamicController {
     @FXML
     private VBox eventsContainer;
     @FXML
+    public Button addEventButton;
+    @FXML
     public Button returnButton;
 
     private final SceneManager sceneManager = SceneManagerProvider.getSceneManager();
@@ -41,8 +43,7 @@ public class CalendarDayController implements DynamicController {
         }
 
         //add event button under list of daily events
-        VBox buttonModal = createAddEventButton();
-        eventsContainer.getChildren().add(buttonModal);
+        addEventButton.setOnAction(e -> sceneManager.openNewScene("/com/grupp5/agila_schemalggare/eventService.fxml", currentDate, "Create Event", 400, 300));
     }
 
     private VBox createEventModal(Event event) {
@@ -97,19 +98,6 @@ public class CalendarDayController implements DynamicController {
         container.setAlignment(Pos.TOP_CENTER);
 
         return container;
-    }
-
-    private VBox createAddEventButton() {
-        VBox buttonModal = new VBox(10);
-
-        Button addButton = new Button("Add event");
-        addButton.maxWidth(100.00);
-        addButton.setOnAction(e -> sceneManager.openNewScene("/com/grupp5/agila_schemalggare/eventService.fxml", currentDate, "Create Event", 400, 300));
-
-        buttonModal.getChildren().add(addButton);
-        buttonModal.setAlignment(Pos.CENTER);
-
-        return buttonModal;
     }
 
     private void deleteEvent(Event event) {

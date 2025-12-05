@@ -28,18 +28,23 @@ public class AdminMenuController implements DynamicController {
 
     private void generatePasswordChangeContainer() {
         for (Account account : accounts) {
+            VBox vBox = new VBox();
             Label titleLabel = new Label("Change " + account.getUsername() + "'s password:");
             HBox accountModal = new HBox(10);
 
             TextField passwordField = new TextField(account.getPassword());
+            passwordField.setUserData(account.getUsername());
 
             accountModal.getChildren().add(passwordField);
-            passwordChangeContainer.getChildren().addAll(titleLabel, accountModal);
+            vBox.getChildren().addAll(titleLabel, accountModal);
+            passwordChangeContainer.getChildren().add(vBox);
         }
     }
 
+
     private void generateRoleChangeContainer() {
         for (Account account : accounts) {
+            VBox vBox = new VBox();
             Label titleLabel = new Label("Change " + account.getUsername() + "'s role:");
             HBox accountModal = new HBox(10);
 
@@ -50,6 +55,9 @@ public class AdminMenuController implements DynamicController {
             adminRoleButton.setToggleGroup(toggleGroup);
             userRoleButton.setToggleGroup(toggleGroup);
 
+            adminRoleButton.setUserData(account.getUsername());
+            userRoleButton.setUserData(account.getUsername());
+
             if (account.getRole().equals("ADMIN")) {
                 adminRoleButton.setSelected(true);
             } else {
@@ -57,23 +65,30 @@ public class AdminMenuController implements DynamicController {
             }
 
             accountModal.getChildren().addAll(adminRoleButton, userRoleButton);
-            roleChangeContainer.getChildren().addAll(titleLabel, accountModal);
+            vBox.getChildren().addAll(titleLabel, accountModal);
+            roleChangeContainer.getChildren().add(vBox);
         }
     }
 
     private void generateDeleteAccountContainer() {
         for (Account account : accounts) {
-            Label titleLabel = new Label("Delete " + account.getUsername() + "'s account:");
-            HBox accountModal = new HBox(10);
+            if (!account.equals(AccountService.getLoggedInAccount())) { //logged in user's delete button is invisible to not delete themselves
+              VBox vBox = new VBox();
+              Label titleLabel = new Label("Delete " + account.getUsername() + "'s account:");
+              HBox accountModal = new HBox(10);
 
-            Button deleteAccountButton = new Button("Delete account");
 
-            deleteAccountButton.setUserData(account.getUsername());
+              Button deleteAccountButton = new Button("Delete account");
 
-            deleteAccountButton.setOnAction(e -> deleteAccountAction(account.getUsername()));
+              deleteAccountButton.setUserData(account.getUsername());
 
-            accountModal.getChildren().add(deleteAccountButton);
-            deleteAccountContainer.getChildren().addAll(titleLabel, accountModal);
+              deleteAccountButton.setOnAction(e -> deleteAccountAction(account.getUsername()));
+
+
+              accountModal.getChildren().add(deleteAccountButton);
+              vBox.getChildren().addAll(titleLabel, accountModal);
+              deleteAccountContainer.getChildren().add(vBox);
+            }
         }
     }
 
@@ -86,34 +101,29 @@ public class AdminMenuController implements DynamicController {
     }
 
     private void savePassWordChanges() {
-        String currentUsername = null;
-
         for (Node node : passwordChangeContainer.getChildren()) {
-            if (node instanceof Label label) {
-                String text = label.getText();
-                currentUsername = text.substring(7, text.indexOf("'s password"));
-            } else if (node instanceof HBox modal) {
+            if (node instanceof HBox modal) {
                 TextField passwordField = (TextField) modal.getChildren().getFirst();
 
-                Account account = accountService.getUserByUsername(currentUsername);
-                account.setPassword(passwordField.getText());
-                accountService.updateAccountPassword(account);
+                String username = (String) passwordField.getUserData();
+                Account account = accountService.getUserByUsername(username);
+
+                if (account != null) {
+                    account.setPassword(passwordField.getText());
+                    accountService.updateAccountPassword(account);
+                }
             }
         }
     }
 
     private void saveRoleChanges() {
-        String currentUsername = null;
-
         for (Node node : roleChangeContainer.getChildren()) {
-            if (node instanceof Label label) {
-                String text = label.getText();
-                currentUsername = text.substring(7, text.indexOf("'s role"));
-
-            } else if (node instanceof HBox modal) {
+            if (node instanceof HBox modal) {
                 ToggleButton adminToggle = (ToggleButton) modal.getChildren().get(0);
+                String username = (String) adminToggle.getUserData();
 
-                Account account = accountService.getUserByUsername(currentUsername);
+                Account account = accountService.getUserByUsername(username);
+                if (account == null) continue;
 
                 if (adminToggle.isSelected()) {
                     accountService.promoteUserToAdmin(account);
@@ -129,28 +139,34 @@ public class AdminMenuController implements DynamicController {
         if (account == null) return;
 
         accountService.deleteAccount(account);
-        AccountService.removeRegisteredUser(account);
+        accounts.remove(account);
 
-        passwordChangeContainer.getChildren().clear();
-        roleChangeContainer.getChildren().clear();
-        deleteAccountContainer.getChildren().clear();
-        updateView();
+        // HAHA, sicken gädda
+        passwordChangeContainer.getChildren().removeIf(node -> node instanceof VBox &&
+            ((Label) ((VBox) node).getChildren().stream().findFirst().filter(node1 -> node1 instanceof Label).get()).getText().equals("Change " + account.getUsername() + "'s password:"));
+
+        roleChangeContainer.getChildren().removeIf(node -> node instanceof VBox &&
+            ((Label) ((VBox) node).getChildren().stream().findFirst().filter(node1 -> node1 instanceof Label).get()).getText().equals("Change " + account.getUsername() + "'s role:"));
+
+        deleteAccountContainer.getChildren().removeIf(node -> node instanceof VBox &&
+          ((Label) ((VBox) node).getChildren().stream().findFirst().filter(node1 -> node1 instanceof Label).get()).getText().equals("Delete " + account.getUsername() + "'s account:"));
+
     }
 
     private void returnToCalendar() {
         SceneManagerProvider.getSceneManager().switchScene("/com/grupp5/agila_schemalggare/calendar-viex.fxml", currentDate);
     }
 
-  @Override
-  public void updateView() {
-    generatePasswordChangeContainer();
-    generateRoleChangeContainer();
-    generateDeleteAccountContainer();
-  }
+    @Override
+    public void updateView() {
+        generatePasswordChangeContainer();
+        generateRoleChangeContainer();
+        generateDeleteAccountContainer();
+    }
 
-  @Override
-  public void setCurrentDate(LocalDateTime currentDate) {
-    this.currentDate = currentDate;
-  }
+    @Override
+    public void setCurrentDate(LocalDateTime currentDate) {
+        this.currentDate = currentDate;
+    }
 }
 

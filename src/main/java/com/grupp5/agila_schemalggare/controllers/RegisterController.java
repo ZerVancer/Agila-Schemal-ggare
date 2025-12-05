@@ -48,8 +48,6 @@ public class RegisterController {
             submitConfirmation.setTextFill(Color.GREEN);
             submitConfirmation.setText("Account creation success!");
         }
-
-        changeSceneToLogin();
     }
 
     @FXML
