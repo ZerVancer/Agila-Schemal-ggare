@@ -28,13 +28,15 @@ public abstract class Account {
     }
 
     public void addEvent(Event event) {
-      calendar.addEvent(event);
+        calendar.addEvent(event);
     }
 
     public UUID getId() {
         return id;
     }
-    public void setId(UUID id) {}
+
+    public void setId(UUID id) {
+    }
 
     // Getters
     public UUID getAccountId() {
@@ -49,16 +51,15 @@ public abstract class Account {
         return password;
     }
 
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     public Calendar getCalendar() {
         return calendar;
     }
 
     public abstract String getRole();
-
-    // Någon eventuell funktion för om användaren är Admin?
-    public boolean canEditOthers() {
-        return false;
-    }
 
     // Check för HashSet
     @Override

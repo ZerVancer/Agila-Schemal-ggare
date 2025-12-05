@@ -29,6 +29,19 @@ public class AccountService {
         }
     }
 
+    public HashSet<Account> getRegisteredUsers() {
+        return registeredUsers;
+    }
+
+    public Account getUserByUsername(String username){
+        for (Account account : registeredUsers) {
+            if (account.getUsername().equals(username)) {
+                return account;
+            }
+        }
+        return null;
+    }
+
     // Getter för resterande komponenter för att hämta kontot om så önskas.
     public static Account getLoggedInAccount() {
         return loggedInAccount;
@@ -115,5 +128,16 @@ public class AccountService {
                 password.matches(".*[!@#$%^&*()_+=\\-{}\\[\\]:;\"'<>,.?/].*"); //must contain at least one special character
     }
 
-    //private void saveAccountToFile() {}
+    private void saveAccountToFile() {
+        //saves new account
+    }
+
+    public void updateAccountPassword(Account updatedAccount) {
+        for (Account account : registeredUsers) {
+            if (account.getUsername().equals(updatedAccount.getUsername())) {
+                account.setPassword(updatedAccount.getPassword());
+            }
+            System.out.println(account.getPassword() + " as");
+        }
+    }
 }

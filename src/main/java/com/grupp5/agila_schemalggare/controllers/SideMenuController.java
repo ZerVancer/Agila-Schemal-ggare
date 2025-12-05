@@ -87,7 +87,7 @@ public class SideMenuController {
     }
 
     public void switchSceneToAdminMenu() {
-
+        SceneManagerProvider.getSceneManager().switchScene("/com/grupp5/agila_schemalggare/adminMenu-view.fxml");
     }
 
     private void setActiveButton(Button clickedButton) {

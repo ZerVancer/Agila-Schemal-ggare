@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.grupp5.agila_schemalggare.controllers.AdminMenuController"
+            prefHeight="400.0" prefWidth="600.0">
+
+    <VBox spacing="10"
+          AnchorPane.bottomAnchor="10"
+          AnchorPane.rightAnchor="10"
+          AnchorPane.topAnchor="10"
+          AnchorPane.leftAnchor="10">
+        <VBox fx:id="menuContainer">
+        </VBox>
+        <VBox>
+            <Button fx:id="saveAndReturnButton" maxWidth="100" text="Save and return" onAction="#saveAllChanges"/>
+        </VBox>
+    </VBox>
+
+</AnchorPane>
