@@ -59,7 +59,16 @@ public abstract class Account {
         return calendar;
     }
 
+    public void setCalendar(Calendar calendar) {
+        this.calendar = calendar;
+    }
+
     public abstract String getRole();
+
+    // Någon eventuell funktion för om användaren är Admin?
+    public boolean canEditOthers() {
+        return false;
+    }
 
     // Check för HashSet
     @Override
@@ -80,6 +89,8 @@ public abstract class Account {
     public int hashCode() {
         return username.hashCode();
     }
+
+    public abstract void setRole(String role);
 
     // Går alltid att lägga till saker i framtiden etc.
 }

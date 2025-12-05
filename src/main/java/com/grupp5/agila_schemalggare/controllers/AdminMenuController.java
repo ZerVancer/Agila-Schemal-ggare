@@ -15,7 +15,9 @@ import java.util.HashSet;
 public class AdminMenuController implements ServiceRegister {
 
     @FXML
-    private VBox menuContainer;
+    private VBox passwordChangeContainer;
+    @FXML
+    private VBox roleChangeContainer;
 
     @FXML
     private Button saveAndReturnButton;
@@ -35,7 +37,11 @@ public class AdminMenuController implements ServiceRegister {
     }
 
     private void populateMenuContainer() {
-        accounts = accountService.getRegisteredUsers();
+        generatePasswordChangeContainer();
+        generateRoleChangeContainer();
+    }
+
+    private void generatePasswordChangeContainer() {
         for (Account account : accounts) {
             HBox accountModal = new HBox(10);
 
@@ -43,7 +49,30 @@ public class AdminMenuController implements ServiceRegister {
             TextField passwordField = new TextField(account.getPassword());
 
             accountModal.getChildren().addAll(accountLabel, passwordField);
-            menuContainer.getChildren().add(accountModal);
+            passwordChangeContainer.getChildren().add(accountModal);
+        }
+    }
+
+    private void generateRoleChangeContainer() {
+        for (Account account : accounts) {
+            HBox accountModal = new HBox(10);
+
+            Label accountLabel = new Label(account.getUsername());
+            ToggleGroup toggleGroup = new ToggleGroup();
+            ToggleButton adminRoleButton = new ToggleButton("Admin");
+            ToggleButton userRoleButton = new ToggleButton("User");
+
+            adminRoleButton.setToggleGroup(toggleGroup);
+            userRoleButton.setToggleGroup(toggleGroup);
+
+            if (account.getRole().equals("ADMIN")) {
+                adminRoleButton.setSelected(true);
+            } else {
+                userRoleButton.setSelected(true);
+            }
+
+            accountModal.getChildren().addAll(accountLabel, adminRoleButton, userRoleButton);
+            roleChangeContainer.getChildren().add(accountModal);
         }
     }
 
@@ -51,12 +80,13 @@ public class AdminMenuController implements ServiceRegister {
     private void saveAllChanges() {
 
         savePassWordChanges();
+        saveRoleChanges();
 
         returnToCalendar();
     }
 
     private void savePassWordChanges() {
-        for (Node node : menuContainer.getChildren()) {
+        for (Node node : passwordChangeContainer.getChildren()) {
             if (node instanceof HBox modal) {
                 Label accountLabel = (Label) modal.getChildren().get(0);
                 TextField passwordField = (TextField) modal.getChildren().get(1);
@@ -67,14 +97,24 @@ public class AdminMenuController implements ServiceRegister {
                 Account account = accountService.getUserByUsername(username);
                 account.setPassword(password);
                 accountService.updateAccountPassword(account);
+            }
+        }
+    }
 
+    private void saveRoleChanges() {
+        for (Node node : roleChangeContainer.getChildren()) {
+            if (node instanceof HBox modal) {
+                Label accountLabel = (Label) modal.getChildren().get(0);
+                String username = accountLabel.getText();
 
-                for (Account a : accounts) {
-                    if (a.getUsername().equals(account.getUsername())) {
-                        a.setPassword(account.getPassword());
-                    }
+                ToggleButton adminToggle = (ToggleButton) modal.getChildren().get(1);
 
-                    System.out.println(a.getPassword() + " am");
+                if (adminToggle.isSelected()) {
+                    Account account = accountService.getUserByUsername(username);
+                    accountService.promoteUserToAdmin(account);
+                } else {
+                    Account account = accountService.getUserByUsername(username);
+                    accountService.demoteAdminToUser(account);
                 }
             }
         }

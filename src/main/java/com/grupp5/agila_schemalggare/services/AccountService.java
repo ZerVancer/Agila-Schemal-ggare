@@ -33,7 +33,7 @@ public class AccountService {
         return registeredUsers;
     }
 
-    public Account getUserByUsername(String username){
+    public Account getUserByUsername(String username) {
         for (Account account : registeredUsers) {
             if (account.getUsername().equals(username)) {
                 return account;
@@ -52,13 +52,13 @@ public class AccountService {
     }
 
     public static void update() {
-      for (Updator update : updator) {
-        update.updateView();
-      }
+        for (Updator update : updator) {
+            update.updateView();
+        }
     }
 
     public static void addUpdator(Updator updator) {
-      AccountService.updator.add(updator);
+        AccountService.updator.add(updator);
     }
 
     public Account loginUser(String username, String password) {
@@ -137,7 +137,27 @@ public class AccountService {
             if (account.getUsername().equals(updatedAccount.getUsername())) {
                 account.setPassword(updatedAccount.getPassword());
             }
-            System.out.println(account.getPassword() + " as");
         }
+    }
+
+    public void promoteUserToAdmin(Account user) {
+        Admin admin = new Admin(user.getUsername(), user.getPassword());
+        admin.setId(user.getId());
+        admin.setCalendar(user.getCalendar());
+        admin.setRole("ADMIN");
+
+        registeredUsers.remove(user);
+        registeredUsers.add(admin);
+    }
+
+
+    public void demoteAdminToUser(Account admin) {
+        User user = new User(admin.getUsername(), admin.getPassword());
+        user.setId(admin.getId());
+        user.setCalendar(user.getCalendar());
+        user.setRole("USER");
+
+        registeredUsers.remove(admin);
+        registeredUsers.add(user);
     }
 }
